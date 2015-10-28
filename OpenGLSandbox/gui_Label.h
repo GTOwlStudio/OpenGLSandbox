@@ -18,7 +18,9 @@ public:
 	~gui_Label();
 	void load();
 	void update();
+	void updateVBO(void* datas, unsigned int bytesSize, unsigned int offset);
 	void render(glm::mat4 &projection, glm::mat4 &modelview);
+	void move(float relX, float relY);
 
 private:
 	std::string m_text; //The text of the label

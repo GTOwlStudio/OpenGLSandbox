@@ -16,10 +16,17 @@ gui_Button::gui_Button(std::string text, FontAtlas &font, float x, float y, floa
 	}
 
 	for (int i=0;i<24;i+=4){
-		m_scolors[i] = 8*r/10;
-		m_scolors[i+1] = 8*g/10;
-		m_scolors[i+2] = 8*b/10;
-		m_scolors[i+3] = a;
+		m_ocolors[i] = 9*r/10;
+		m_ocolors[i+1] = 9*g/10;
+		m_ocolors[i+2] = 9*b/10;
+		m_ocolors[i+3] = a;
+	}
+
+	for (int i=0;i<24;i+=4){
+		m_pcolors[i] = 8*r/10;
+		m_pcolors[i+1] = 8*g/10;
+		m_pcolors[i+2] = 8*b/10;
+		m_pcolors[i+3] = a;
 	}
 
 	/*for (int i=0;i<24;i+=4){
@@ -52,10 +59,11 @@ void gui_Button::update(){
 		m_beenReleased = false;
 	}
 	//printf("isEntered=%i\n", m_isPressed);
-	if (!m_isEntered && (x>=m_x && y>=(m_y)) && ( x<(m_x+m_w) ) && (y<m_y+m_h) ){
+	if (!m_isEntered && (x>=m_x && y>=(m_y)) && ( x<(m_x+m_w) ) && (y<m_y+m_h) ){ //Mouse over
 		printf("Entered\n");
 		m_isEntered = true;
 		m_isExited = false;
+		m_background.updateVBO(m_ocolors, sizeof(float)*24, sizeof(float)*18);
 	}
 
 	//if (!m_isExited &&  (x<m_x) || (y<m_y) || (x>(m_x+m_w)) || (y>(m_y+m_h)) ){
@@ -63,15 +71,16 @@ void gui_Button::update(){
 		printf("Exited\n");
 		m_isExited = true;
 		m_isEntered = false;
+		m_background.updateVBO(m_colors, sizeof(float)*24, sizeof(float)*18);
 	}
 
-	if (m_isEntered && !m_isPressed && Input::input.getBoutonSouris(1)){
+	if (m_isEntered && !m_isPressed && Input::input.getBoutonSouris(1)){ //Pressed
 		printf("Pressed\n");
 		m_isPressed = true;
-		m_background.updateVBO(m_scolors, sizeof(float)*24, sizeof(float)*18);
+		m_background.updateVBO(m_pcolors, sizeof(float)*24, sizeof(float)*18);
 	}
 
-	if (m_isPressed && !Input::input.getBoutonSouris(1)){
+	if (m_isPressed && !Input::input.getBoutonSouris(1)){ // Released
 		printf("Released\n");
 		m_beenReleased = true;
 		m_background.updateVBO(m_colors, sizeof(float)*24, sizeof(float)*18);
@@ -82,6 +91,14 @@ void gui_Button::render(glm::mat4 &projection, glm::mat4 &modelview){
 	m_background.render(projection, modelview);
 	m_text.render(projection, modelview);
 }
+
+void gui_Button::setColor(float r, float g, float b, float a){
+	
+}
+
+/*void gui_Button::moveText(float x, float y){
+	
+}*/
 
 bool gui_Button::isPressed() const{
 	return m_isPressed;
@@ -100,4 +117,27 @@ bool gui_Button::isEntered() const{
 
 bool gui_Button::isExited() const{
 	return m_isExited;
+}
+
+float gui_Button::getX() const{
+	return m_x;
+}
+
+
+float gui_Button::getY() const{
+	return m_y;
+}
+
+
+float gui_Button::getWidth() const{
+	return m_w;
+}
+
+
+float gui_Button::getHeight() const{
+	return m_h;
+}
+
+gui_Label* gui_Button::getLabel(){
+	return &m_text;
 }
