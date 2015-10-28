@@ -557,3 +557,28 @@ void gui_Label::render(glm::mat4 &projection, glm::mat4 &modelview){
 	glUseProgram(0);
 
 }
+
+void gui_Label::updateVBO(void* datas, unsigned int bytesSize, unsigned int offset){
+	glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
+	void *VBOAddress = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+	if (VBOAddress==NULL){
+		std::cout << "ERROR : while VBO recuperation" << std::endl;
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		return;
+	}
+
+	memcpy((char*)VBOAddress + offset, datas,bytesSize);
+
+	glUnmapBuffer(GL_ARRAY_BUFFER);
+	VBOAddress = 0;
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void gui_Label::move(float relX, float relY){
+	for (int i=0;i<18*m_textSize;i+=2){
+		m_coords[i] += relX;
+		i++;
+		m_coords[i] += relY;
+	}
+	updateVBO(m_coords, m_coordsBytesSize, 0);
+}
