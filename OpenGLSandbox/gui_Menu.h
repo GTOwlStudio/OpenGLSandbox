@@ -13,12 +13,16 @@ public:
 	~gui_Menu();
 	void load();
 	void update();
+	void setPosition(float x, float y);
 	void render(glm::mat4 &projection, glm::mat4 &modelview);
+	gui_Button* getButton();
+	//void getLast();
+	void addAction(gui_Action *action);
 //	void addActions(std::string name, );
 
 private:
 	gui_Button m_button;
-	//std::vector<gui_Action> m_actions;
+	std::vector<gui_Action*> m_actions;
 	
 };
 

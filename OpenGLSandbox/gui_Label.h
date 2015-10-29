@@ -20,6 +20,7 @@ public:
 	void update();
 	void updateVBO(void* datas, unsigned int bytesSize, unsigned int offset);
 	void render(glm::mat4 &projection, glm::mat4 &modelview);
+	void setPosition(float x, float y);
 	void move(float relX, float relY);
 
 private:

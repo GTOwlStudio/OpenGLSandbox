@@ -574,6 +574,11 @@ void gui_Label::updateVBO(void* datas, unsigned int bytesSize, unsigned int offs
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void gui_Label::setPosition(float x, float y){
+	move(x-m_x,y-m_y);
+	m_x=x;m_y=y;
+}
+
 void gui_Label::move(float relX, float relY){
 	for (int i=0;i<18*m_textSize;i+=2){
 		m_coords[i] += relX;

@@ -19,6 +19,8 @@ public:
 	void setColor(float r, float g, float b, float a=1.0f);
 	//void setOverColor(float r, float g, float b, float a=1.0f);
 	//void setPressedColor(float r, float g, float b, float a=1.0f);
+	void setPosition(float x, float y);
+	void move(float relX, float relY);
 	gui_Label* getLabel();
 	bool isPressed() const;
 	bool beenReleased() const;
@@ -30,6 +32,7 @@ public:
 	float getHeight() const;
 
 private:
+//	void updateVBO(void* data, unsigned int bytesSize, unsigned int size);
 	gui_Label m_text;
 	QuadC m_background;
 	float m_colors[24]; //Colors of the button

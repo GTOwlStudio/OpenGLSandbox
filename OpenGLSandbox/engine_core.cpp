@@ -68,12 +68,16 @@ void engine_core::mainLoop(){
 	}
 	/*gui_Label alphabet(allLetter, ftest, glm::vec4(10,200,80,10), 0.1, 1.0,0.0,0.0);
 	alphabet.load();*/
-	/*gui_Label label(test_string, ftest, glm::vec4(50.0,50.0,ftest.getATextWidth(test_string),ftest.getATextHeight(test_string)), 0.1,1.0,0.0,0.0);
-	label.load();*/
+	gui_Label label(test_string, ftest, glm::vec4(50.0,50.0,ftest.getATextWidth(test_string),ftest.getATextHeight(test_string)), 0.1,1.0,0.0,0.0);
+	label.load();
+	label.move(100.0,0.0);
+	//label.move(100.0, 0.0);
 
 	/*gui_Label l(test_string, ftest, 50.0+0.7,50.0, 0.1,0.0,0.0,1.0);
 	l.load();*/
-
+	QuadC mq(20.0f,20.0f,20.0f,20.0f, 0.1f, 1.0f,0.0f,0.0f,1.0f);
+	mq.load();
+	mq.setPosition(100.0,20.0);
 	glClearColor(0.25,0.25,0.25,1.0);
 	//glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -96,11 +100,12 @@ void engine_core::mainLoop(){
        // camera.deplacer(m_input);
 		modelview = glm::mat4(1.0);
         glClear(GL_COLOR_BUFFER_BIT/* | GL_DEPTH_BUFFER_BIT*/);
-
+		//RENDU
       //  caisse.afficher(projection, modelview);
 		//q.render(projection, modelview);
 		//r.render(projection, modelview);	
-		//label.render(projection, modelview);
+		label.render(projection, modelview);
+		mq.render(projection, modelview);
 		//alphabet.render(projection, modelview);
 		//l.render(projection, modelview);
 	//	dev.update();

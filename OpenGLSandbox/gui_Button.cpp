@@ -141,3 +141,12 @@ float gui_Button::getHeight() const{
 gui_Label* gui_Button::getLabel(){
 	return &m_text;
 }
+
+void gui_Button::setPosition(float x, float y){
+	m_background.setPosition(x,y);
+	m_text.setPosition(x,y);
+}
+
+void gui_Button::move(float relX, float relY){
+	//m_background.updateVBO();
+}
