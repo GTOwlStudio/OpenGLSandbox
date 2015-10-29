@@ -74,7 +74,7 @@ gui_Label::gui_Label(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, float
 		float w = m_fontatlas->getCharInfo()[*p].bw*sx;
 		float h = m_fontatlas->getCharInfo()[*p].bh*sy;
 		//std::printf(" x2=%i y2=%i w=%i h=%i\n",x2, y2, w, h);
-		m_x += m_fontatlas->getCharInfo()[*p].ax * sx;
+		//m_x += m_fontatlas->getCharInfo()[*p].ax * sx;
 		m_y += m_fontatlas->getCharInfo()[*p].ay *sy;
 		
 		
@@ -575,6 +575,8 @@ void gui_Label::updateVBO(void* datas, unsigned int bytesSize, unsigned int offs
 }
 
 void gui_Label::setPosition(float x, float y){
+	printf("m_x=%f m_y=%f\n", m_x, m_y);
+	printf("x=%f, y=%f\n", x-m_x, y-m_y);
 	move(x-m_x,y-m_y);
 	m_x=x;m_y=y;
 }
