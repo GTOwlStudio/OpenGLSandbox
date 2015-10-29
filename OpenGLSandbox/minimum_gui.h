@@ -2,6 +2,7 @@
 
 #include "gui_Object.h"
 #include "gui_Button.h"
+#include "gui_Menu.h"
 #include "QuadC.h"
 #include "FontAtlas.h"
 
@@ -16,8 +17,12 @@ public:
 	void render(glm::mat4 &guiMatrix);
 
 private:
+	FontAtlas &m_font;
+	int m_width;
+	int m_height;
 	unsigned int m_objectsSize;
 	unsigned int m_NNTUObjectOffset; //No Need To Update Object Offset
+	unsigned int m_ILOO; //Independantly loaded objects offset 
 	gui_Object** m_objects;
 	
 

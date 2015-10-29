@@ -9,7 +9,7 @@
 class gui_Button : public gui_Object
 {
 public:
-	gui_Button(std::string text, FontAtlas &font,float x, float y, float w, float h, float depth,  float r, float g, float b, float a=1.0f);
+	gui_Button(std::string text, FontAtlas &font,float x, float y, float w, float h, float depth,  float r, float g, float b, float a=1.0f, float txoffset=0.0f, float tyoffset=0.0f);
 	~gui_Button();
 	void load();
 	void update();

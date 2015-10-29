@@ -1,11 +1,11 @@
 #include "gui_Button.h"
 
 
-gui_Button::gui_Button(std::string text, FontAtlas &font, float x, float y, float w, float h, float depth, float r, float g, float b, float a) : 
+gui_Button::gui_Button(std::string text, FontAtlas &font, float x, float y, float w, float h, float depth, float r, float g, float b, float a, float txoffset, float tyoffset) : 
 	/*m_background(x,y,font.getTextWidth(text),font.getTextHeight(text),depth,r,g,b,a), m_text(text, font, glm::vec4(x,y,w,h), depth, 1.0,1.0,1.0),
 	m_x(x), m_y(y), m_w(w), m_h(h), m_isEntered(false), m_isExited(true), m_isPressed(false), m_beenReleased(false)*/
 	m_x(x), m_y(y), m_w(w), m_h(h),
-	m_background(x,y,w,h,depth,r,g,b,a), m_text(text, font, glm::vec4(x,y,w,h), depth, 1.0,1.0,1.0),
+	m_background(x,y,w,h,depth,r,g,b,a), m_text(text, font, glm::vec4(x+txoffset,y+tyoffset,w,h), depth, 1.0,1.0,1.0),
 	m_isEntered(false), m_isExited(true), m_isPressed(false), m_beenReleased(false)
 {
 	for (int i=0;i<24;i+=4){
@@ -145,6 +145,7 @@ gui_Label* gui_Button::getLabel(){
 void gui_Button::setPosition(float x, float y){
 	m_background.setPosition(x,y);
 	m_text.setPosition(x,y);
+	
 }
 
 void gui_Button::move(float relX, float relY){

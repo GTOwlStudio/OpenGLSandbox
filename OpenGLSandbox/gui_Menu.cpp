@@ -1,7 +1,7 @@
 #include "gui_Menu.h"
 
 
-gui_Menu::gui_Menu(std::string name, FontAtlas &font, float x, float y, float w, float h, float depth) : m_button(name, font, x,y,w,h,depth,1.0,1.0,1.0,1.0)//, m_actions()
+gui_Menu::gui_Menu(std::string name, FontAtlas &font, float x, float y, float w, float h, float depth, float txoffset, float tyoffset) : m_button(name, font, x,y,w,h,depth,1.0,1.0,1.0,1.0, txoffset, tyoffset)//, m_actions()
 {
 	
 }
