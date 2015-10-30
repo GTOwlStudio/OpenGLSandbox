@@ -16,13 +16,14 @@ public:
 	void setPosition(float x, float y);
 	void render(glm::mat4 &projection, glm::mat4 &modelview);
 	gui_Button* getButton();
-	//void getLast();
-	void addAction(gui_Action *action);
-//	void addActions(std::string name, );
+	void addAction(std::string name);
+	void setActionsWidth(float width);
+	bool isUnfold() const;
 
 private:
 	gui_Button m_button;
 	std::vector<gui_Action*> m_actions;
+	bool m_isUnfold;
 	
 };
 

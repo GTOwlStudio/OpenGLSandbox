@@ -15,6 +15,7 @@
 #include "QuadC.h"
 #include "minimum_gui.h"
 #include "gui_devtest.h"
+#include "gui_Action.h"
 
 class engine_core
 {
