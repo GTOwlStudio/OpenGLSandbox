@@ -444,6 +444,7 @@ void gui_Label::update(){
 //}
 
 void gui_Label::load(){
+
 	if (glIsBuffer(m_vboID)==GL_TRUE){
 		std::cout << "glIsBuffer() = GL_TRUE vboID = " << m_vboID << std::endl;
 
@@ -492,6 +493,7 @@ gui_Label::~gui_Label()
 	glDeleteBuffers(1, &m_vboID);
 	glDeleteVertexArrays(1, &m_vaoID);
 	//delete m_fontatlas;
+
 	delete[] m_coord;
 	delete[] m_coords;
 	delete[] m_texCoords;
@@ -575,8 +577,8 @@ void gui_Label::updateVBO(void* datas, unsigned int bytesSize, unsigned int offs
 }
 
 void gui_Label::setPosition(float x, float y){
-	printf("m_x=%f m_y=%f\n", m_x, m_y);
-	printf("x=%f, y=%f\n", x-m_x, y-m_y);
+	/*printf("m_x=%f m_y=%f\n", m_x, m_y);
+	printf("x=%f, y=%f\n", x-m_x, y-m_y);*/
 	move(x-m_x,y-m_y);
 	m_x=x;m_y=y;
 }
@@ -588,4 +590,8 @@ void gui_Label::move(float relX, float relY){
 		m_coords[i] += relY;
 	}
 	updateVBO(m_coords, m_coordsBytesSize, 0);
+}
+
+FontAtlas* gui_Label::getFont() const{
+	return m_fontatlas;
 }

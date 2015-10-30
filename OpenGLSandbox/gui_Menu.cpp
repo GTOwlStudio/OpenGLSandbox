@@ -18,9 +18,9 @@ gui_Menu::~gui_Menu()
 
 void gui_Menu::load(){
 	m_button.load();
-	for (int i =0;i<m_actions.size();i++){
+	/*for (int i =0;i<m_actions.size();i++){
 		m_actions[i]->load();
-	}
+	}*/
 }
 
 void gui_Menu::update(){
@@ -51,14 +51,17 @@ void gui_Menu::addAction(std::string name){
 	if (m_actions.size()!=0){
 		float tw = std::max(m_button.getLabel()->getFont()->getATextWidth(name), m_actions.back()->getButton()->getWidth());
 		m_actions.push_back(new gui_Action(name, *m_button.getLabel()->getFont(),m_button.getX(), m_actions.back()->getButton()->getY()-m_button.getLabel()->getFont()->getATextHeight(name),tw, m_button.getLabel()->getFont()->getATextHeight(name),  m_button.getDepth()));
+		m_actions.back()->load();
 		if (m_button.getLabel()->getFont()->getATextWidth(name)==tw){
 		for (int i=0;i<m_actions.size()-1;i++){
-			
+			//printf("i=%i\n", i);
+			m_actions[0]->getButton()->setBounds(tw, m_actions[0]->getButton()->getHeight());
 			}
 		}
 		return;
 	}
 	m_actions.push_back(new gui_Action(name, *m_button.getLabel()->getFont(), m_button.getX(), m_button.getY()-m_button.getLabel()->getFont()->getATextHeight(name), m_button.getLabel()->getFont()->getATextWidth(name), m_button.getLabel()->getFont()->getATextHeight(name), m_button.getDepth()));
+	m_actions.back()->load();
 	//m_actions.back()->move();
 	//m_actions.push_back(new gui_Action("Action 1", *m_button.getLabel()->getFont(), 0.0, 570.0,45.0,10.0,0.1));
 	///printf("m_button.getY()=%f", m_button.getY());
