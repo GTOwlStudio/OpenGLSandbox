@@ -142,8 +142,24 @@ void QuadC::setPosition(float x, float y){
 	float tmp_W=m_vertices[3]-m_vertices[0];
 	float tmp_H=m_vertices[1]-m_vertices[7];
 	
-	float tmpVertices[12] = {x,y+tmp_W, x+tmp_W,y+tmp_H,	x,y,
+	float tmpVertices[12] = {x,y+tmp_H, x+tmp_W,y+tmp_H,	x,y,
 							 x,y,	 x+tmp_W,y+tmp_H,		x+tmp_W, y};
+	int offset=0;
+	for(int i=0;i<12;i+=2){
+		m_vertices[i+offset] = tmpVertices[i];//X
+		m_vertices[i+1+offset] = tmpVertices[i+1];//Y
+		offset++;
+	}
+	updateVBO(m_vertices, m_verticesBytesSize, 0);
+
+}
+
+void QuadC::setBounds(float w, float h){
+	float tmp_X = m_vertices[0];
+	float tmp_Y = m_vertices[7];
+	printf("x=%f y=%f\n", tmp_X, tmp_Y);
+	float tmpVertices[12] = {tmp_X,tmp_Y+h, tmp_X+w,tmp_Y+h,	tmp_X,tmp_Y,
+							 tmp_X,tmp_Y,	 tmp_X+w,tmp_Y+h,		tmp_X+w, tmp_Y};
 	int offset=0;
 	for(int i=0;i<12;i+=2){
 		m_vertices[i+offset] = tmpVertices[i];//X
