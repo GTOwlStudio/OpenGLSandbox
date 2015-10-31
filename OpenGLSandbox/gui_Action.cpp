@@ -1,7 +1,7 @@
 #include "gui_Action.h"
 
 
-gui_Action::gui_Action(std::string name, FontAtlas &font, float x, float y, float w, float h, float depth) : m_button(name, font, x,y,w,h,depth, 1.0f,1.0f,1.0f)
+gui_Action::gui_Action(std::string name, FontAtlas &font, float x, float y, float w, float h, float depth) : m_button(name, font, x,y,w,h,depth, 1.0f,1.0f,1.0f), m_name(name)
 {
 	printf("x=%f y=%f w=%f h=%f depth=%f\n",x,y,w,h, depth);
 }
@@ -31,4 +31,8 @@ void gui_Action::setPosition(float x, float y){
 
 gui_Button* gui_Action::getButton(){
 	return &m_button;
+}
+
+std::string gui_Action::getName() const{
+	return m_name;
 }

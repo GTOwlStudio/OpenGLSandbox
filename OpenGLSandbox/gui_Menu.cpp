@@ -2,7 +2,7 @@
 
 
 gui_Menu::gui_Menu(std::string name, FontAtlas &font, float x, float y, float w, float h, float depth, float txoffset, float tyoffset) :
-	m_button(name, font, x,y,w,h,depth,1.0,1.0,1.0,1.0, txoffset, tyoffset), m_actions(), m_isUnfold(false)
+	m_button(name, font, x,y,w,h,depth,1.0,1.0,1.0,1.0, txoffset, tyoffset), m_actions(), m_isUnfold(false), m_isEntered(false), m_isExited(true)
 {
 	
 }
@@ -24,12 +24,50 @@ void gui_Menu::load(){
 }
 
 void gui_Menu::update(){
-	m_button.update();
-	m_isUnfold = m_button.isPressed();
+	/*m_button.update();
+	m_isUnfold = m_button.beenReleased();
 	if (m_isUnfold){
 		for (int i =0;i<m_actions.size();i++){
 			m_actions[i]->update();
 		}
+	m_isEntered = false;
+	for (int i =0;i<m_actions.size();i++){
+		if (m_actions[i]->getButton()->isEntered()){
+				m_isEntered=true;
+				m_isExited=false;
+				break;
+			}
+		}
+	}*/
+	/*if (m_isUnfold!=m_button.beenReleased()){
+		printf("released\n");
+	}*/
+	if (!m_isUnfold){
+		m_isUnfold=m_button.beenReleased();
+		m_button.update();
+	}
+	if (m_isUnfold){
+		m_button.updateLogic();
+	for (int i =0;i<m_actions.size();i++){
+			m_actions[i]->update();
+	}
+//	m_isEntered = false; m_isExited = false; //To Modify
+	for (int i =0;i<m_actions.size();i++){
+		if(m_button.isEntered()){return;}
+		if (m_actions[i]->getButton()->isEntered()){
+				m_isEntered=true;
+				m_isExited=false;
+				if (m_actions[i]->getButton()->beenReleased()){
+					m_isEntered=false;
+					m_isExited=true; m_isUnfold = false;
+					std::cout << m_actions[i]->getName() << " launched\n";
+					//printf("%s launched\n", m_actions[i]->getName(), i);
+				}
+				return;
+			}
+		}
+	m_isEntered=false; m_isExited = true;
+	m_isUnfold = false;
 	}
 }
 

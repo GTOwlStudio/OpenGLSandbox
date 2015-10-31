@@ -22,6 +22,7 @@ public:
 	void render(glm::mat4 &projection, glm::mat4 &modelview);
 	void setPosition(float x, float y);
 	void move(float relX, float relY);
+	FontAtlas* getFont() const;
 
 private:
 	std::string m_text; //The text of the label

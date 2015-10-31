@@ -13,8 +13,10 @@ public:
 	void setPosition(float x, float y);
 	void render(glm::mat4 &projection, glm::mat4 &modelview);
 	gui_Button* getButton();
+	std::string getName() const;
 private:
 	gui_Button m_button;
+	std::string m_name;
 
 };
 

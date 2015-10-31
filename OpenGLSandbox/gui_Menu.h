@@ -24,6 +24,8 @@ private:
 	gui_Button m_button;
 	std::vector<gui_Action*> m_actions;
 	bool m_isUnfold;
+	bool m_isEntered;
+	bool m_isExited;
 	
 };
 

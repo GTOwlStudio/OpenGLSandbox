@@ -12,7 +12,8 @@ public:
 	gui_Button(std::string text, FontAtlas &font,float x, float y, float w, float h, float depth,  float r, float g, float b, float a=1.0f, float txoffset=0.0f, float tyoffset=0.0f);
 	~gui_Button();
 	void load();
-	void update();
+	void update(); //Update Logic and Data
+	void updateLogic(); //Update Logic
 	void render(glm::mat4 &projection, glm::mat4 &modelview);
 	/*void setTextRelPosition(float x, float y); //Set a position on the button x=0 is the bottom and y=0 the right
 	void moveText(float x, float y); //Move the button*/
@@ -21,6 +22,9 @@ public:
 	//void setPressedColor(float r, float g, float b, float a=1.0f);
 	void setPosition(float x, float y);
 	void move(float relX, float relY);
+	void setBounds(float w, float h);
+	/*void setWidth(float w);
+	void setHeight(float h);*/
 	gui_Label* getLabel();
 	bool isPressed() const;
 	bool beenReleased() const;
@@ -30,6 +34,8 @@ public:
 	float getY() const;
 	float getWidth() const;
 	float getHeight() const;
+	float getDepth() const;
+	FontAtlas* getFont() const;
 
 private:
 //	void updateVBO(void* data, unsigned int bytesSize, unsigned int size);
