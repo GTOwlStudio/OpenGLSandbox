@@ -81,6 +81,34 @@ Quad::Quad(float vertices[18], std::string vert, std::string frag, std::string t
 }
 
 
+Quad::Quad(float vertices[18], float texCoords[12], std::string vert, std::string frag, GLuint textureID) : m_verticesBytesSize(18*sizeof(float)), m_texCoordsBytesSize(12*sizeof(float)),
+	m_shader(vert, frag),m_texture(textureID){
+
+	m_shader.load();
+
+	for(int i=0;i<18;i++){
+		m_vertices[i] = vertices[i];
+	}
+
+	for (int i=0;i<12;i++){
+		m_texCoords[i] = texCoords[i];
+	}
+}
+
+Quad::Quad(float vertices[18], float texCoords[12], std::string vert, std::string frag, std::string texture) : m_verticesBytesSize(18*sizeof(float)), m_texCoordsBytesSize(12*sizeof(float)),
+	m_shader(vert, frag),m_texture(texture){
+	m_texture.load();
+	m_shader.load();
+	
+	for(int i=0;i<18;i++){
+		m_vertices[i] = vertices[i];
+	}
+
+	for (int i=0;i<12;i++){
+		m_texCoords[i] = texCoords[i];
+	}
+}
+
 Quad::~Quad()
 {
 

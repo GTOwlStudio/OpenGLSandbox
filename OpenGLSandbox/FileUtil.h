@@ -32,6 +32,7 @@ static std::string arrayToString(T arr[], int size, int col=0){
 	static bool isChainInFile(std::string filename, std::string chainToFind);
 	static bool arrayToFile(std::string filename, float *arr, int ID, int rows, int cols, int writtingMode);
 	static void fileToArray(std::string filename, int ID, float *dst);
+	static void stringToFile(std::string content, std::string filename);
 	static void startlog(std::string file);
 
 };

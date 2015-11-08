@@ -16,6 +16,8 @@ public:
 	Quad(float x, float y, float w, float h, float depth, std::string vert, std::string frag, std::string texture);
 	Quad(float x, float y, float w, float h, float depth, std::string vert, std::string frag, GLuint textureID);
 	Quad(float vertices[18], std::string vert, std::string frag, std::string texture);
+	Quad(float vertices[18], float texCoords[12], std::string vert, std::string frag, std::string texture);
+	Quad(float vertices[18], float texCoords[12], std::string vert, std::string frag, GLuint textureID);
 	~Quad();
 	void load();
 	void render(glm::mat4 &projection, glm::mat4 &modelview);

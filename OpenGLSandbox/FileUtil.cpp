@@ -100,6 +100,16 @@ void FileUtil::fileToArray(std::string filename, int ID, float *dst){
 	}
 }
 
+void FileUtil::stringToFile(std::string content, std::string filename){
+	std::ofstream file(filename.c_str(), std::ios::app);
+	if (!file){
+		std::cout << "ERROR while opening file : " << filename << std::endl;
+		file.close();
+	}
+	file << content;
+	file.close();
+}
+
 void FileUtil::startlog(std::string logfile){
 
 	std::ifstream read_file(logfile.c_str());
@@ -133,3 +143,4 @@ void FileUtil::startlog(std::string logfile){
 	file << i << "\t" << __TIMESTAMP__ << std::endl; 
 	file.close();
 }
+
