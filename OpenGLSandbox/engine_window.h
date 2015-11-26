@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <SDL2\SDL.h>
+#include "Input.h"
 
 #ifdef WIN32
 #include <GL/glew.h>
@@ -24,12 +25,14 @@ public:
 	~engine_window();
 	bool init();
 	bool init_gl();
+	void updateResize();
 	void update();
 	int getWidth() const;
 	int getHeight() const;
 
 private:
 	SDL_Window *m_mainwindow;
+	SDL_Event m_windowEvent;
 	SDL_GLContext m_glcontext;
 
 	std::string m_window_title;

@@ -1,7 +1,9 @@
 #include "engine_window.h"
 
 
-engine_window::engine_window(int width, int height,std::string title) : m_window_title(title), m_window_width(width), m_window_height(height), m_mainwindow(0), m_glcontext(0)
+engine_window::engine_window(int width, int height,std::string title) : 
+	m_window_title(title), m_window_width(width), m_window_height(height), 
+	m_mainwindow(0), m_glcontext(0)
 {
 }
 
@@ -25,8 +27,8 @@ bool engine_window::init(){
 	
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-//	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+//	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 
 	
 
@@ -35,7 +37,7 @@ bool engine_window::init(){
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);*/
 
 	//WINDOW CREATION
-	m_mainwindow = SDL_CreateWindow(m_window_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_window_width, m_window_height, SDL_WINDOW_SHOWN|SDL_WINDOW_OPENGL);
+	m_mainwindow = SDL_CreateWindow(m_window_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_window_width, m_window_height, SDL_WINDOW_SHOWN|SDL_WINDOW_OPENGL/*|SDL_WINDOW_RESIZABLE*/);
 	//DebugClass::addIf();
 	if (m_mainwindow==0){
 
@@ -56,6 +58,8 @@ bool engine_window::init(){
 		return false;
 	}
 	return true;
+
+
 }
 
 bool engine_window::init_gl(){
@@ -76,7 +80,17 @@ bool engine_window::init_gl(){
 	#endif
 }
 
+void engine_window::updateResize(){
+	//int a = 0;
+	SDL_GetWindowSize(m_mainwindow, &m_window_width, &m_window_height);
+	printf("Window Size is %ix%i\n", m_window_width, m_window_height);
+}
+
 void engine_window::update(){
+	/*if (Input::input.windowResized()){
+		printf("Window Resized\n");
+
+	}*/
 	SDL_GL_SwapWindow(m_mainwindow);
 }
 

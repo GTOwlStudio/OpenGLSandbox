@@ -14,9 +14,12 @@ public:
 
 	void load();
 	void update();
+	void resize(int width, int height);
 	void render(glm::mat4 &guiMatrix);
+	bool isFinished() const;
 
 private:
+	gui_Menu* m_menu_file;
 	FontAtlas &m_font;
 	int m_width;
 	int m_height;
@@ -24,6 +27,7 @@ private:
 	unsigned int m_NNTUObjectOffset; //No Need To Update Object Offset
 	unsigned int m_ILOO; //Independantly loaded objects offset 
 	gui_Object** m_objects;
+	bool m_isFinished;
 	
 
 };

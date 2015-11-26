@@ -154,17 +154,21 @@ gui_Label::gui_Label(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, float
 
 		for (int i =0;i<18;i++){
 			m_coords[i+coordOffset] = tmpCoord[i];
+			
 			//std::printf(" m_tmpCoord[%i] = %f\n", i, tmpCoord[i]);
 			//std::printf(" m_coords[%i] = %f\n", i+coordOffset, m_coords[i+coordOffset]);
 			//std::cout << tmpCoord<< std::endl;
 		}
 		coordOffset+=18;
-
+		
 		for (int i=0;i<12;i++){
 			m_texCoords[i+texCoordOffset] = tmpTexCoords[i];
 			//printf("m_texCoord[%i]=%f\n", i+texCoordOffset, m_texCoords[i+texCoordOffset]);
 		}
 		texCoordOffset+=12;
+	//	FileUtil::stringToFile(FileUtil::arrayToString(m_coords, 18, 3), "dev_test/quad_coords.txt");
+	//	FileUtil::stringToFile(FileUtil::arrayToString(m_texCoords, 18, 3), "dev_test/quad_texcoords.txt");
+
 
 		/*m_coords[o++] = x2;
 		m_coords[o++] = y2;
@@ -332,9 +336,11 @@ gui_Label::gui_Label(std::string text, FontAtlas &atlas, float x, float y, float
 								x3+bl+bw,y3+(ay+bt+bh), depth};*/
 		//dev_size+=bw;
 
+		/*float tmpTexCoords[18] = {(tx-bw)/dev_w,ty/dev_h, (tx-bw)/dev_w,(ty+bh)/dev_h, (tx)/dev_w,(ty+bh)/dev_h,	
+				(tx-bw)/dev_w,ty/dev_h, tx/dev_w,(ty+bh)/dev_h, tx/dev_w,ty/dev_h};*/
+
 		float tmpTexCoords[18] = {(tx-bw)/dev_w,ty/dev_h, (tx-bw)/dev_w,(ty+bh)/dev_h, (tx)/dev_w,(ty+bh)/dev_h,	
 				(tx-bw)/dev_w,ty/dev_h, tx/dev_w,(ty+bh)/dev_h, tx/dev_w,ty/dev_h};
-
 
 		for (int i =0;i<18;i++){
 			m_coords[i+coordOffset] = tmpCoord[i];
@@ -460,7 +466,7 @@ void gui_Label::load(){
 	/*glBufferData(GL_ARRAY_BUFFER, m_coordsBytesSize+ dev_texSize, 0, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, m_coordsBytesSize, m_coords);
 	glBufferSubData(GL_ARRAY_BUFFER, m_coordsBytesSize, dev_texSize, dev_tex);*/
-	glBufferData(GL_ARRAY_BUFFER, m_coordsBytesSize+m_texCoordsBytesSize, 0, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, m_coordsBytesSize+m_texCoordsBytesSize, 0, GL_STREAM_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, m_coordsBytesSize, m_coords);
 	glBufferSubData(GL_ARRAY_BUFFER, m_coordsBytesSize, m_texCoordsBytesSize, m_texCoords);
 	/*glBufferData(GL_ARRAY_BUFFER, m_coordsBytesSize, 0, GL_STATIC_DRAW);
@@ -482,6 +488,8 @@ void gui_Label::load(){
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(2,2,GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(m_coordsBytesSize));
 		glEnableVertexAttribArray(2);
+		/*glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(2);*/
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
@@ -590,6 +598,8 @@ void gui_Label::move(float relX, float relY){
 		m_coords[i] += relY;
 	}
 	updateVBO(m_coords, m_coordsBytesSize, 0);
+	m_x += relX;
+	m_y += relY;
 }
 
 FontAtlas* gui_Label::getFont() const{

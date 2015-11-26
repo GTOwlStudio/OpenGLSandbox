@@ -2,7 +2,7 @@
 
 
 gui_Menu::gui_Menu(std::string name, FontAtlas &font, float x, float y, float w, float h, float depth, float txoffset, float tyoffset) :
-	m_button(name, font, x,y,w,h,depth,1.0,1.0,1.0,1.0, txoffset, tyoffset), m_actions(), m_isUnfold(false), m_isEntered(false), m_isExited(true)
+	m_button(name, font, x,y,w,h,depth,1.0,1.0,1.0,1.0, txoffset, tyoffset), m_actions(), m_isUnfold(false), m_isEntered(false), m_isExited(true), m_lastActionID(-1)
 {
 	
 }
@@ -42,6 +42,9 @@ void gui_Menu::update(){
 	/*if (m_isUnfold!=m_button.beenReleased()){
 		printf("released\n");
 	}*/
+	if (m_lastActionID!=-1){
+		m_lastActionID = -1;
+	}
 	if (!m_isUnfold){
 		m_isUnfold=m_button.beenReleased();
 		m_button.update();
@@ -60,7 +63,9 @@ void gui_Menu::update(){
 				if (m_actions[i]->getButton()->beenReleased()){
 					m_isEntered=false;
 					m_isExited=true; m_isUnfold = false;
-					std::cout << m_actions[i]->getName() << " launched\n";
+					/*std::cout << m_actions[i]->getName() << " launched\n";
+					printf("i=%i\n", i);*/
+					m_lastActionID = i;
 					//printf("%s launched\n", m_actions[i]->getName(), i);
 				}
 				return;
@@ -113,4 +118,8 @@ void gui_Menu::setPosition(float x, float y){
 
 bool gui_Menu::isUnfold() const{
 	return m_isUnfold;
+}
+
+int gui_Menu::getLastActionID() const{
+	return m_lastActionID;
 }

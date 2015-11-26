@@ -139,6 +139,7 @@ void QuadC::render(glm::mat4 &projection, glm::mat4 &modelview){
 }
 
 void QuadC::setPosition(float x, float y){
+	printf("x=%f y=%f\n", x, y);
 	float tmp_W=m_vertices[3]-m_vertices[0];
 	float tmp_H=m_vertices[1]-m_vertices[7];
 	

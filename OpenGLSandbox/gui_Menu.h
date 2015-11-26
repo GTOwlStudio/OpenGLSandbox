@@ -19,6 +19,7 @@ public:
 	void addAction(std::string name);
 	void setActionsWidth(float width);
 	bool isUnfold() const;
+	int getLastActionID() const;
 
 private:
 	gui_Button m_button;
@@ -26,6 +27,7 @@ private:
 	bool m_isUnfold;
 	bool m_isEntered;
 	bool m_isExited;
+	int m_lastActionID;
 	
 };
 

@@ -51,7 +51,7 @@ void gui_Button::load(){
 void gui_Button::update(){
 	//WARNING 600-my -> to dynamic value  (600-width)
 	int x = Input::input.getX();
-	int y = 600-Input::input.getY();
+	int y = Input::input.getY_screen();//-Input::input.getY();
 	//printf("x=%i y=%i\n", x,y);
 	
 	if (m_beenReleased){
@@ -91,7 +91,7 @@ void gui_Button::update(){
 
 void gui_Button::updateLogic(){
 	int x = Input::input.getX();
-	int y = 600-Input::input.getY();
+	int y = Input::input.getY_screen();//600-Input::input.getY();
 	//printf("x=%i y=%i\n", x,y);
 	
 	if (m_beenReleased){

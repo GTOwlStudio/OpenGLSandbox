@@ -2,7 +2,8 @@
 
 // Constructeurs et Destructeur
 
-engine_shader::engine_shader() : m_vertexID(0), m_fragmentID(0), m_programID(0), m_vertexSource(), m_fragmentSource()
+engine_shader::engine_shader() : m_vertexID(0), m_fragmentID(0), m_geometryID(0), m_programID(0), m_vertexSource(), m_fragmentSource(), m_geometrySource(),
+	m_shaderType(SHADER_VERTEX_FRAGMENT)
 {
 }
 
@@ -13,7 +14,7 @@ engine_shader::engine_shader(engine_shader const &shaderACopier)
 
     m_vertexSource = shaderACopier.m_vertexSource;
     m_fragmentSource = shaderACopier.m_fragmentSource;
-
+	m_geometrySource = shaderACopier.m_geometrySource;
 
     // Chargement du nouveau shader
 
@@ -21,8 +22,13 @@ engine_shader::engine_shader(engine_shader const &shaderACopier)
 }
 
 
-engine_shader::engine_shader(std::string vertexSource, std::string fragmentSource) : m_vertexID(0), m_fragmentID(0), m_programID(0),
-                                                                       m_vertexSource(vertexSource), m_fragmentSource(fragmentSource)
+engine_shader::engine_shader(std::string vertexSource, std::string fragmentSource) : m_vertexID(0), m_fragmentID(0), m_geometryID(0), m_programID(0),
+	m_vertexSource(vertexSource), m_fragmentSource(fragmentSource), m_geometrySource(), m_shaderType(SHADER_VERTEX_FRAGMENT)
+{
+}
+
+engine_shader::engine_shader(std::string vertexSource, std::string fragmentSource, std::string geometryShader) : m_vertexID(0), m_fragmentID(0), m_geometryID(0), m_programID(0),
+	m_vertexSource(vertexSource), m_fragmentSource(fragmentSource), m_geometrySource(geometryShader), m_shaderType(SHADER_VERTEX_GEOMETRY_FRAGMENT)
 {
 }
 
@@ -30,12 +36,13 @@ engine_shader::engine_shader(std::string vertexSource, std::string fragmentSourc
 engine_shader::~engine_shader()
 {
     // Destruction du shader
-
-    glDeleteShader(m_vertexID);
+	glDeleteShader(m_vertexID);
     glDeleteShader(m_fragmentID);
+	if (m_shaderType==SHADER_VERTEX_GEOMETRY_FRAGMENT){
+		glDeleteShader(m_geometryID);
+	}
     glDeleteProgram(m_programID);
 }
-
 
 // Méthodes
 
@@ -45,6 +52,7 @@ engine_shader& engine_shader::operator=(engine_shader const &shaderACopier)
 
     m_vertexSource = shaderACopier.m_vertexSource;
     m_fragmentSource = shaderACopier.m_fragmentSource;
+	m_geometrySource = shaderACopier.m_geometrySource;
 
 
     // Chargement du nouveau shader
@@ -68,6 +76,12 @@ bool engine_shader::load()
     if(glIsShader(m_fragmentID) == GL_TRUE)
         glDeleteShader(m_fragmentID);
 
+	if (m_shaderType==SHADER_VERTEX_GEOMETRY_FRAGMENT){
+		if(glIsShader(m_geometryID) == GL_TRUE){
+			glDeleteShader(m_geometryID);
+		}
+	}
+
     if(glIsProgram(m_programID) == GL_TRUE){
         glDeleteProgram(m_programID);
 	}
@@ -75,12 +89,20 @@ bool engine_shader::load()
 
     // Compilation des shaders
 
-    if(!compilerShader(m_vertexID, GL_VERTEX_SHADER, m_vertexSource))
+    if(!compilerShader(m_vertexID, GL_VERTEX_SHADER, m_vertexSource)){
         return false;
+	}
 
-    if(!compilerShader(m_fragmentID, GL_FRAGMENT_SHADER, m_fragmentSource))
+	if (m_shaderType==SHADER_VERTEX_GEOMETRY_FRAGMENT){
+		if (!compilerShader(m_geometryID, GL_GEOMETRY_SHADER, m_geometrySource)){
+			return false;
+		}
+	}
+    if(!compilerShader(m_fragmentID, GL_FRAGMENT_SHADER, m_fragmentSource)){
         return false;
+	}
 
+	
 
     // Création du programme
 
@@ -90,6 +112,9 @@ bool engine_shader::load()
     // Association des shaders
 
     glAttachShader(m_programID, m_vertexID);
+	if (m_shaderType==SHADER_VERTEX_GEOMETRY_FRAGMENT){
+		glAttachShader(m_programID, m_geometryID);
+	}
     glAttachShader(m_programID, m_fragmentID);
 
 
@@ -271,4 +296,8 @@ bool engine_shader::compilerShader(GLuint &shader, GLenum type, std::string cons
 GLuint engine_shader::getProgramID() const
 {
     return m_programID;
+}
+
+SHADER_TYPE engine_shader::getShaderType() const{
+	return m_shaderType;
 }

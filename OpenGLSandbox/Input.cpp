@@ -3,7 +3,8 @@
 
 // Constructeur et Destructeur
 
-Input::Input() : m_x(0), m_y(0), m_xRel(0), m_yRel(0), m_terminer(false)
+Input::Input() : m_x(0), m_y(0), m_xRel(0), m_yRel(0), m_terminer(false),
+	m_window_resized(false), m_updateLoopRotation(0)
 {
     // Initialisation du tableau m_touches[]
 	printf("Careful with the constructor of Input make sure this line is just diplayed once");
@@ -35,8 +36,9 @@ void Input::updateEvenements()
 
 	m_x = m_evenements.motion.x;
     m_y = m_evenements.motion.y;
+//	m_updateLoopRotation = 0;
     // Boucle d'évènements
-
+	m_window_resized = false;
     while(SDL_PollEvent(&m_evenements))
     {
         // Switch sur le type d'évènement
@@ -91,9 +93,13 @@ void Input::updateEvenements()
             // Cas de la fermeture de la fenêtre
 
             case SDL_WINDOWEVENT:
-
+				//printf("Over\n");
                 if(m_evenements.window.event == SDL_WINDOWEVENT_CLOSE)
                     m_terminer = true;
+				if (m_evenements.window.event == SDL_WINDOWEVENT_SIZE_CHANGED){
+					m_window_resized = true;
+					//printf("\tHere1\n");
+				}
 
             break;
 
@@ -101,7 +107,9 @@ void Input::updateEvenements()
             default:
             break;
         }
+		//m_updateLoopRotation++;
     }
+	//printf("\tOut\n");
 }
 
 
@@ -155,6 +163,14 @@ bool Input::mouvementSouris() const
         return true;
 }
 
+bool Input::windowResized() const{
+	return m_window_resized;
+}
+
+void Input::setRefWindow(int height){
+	m_height = height;
+}
+
 
 // Getters concernant la position du curseur
 
@@ -166,6 +182,11 @@ int Input::getX() const
 int Input::getY() const
 {
     return m_y;
+}
+
+int Input::getY_screen() const
+{
+	return m_height - m_y;
 }
 
 int Input::getXRel() const

@@ -20,7 +20,7 @@ public:
 
 private:
 	void updateVBO(void* datas,unsigned int bytesSize, unsigned int offset);
-	engine_shader m_shader;
+	engine_shader m_shader; //The display shader
 	GLuint m_vbo; //VBO ID
 	GLuint m_vao; //VAO iD
 	unsigned int m_pointsBytesSize;
