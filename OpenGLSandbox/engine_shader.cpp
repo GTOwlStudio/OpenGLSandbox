@@ -190,8 +190,9 @@ bool engine_shader::compilerShader(GLuint &shader, GLenum type, std::string cons
 
     if(shader == 0)
     {
-        std::cout << "Erreur, le type de shader (" << type << ") n'existe pas" << std::endl;
-        return false;
+       // std::cout << "Erreur, le type de shader (" << type << ") n'existe pas" << std::endl;
+		Util::error("ERROR : shader type (%s) n'existe pas\n");
+		return false;
     }
 
 
@@ -204,8 +205,9 @@ bool engine_shader::compilerShader(GLuint &shader, GLenum type, std::string cons
 
     if(!fichier)
     {
-        std::cout << "Erreur le fichier " << fichierSource << " est introuvable" << std::endl;
-        glDeleteShader(shader);
+        //std::cout << "Erreur le fichier " << fichierSource << " est introuvable" << std::endl;
+		Util::error("ERROR : file %s is unfindable\n");
+		glDeleteShader(shader);
 
         return false;
     }
@@ -272,7 +274,8 @@ bool engine_shader::compilerShader(GLuint &shader, GLenum type, std::string cons
 
         // Affichage de l'erreur
 
-        std::cout << erreur << std::endl;
+       // std::cout << erreur << std::endl;
+		Util::error(erreur);
 
 
         // Libération de la mémoire et retour du booléen false

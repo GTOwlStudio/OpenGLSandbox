@@ -28,6 +28,7 @@
 #include <string>
 #include <fstream>
 
+#include "Util.h"
 
 // Classe engine_shader
 
@@ -47,7 +48,7 @@ class engine_shader
     engine_shader();
     engine_shader(engine_shader const &shaderACopier);
     engine_shader(std::string vertexSource, std::string fragmentSource);
-	engine_shader(std::string vertexSource, std::string geometrySource, std::string fragmentShader);
+	engine_shader(std::string vertexSource, std::string fragmentShader, std::string geometrySource);
     ~engine_shader();
 
     engine_shader& operator=(engine_shader const &engine_shaderACopier);
