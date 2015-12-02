@@ -16,6 +16,10 @@
 #include "minimum_gui.h"
 #include "gui_devtest.h"
 #include "gui_Action.h"
+#include "Line.h"
+#include "Util.h"
+#include "dev_gs.h"
+#include "BSpline.h"
 
 class engine_core
 {

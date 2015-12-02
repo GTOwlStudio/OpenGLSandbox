@@ -4,6 +4,7 @@ engine_core::engine_core(int w, int h, std::string mainwindowtitle, int fpsCap) 
 	m_fpsCap(fpsCap), m_while_start(0), m_while_duration(0), m_timeBetweenFrames(1000/fpsCap)
 {
 	m_mainwindow = new engine_window(w,h,mainwindowtitle);
+	Input::input.setRefWindow(m_mainwindow->getHeight());
 }
 
 
@@ -25,32 +26,52 @@ bool engine_core::init(){
 
 void engine_core::mainLoop(){
 
-	glm::mat4 projection = glm::ortho(0.0f,960.0f, 0.0f, 600.0f);
+	//glm::mat4 guiMat = glm::ortho(0.0f,960.0f, 0.0f, 600.0f);
+	glm::mat4 guiMat = glm::ortho(0.0f,(float)m_mainwindow->getWidth(), 0.0f, (float)m_mainwindow->getHeight());
 	//glm::mat4 projection = glm::ortho(0.0f,960.0f, 0.0f, 600.0f, -1.0f, 100.0f);
     glm::mat4 modelview = glm::mat4(1.0);
 	FontAtlas ftest("fonts/tahoma.ttf", 12);
+	FontAtlas ebrima("fonts/ebrima.ttf", 48);
 	//Quad q(20.0,20.0,512.0,48,1.0,"shaders/font.vert", "shaders/font.frag", "textures/base_texture.jpg");
 	//Quad q(0.0,0.0,512.0,512.0,1.0,"shaders/font_dev.vert", "shaders/font_dev.frag", "textures/dev_atlasredtest.png");
-    /*Quad q(20.0,250.0,512,72.0,0.2,"shaders/font_dev.vert", "shaders/font_dev.frag", ftest.getTexID());
+	/*Quad q(200.0,10.0,512,ftest.getAtlasHeight(),0.2,"shaders/font_dev.vert", "shaders/font_dev.frag", ftest.getTexID());
 	q.load();*/
-	//ftest.getATextWidth("testt");
-	/*QuadC t(1.0f,589.0f,18.0f,9.0f,0.2f,1.0f,0.0f,1.0f, 0.5f);
-	t.load();*/
-	//gui_Button button("OpenGL", ftest, 100.0,100.0,     100.0, 20.0, 0.7, 1.0, 1.0, 0.0);
 
-	/*gui_Button button("File",  ftest,  50.0,  50, 200.0, 200.0, 0.7, 1.0, 0.0, 0.0);
+	float qVertices[18] = {0.0f,0.0f+512.0f,0.2f, 0.0f+512.0f,0.0f+512.0f,0.2f,	0.0f,0.0f,0.2f,
+							 0.0f,0.0f,0.2f,	 0.0f+512.0f,0.0f+512.0f,0.2f,		0.0f+512.0f,0.0f,0.2f};
+	float qTexc[12] = {0.0,1.0, 1.0,1.0, 0.0,0.0, 
+								0.0,0.0, 1.0,1.0, 1.0, 0.0};
+	
+	Quad test(qVertices, qTexc, "shaders/texture.vert", "shaders/texture.frag", "textures/texu.png");
+	test.load();
+	/*gui_Button button("OpenGL", ftest, 100.0,100.0,     100.0, 20.0, 0.7, 1.0, 1.0, 0.0);
 	button.load();*/
-	//std::string test_string("Why the majuscle o not display see here ->OpenGL");
-	std::string test_string("File");
-	/*QuadC rect(50.0, 50.0, 150.0,  150.0, 0.7, 1.0, 0.0, 0.0, 0.2);
-	rect.load();*/
-	printf("File/2.0=%f\n", ftest.getATextWidth("File")/2.0);
-	/*QuadC rect2(50.0, 50.0, 689,  ftest.getATextHeight(test_string), 0.7, 0.0, 1.0, 0.0, 0.2);
-	rect2.load();*/
-	//printf("textsize w=%f h=%f\n", ftest.getATextWidth("Why the majuscle o not display see here ->OpenGL"), ftest.getATextHeight("Why the majuscle o not display see here ->OpenGL"));
+	
+/*	int gsMI;
+	glGetIntegerv(GL_MAX_GEOMETRY_SHADER_INVOCATIONS, &gsMI);
+	printf("GL_MAX_GEOMETRY_SHADER_INVOCATIONS=%i\n", gsMI);*/
+
+	std::string test_string("The Quick Brown Fox Jump Over The Lazy Dog");
+
+//	printf("File/2.0=%f\n", ftest.getATextWidth("File")/2.0);
+
+	glLineWidth(2.0);
+	glEnable(GL_LINE_SMOOTH);
+	Line line(50.0, 50.0, 0.2,  100.0, 100.0, 0.2f, 1.0, 0.0, 1.0, 1.0);
+	line.load();
+	line.addPoints(400.0, 000.0, 0.2);
+	line.addPoints(450.0, 300.0, 0.2);
+	printf("engine_width=%i engine_height=%i\n", m_mainwindow->getWidth(), m_mainwindow->getHeight());
 	minimum_gui gui(m_mainwindow->getWidth(), m_mainwindow->getHeight(), ftest);
 	gui.load();
 
+	QuadC rq(150.0, 150.0, 10, 10, 0.2, 1.0, 1.0, 1.0, 1.0);
+	rq.load();
+
+	dev_gs geometrys(200.0f, 200.0f, 300.0f, 200.0f, 0.2f, "shaders/gs_basic.vert", "shaders/gs_basic.frag", "shaders/gs_basic.gs");
+	geometrys.load();
+	//gui_Action action("Action 1", ftest, 0.0, 570.0,45.0,10.0,0.1);
+	//action.load();
 	/*gui_devtest dev("File", ftest);
 	dev.update();*/
 
@@ -62,37 +83,77 @@ void engine_core::mainLoop(){
 	/*Quad debug(v, "shaders/font_dev.vert", "shaders/font_dev.frag", "textures/base_texture.jpg");
 	debug.load();*/
 	//char allleter[128-32];
-	std::string allLetter = "";
+	std::string allLetter = "The Quick Brown Fox Jum Over The Lazy Dog";
 	for (int i=64;i<128;i++){
 		allLetter+=char(i);
 	}
 	/*gui_Label alphabet(allLetter, ftest, glm::vec4(10,200,80,10), 0.1, 1.0,0.0,0.0);
 	alphabet.load();*/
-	gui_Label label(test_string, ftest, glm::vec4(50.0,50.0,ftest.getATextWidth(test_string),ftest.getATextHeight(test_string)), 0.1,1.0,0.0,0.0);
-	label.load();
-	label.move(100.0,0.0);
+	/*gui_Label label(test_string, ftest, glm::vec4(50.0,50.52,ftest.getATextWidth(test_string),ftest.getATextHeight(test_string)), 0.1,1.0,0.0,0.0);
+	label.load();*/
+	//label.setPosition(100.0,100.0);
+	//label.move(100.0,0.0);
 	//label.move(100.0, 0.0);
+	
+	BSpline spline(50.0, 50.0, 0.2,  100.0, 150.0, 0.2f, 1.0, 0.0, 0.0, 1.0);
+	spline.load();
+	spline.addControlPoint(400.0, 000.0, 0.2);
+	spline.addControlPoint(450.0, 300.0, 0.2);
+	spline.generateSpline(0.05f);
 
-	/*gui_Label l(test_string, ftest, 50.0+0.7,50.0, 0.1,0.0,0.0,1.0);
+	gui_Label l(test_string, ebrima, 51.0, 51.0, 0.1,0.0,0.0,1.0);
+	l.load();
+	//l.move(0.0, 0.5);
+	//l.move(0.0, -0.5);
+	/*gui_devtest l (test_string, ftest, 50.0f, 50.0f,0.1,0.0,0.0,1.0);
 	l.load();*/
-	QuadC mq(20.0f,20.0f,20.0f,20.0f, 0.1f, 1.0f,0.0f,0.0f,1.0f);
+	/*QuadC mq(20.0f,20.0f,20.0f,20.0f, 0.1f, 1.0f,0.0f,0.0f,1.0f);
 	mq.load();
-	mq.setPosition(100.0,20.0);
-	glClearColor(0.25,0.25,0.25,1.0);
+	mq.setPosition(100.0,20.0);*/
+	float greyValue = 0.75;
+	//glClearColor(0.25,0.25,0.25,1.0);
+	glClearColor(greyValue, greyValue,greyValue,1.0f);
 	//glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
+	//glm::vec4 ();
+	Util::getPointPositionOnScreen(guiMat, glm::vec4(50.0, 50.0, 0.2, 1.0), m_mainwindow->getWidth(), m_mainwindow->getHeight());
+
+	/*Uint32 m_S, m_L;
+	Uint32 updateFreq = 240;
 	//while(!m_input.terminer())
+	m_S = SDL_GetTicks();*/
 	while(!Input::input.terminer())
+	//while(!Input::input.terminer())
     {
 
-		m_while_start = SDL_GetTicks();
-
+		/*m_while_start = SDL_GetTicks();
+		m_L = SDL_GetTicks();
+		if ((m_L-m_S)>=(1000/updateFreq)){
+			m_S = SDL_GetTicks();
+			//printf("here\n");
+			l.setPosition(Input::input.getX(), m_mainwindow->getHeight()- Input::input.getY());
+			//l.move(0.0, 0.05);
+		}*/
        // m_input.updateEvenements();
 		Input::input.updateEvenements();
+		if (Input::input.windowResized()){
+			m_mainwindow->updateResize(); // Just To Set The Good With and Height
+			gui.resize(m_mainwindow->getWidth(), m_mainwindow->getHeight());
+			printf("x:%i y:%i\n", 150.0, m_mainwindow->getHeight()-50);
+			//std::cout << m_mainwindow->getHeight()-50 << std::endl;
+			rq.setPosition(150.0, m_mainwindow->getHeight()-50);
+		}
         if(Input::input.getTouche(SDL_SCANCODE_ESCAPE))
            break;
+		if (Input::input.getTouche(SDL_SCANCODE_P)){
+			rq.setPosition(300, m_mainwindow->getHeight()-50);
+		}
+		if (!gui.isFinished()){
+			break;
+		}
 		/*if (m_input.getTouche(SDL_SCANCODE_G)){
 			std::cout << "GL : "<< gl_version_major << "." << gl_version_minor << std::endl;
 		}*/
@@ -102,18 +163,24 @@ void engine_core::mainLoop(){
         glClear(GL_COLOR_BUFFER_BIT/* | GL_DEPTH_BUFFER_BIT*/);
 		//RENDU
       //  caisse.afficher(projection, modelview);
-		//q.render(projection, modelview);
+	//	q.render(projection, modelview);
 		//r.render(projection, modelview);	
-		label.render(projection, modelview);
-		mq.render(projection, modelview);
+	//	label.render(projection, modelview);
+//		mq.render(projection, modelview);
 		//alphabet.render(projection, modelview);
-		//l.render(projection, modelview);
+		//l.render(guiMat, modelview);
+		//geometrys.render(guiMat, modelview);
+		//rq.render(guiMat, modelview);
 	//	dev.update();
 		//dev.render(projection, modelview);
-
+	//	aLetter.render(projection, modelview);
+		//test.render(projection, modelview);
+		line.render(guiMat);
+		spline.render(guiMat);
 		gui.update();
-		gui.render(projection);
+		gui.render(guiMat);
 
+		//action.render(projection, modelview);
 		//t.render(projection, modelview);
 
 		/*button.update();
@@ -123,10 +190,13 @@ void engine_core::mainLoop(){
 		//rect2.render(projection, modelview);
 		//debug.render(projection, modelview);
 
+		
+
 		m_mainwindow->update();
 
 		m_while_duration = SDL_GetTicks()-m_while_start;		
 		if(m_while_duration< m_timeBetweenFrames)
+			//glFlush();
 			SDL_Delay(m_timeBetweenFrames - m_while_duration);
     }
 
