@@ -74,6 +74,7 @@ void BSpline::render(glm::mat4 &mat){
 BSpline::~BSpline(void)
 {
 	glDeleteBuffers(1, &m_vbo);
+	glDeleteBuffers(1, &m_vbo_spline);
 	glDeleteVertexArrays(1, &m_vao);
 }
 
@@ -82,13 +83,13 @@ void BSpline::addControlPoint(float x, float y, float z){
 	m_control.push_back(x);
 	m_control.push_back(y);
 	m_control.push_back(z);
-	printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
+	//printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
 	m_colors.push_back(m_colors[m_colors.size()-4]);
-	printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
+	//printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
 	m_colors.push_back(m_colors[m_colors.size()-4]);
-	printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
+	//printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
 	m_colors.push_back(m_colors[m_colors.size()-4]);
-	printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
+	//printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
 	m_colors.push_back(m_colors[m_colors.size()-4]);
 	m_controlBytesSize += sizeof(float)*3;
 	m_colorsBytesSize += sizeof(float)*4;

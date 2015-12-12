@@ -16,6 +16,8 @@ public:
 	void load();
 	void render(glm::mat4 &mat);
 	void addPoints(float x, float y, float z);
+	unsigned int getLineSized() const;
+	void setPoint(unsigned int pId, float modX, float modY, float modZ); //pId points ID, modX, mod......, value of the points 
 
 
 private:

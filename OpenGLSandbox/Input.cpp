@@ -48,14 +48,16 @@ void Input::updateEvenements()
             // Cas d'une touche enfoncée
 
             case SDL_KEYDOWN:
-                m_touches[m_evenements.key.keysym.scancode] = true;
+				//m_touches[m_evenements.key.keysym.scancode] = true;
+				m_touches[m_evenements.key.keysym.sym] = true;
             break;
 
 
             // Cas d'une touche relâchée
 
             case SDL_KEYUP:
-                m_touches[m_evenements.key.keysym.scancode] = false;
+              //  m_touches[m_evenements.key.keysym.scancode] = false;
+				m_touches[m_evenements.key.keysym.sym] = false;
             break;
 
 
@@ -142,7 +144,8 @@ void Input::capturerPointeur(bool reponse) const
 
 // Getters
 
-bool Input::getTouche(const SDL_Scancode touche) const
+//bool Input::getTouche(const SDL_Scancode touche) const
+bool Input::getTouche(const SDL_Keycode touche) const
 {
     return m_touches[touche];
 }

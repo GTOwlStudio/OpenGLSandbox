@@ -95,11 +95,16 @@ void engine_core::mainLoop(){
 	//label.move(100.0,0.0);
 	//label.move(100.0, 0.0);
 	
-	BSpline spline(50.0, 50.0, 0.2,  100.0, 150.0, 0.2f, 1.0, 0.0, 0.0, 1.0);
+	BSpline spline(50.0, 50.0, 0.2,  100.0, 100.0, 0.2f, 1.0, 0.0, 0.0, 1.0);
 	spline.load();
 	spline.addControlPoint(400.0, 000.0, 0.2);
 	spline.addControlPoint(450.0, 300.0, 0.2);
-	spline.generateSpline(0.05f);
+	spline.generateSpline(0.025f);
+
+	//Line segment(100.0, 100.0, 400.0, 100.0, 0.2, 1.0, 0.0, 1.0, 1.0);
+	Line segment(100.0, 200.0, 0.2,  400.0, 200.0, 0.2f, 1.0, 0.0, 1.0, 1.0);
+	segment.load();
+	//segment.addPoints(200.0, 100.0, 0.2);
 
 	gui_Label l(test_string, ebrima, 51.0, 51.0, 0.1,0.0,0.0,1.0);
 	l.load();
@@ -117,7 +122,7 @@ void engine_core::mainLoop(){
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 //	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-
+	bool dev_hit = false;
 	//glm::vec4 ();
 	Util::getPointPositionOnScreen(guiMat, glm::vec4(50.0, 50.0, 0.2, 1.0), m_mainwindow->getWidth(), m_mainwindow->getHeight());
 
@@ -141,15 +146,26 @@ void engine_core::mainLoop(){
 		Input::input.updateEvenements();
 		if (Input::input.windowResized()){
 			m_mainwindow->updateResize(); // Just To Set The Good With and Height
+			printf("x:%i y:%i\n", 150, (int)m_mainwindow->getHeight()-50);
 			gui.resize(m_mainwindow->getWidth(), m_mainwindow->getHeight());
-			printf("x:%i y:%i\n", 150.0, m_mainwindow->getHeight()-50);
+			
 			//std::cout << m_mainwindow->getHeight()-50 << std::endl;
-			rq.setPosition(150.0, m_mainwindow->getHeight()-50);
+			rq.setPosition(150.0, (float)m_mainwindow->getHeight()-50.0f);
+			guiMat = glm::ortho(0.0f, (float)m_mainwindow->getWidth(), 0.0f, (float)m_mainwindow->getHeight());
+			glViewport(0, 0, m_mainwindow->getWidth(), m_mainwindow->getHeight());
 		}
-        if(Input::input.getTouche(SDL_SCANCODE_ESCAPE))
+		if(Input::input.getTouche(SDLK_ESCAPE))
            break;
-		if (Input::input.getTouche(SDL_SCANCODE_P)){
-			rq.setPosition(300, m_mainwindow->getHeight()-50);
+		if (Input::input.getTouche(SDLK_g)){
+			gui.resize(m_mainwindow->getWidth(), m_mainwindow->getHeight());
+		}
+		if (Input::input.getTouche(SDLK_p)){
+			rq.setPosition(300, (m_mainwindow->getHeight())-50);
+		}
+		if (Input::input.getTouche(SDLK_a)&&!dev_hit){
+			printf("Here\n");
+			segment.setPoint(1, 150.0, 10.0, 0.2);
+			dev_hit = true;
 		}
 		if (!gui.isFinished()){
 			break;
@@ -170,15 +186,17 @@ void engine_core::mainLoop(){
 		//alphabet.render(projection, modelview);
 		//l.render(guiMat, modelview);
 		//geometrys.render(guiMat, modelview);
-		//rq.render(guiMat, modelview);
+		rq.render(guiMat, modelview);
 	//	dev.update();
 		//dev.render(projection, modelview);
 	//	aLetter.render(projection, modelview);
 		//test.render(projection, modelview);
+		segment.render(guiMat);
 		line.render(guiMat);
 		spline.render(guiMat);
 		gui.update();
 		gui.render(guiMat);
+		
 
 		//action.render(projection, modelview);
 		//t.render(projection, modelview);

@@ -31,11 +31,11 @@
 //	*/
 //}
 
-dev_gs::dev_gs(float x, float y, float w, float h, float depth,std::string vert, std::string frag, std::string geometry) : m_verticesBytesSize(12*sizeof(float)),
+dev_gs::dev_gs(float x, float y, float w, float h, float depth,std::string vert, std::string frag, std::string geometry) : m_verticesBytesSize(9*sizeof(float)),
 m_shader(vert, frag, geometry)
 {
 	m_shader.load();
-	float tmpVertices[12] = {x,y,depth	,x+w,y,depth,	x+w,y+w,depth, x,y+h,depth};
+	float tmpVertices[9] = {x,y,depth	,x,y+h,depth,	x+w,y+w,depth};//, x+w,y,depth};
 	for (int i = 0;i<12;i++){
 		m_vertices[i] = tmpVertices[i];
 	}
@@ -120,7 +120,7 @@ void dev_gs::render(glm::mat4 &projection, glm::mat4 &modelview){
 
            // glBindTexture(GL_TEXTURE_2D, m_texture.getID());
 
-            glDrawArrays(GL_POINTS, 0, 4);
+            glDrawArrays(GL_TRIANGLES, 0, 3);
 
 			//glBindTexture(GL_TEXTURE_2D, 0);
         glBindVertexArray(0);

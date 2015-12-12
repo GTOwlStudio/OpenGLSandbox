@@ -37,7 +37,7 @@ bool engine_window::init(){
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);*/
 
 	//WINDOW CREATION
-	m_mainwindow = SDL_CreateWindow(m_window_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_window_width, m_window_height, SDL_WINDOW_SHOWN|SDL_WINDOW_OPENGL/*|SDL_WINDOW_RESIZABLE*/);
+	m_mainwindow = SDL_CreateWindow(m_window_title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_window_width, m_window_height, SDL_WINDOW_SHOWN|SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE);
 	//DebugClass::addIf();
 	if (m_mainwindow==0){
 
@@ -45,6 +45,8 @@ bool engine_window::init(){
 		SDL_Quit();
 		return false;
 	}
+
+	//SDL_EnableUno
 
 	//OpenGL Context CREATION
 	m_glcontext = SDL_GL_CreateContext(m_mainwindow);

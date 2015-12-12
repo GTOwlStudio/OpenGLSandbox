@@ -11,7 +11,7 @@ QuadC::QuadC(float x, float y, float w, float h, float depth, float r, float g, 
 	m_shader("shaders/colors.vert", "shaders/colors.frag")
 {
 	//m_texture.load();
-	printf("m_w=%f m_h=%f\n", w,h);
+	//printf("m_w=%f m_h=%f\n", w,h);
 	m_shader.load();
 	/*float tmpVertices[18] = {x,y,depth, x+w,y,depth, x,y+h,depth,
 							x,y+h,depth, x+w,y,depth, x+w,y+h,depth};*/
@@ -139,7 +139,7 @@ void QuadC::render(glm::mat4 &projection, glm::mat4 &modelview){
 }
 
 void QuadC::setPosition(float x, float y){
-	printf("x=%f y=%f\n", x, y);
+	//printf("x=%f y=%f\n", x, y);
 	float tmp_W=m_vertices[3]-m_vertices[0];
 	float tmp_H=m_vertices[1]-m_vertices[7];
 	
@@ -158,7 +158,7 @@ void QuadC::setPosition(float x, float y){
 void QuadC::setBounds(float w, float h){
 	float tmp_X = m_vertices[0];
 	float tmp_Y = m_vertices[7];
-	printf("x=%f y=%f\n", tmp_X, tmp_Y);
+//	printf("x=%f y=%f\n", tmp_X, tmp_Y);
 	float tmpVertices[12] = {tmp_X,tmp_Y+h, tmp_X+w,tmp_Y+h,	tmp_X,tmp_Y,
 							 tmp_X,tmp_Y,	 tmp_X+w,tmp_Y+h,		tmp_X+w, tmp_Y};
 	int offset=0;

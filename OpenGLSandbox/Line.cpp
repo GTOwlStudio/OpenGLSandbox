@@ -89,13 +89,13 @@ void Line::addPoints(float x, float y, float z){
 	m_points.push_back(x);
 	m_points.push_back(y);
 	m_points.push_back(z);
-	printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
+	//printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
 	m_colors.push_back(m_colors[m_colors.size()-4]);
-	printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
+	//printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
 	m_colors.push_back(m_colors[m_colors.size()-4]);
-	printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
+	//printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
 	m_colors.push_back(m_colors[m_colors.size()-4]);
-	printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
+	//printf("m_colors[m_colors.size()-4]=%f\n", m_colors[m_colors.size()-4]);
 	m_colors.push_back(m_colors[m_colors.size()-4]);
 	m_pointsBytesSize += sizeof(float)*3;
 	m_colorsBytesSize += sizeof(float)*4;
@@ -135,4 +135,23 @@ void Line::updateVBO(void* datas,unsigned int bytesSize, unsigned int offset){
 	glUnmapBuffer(GL_ARRAY_BUFFER);
 	VBOAddress = 0;
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+unsigned int Line::getLineSized() const{
+	return m_points.size();
+}
+
+void Line::setPoint(unsigned int id, float x, float y, float z){
+	if (id*3<m_points.size()){
+	printf("id*3=%i\n", id*3);
+	m_points[id*3] = x;
+	printf("id*3+1=%i\n", (id*3)+1);
+	m_points[(id*3)+1] = y;
+	printf("id*3+2=%i\n", (id*3)+2);
+	m_points[(id*3)+2] = z;
+	//WARNING
+	float ncoords[3] = {x,y,z};
+	updateVBO(ncoords, sizeof(float)*3, sizeof(float)*3*id);
+
+	}
 }

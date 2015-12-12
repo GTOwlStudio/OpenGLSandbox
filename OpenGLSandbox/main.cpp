@@ -30,8 +30,8 @@ int main(int argc, char** argv){
 	//float test[6] = {0.0,25.0,56.56,0.0,560,6.0};
 	//FileUtil::arrayToFile("dev_test/arr.txt", test, 0, 3,2, MODE_ADD);
 	//printf("charsize=%i", sizeof(char));
-	//engine_core engine(960,600,"OpenGL 3.3 Engine", 60);
-	engine_core engine(1440,900,"OpenGL 3.3 Engine", 60);
+	engine_core engine(960,600,"OpenGL 3.3 Engine", 60);
+	//engine_core engine(1440,900,"OpenGL 3.3 Engine", 60);
 	engine.init();
 	engine.mainLoop();
 	_CrtDumpMemoryLeaks();

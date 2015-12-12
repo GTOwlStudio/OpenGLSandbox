@@ -51,8 +51,8 @@ gui_Label::gui_Label(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, float
 
 	//int atlas_width = m_fontatlas->getAtlasWidth();
 	//int atlas_height = m_fontatlas->getAtlasHeight();
-	std::printf("m_text.c_str() = %s\n", m_text.c_str());
-
+	//std::printf("m_text.c_str() = %s\n", m_text.c_str());
+	Util::dev("m_text.c_str() = %s\n", m_text.c_str());
 	float x3 = m_x;
 	float y3 = m_y-m_fontatlas->getFontHeight();
 	float ax,ay,bw,bh,bl,bt,tx,ty;
@@ -239,7 +239,7 @@ gui_Label::gui_Label(std::string text, FontAtlas &atlas, float x, float y, float
 
 	//int atlas_width = m_fontatlas->getAtlasWidth();
 	//int atlas_height = m_fontatlas->getAtlasHeight();
-	std::printf("m_text.c_str() = %s\n", m_text.c_str());
+	//std::printf("m_text.c_str() = %s\n", m_text.c_str());
 
 	float x3 = m_x;
 	float y3 = m_y-m_fontatlas->getFontHeight();

@@ -107,7 +107,7 @@ FontAtlas::FontAtlas(std::string fontfile, int fontHeight) : m_texID(0),
 		m_charInfo[i].ty = (float)last_y;
 
 	}
-
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	//for (int i=32;i<128;i++){
 	//	if (FT_Load_Char(m_face, i, FT_LOAD_RENDER)){std::cout << "Failed To loadchar" << i << std::endl;}

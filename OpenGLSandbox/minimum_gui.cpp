@@ -4,7 +4,7 @@
 minimum_gui::minimum_gui(int width, int height, FontAtlas &font) : m_objectsSize(1), m_NNTUObjectOffset(1), m_ILOO(0), m_font(font), m_width(width), m_height(height), m_isFinished(true)
 {
 	m_objects = new gui_Object*[m_objectsSize];
-	m_objects[0] = new QuadC(0.0, height-20.0, width, 20.0, 0.700, 1.0, 1.0, 1.0, 1.0);
+	m_objects[0] = new QuadC(0.0, height-20.0, width, 20.0, 0.700, 0.0, 1.0, 1.0, 1.0);
 	//gui_Menu* menu_file = new gui_Menu("File", m_font, 0.0f,m_height-20.0, 20.0f, 20.0f, 0.701f, 0.0, 7.0f);
 	
 
@@ -25,7 +25,8 @@ void minimum_gui::load(){
 }
 
 void minimum_gui::resize(int width, int height){
-	m_objects[0]->setPosition(0, height-40);
+	printf("width=%i height=%i\n", width, height);
+	m_objects[0]->setPosition(0, (float)(height-20.0f));
 }
 
 void minimum_gui::update(){

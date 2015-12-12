@@ -3,6 +3,7 @@
 #include "gui_Object.h"
 #include "FontAtlas.h"
 #include "FileUtil.h"
+#include "Util.h"
 
 enum LABEL_POS_MODE {
 	LABEL_POS_NONE = 0, //USER Defined
@@ -19,6 +20,7 @@ public:
 	void load();
 	void update();
 	void updateVBO(void* datas, unsigned int bytesSize, unsigned int offset);
+	//void render(glm::mat4 &projection);
 	void render(glm::mat4 &projection, glm::mat4 &modelview);
 	void setPosition(float x, float y);
 	void move(float relX, float relY);
@@ -40,7 +42,7 @@ private:
 	unsigned int m_colorsBytesSize;
 	unsigned int m_texCoordsBytesSize;
 	
-	glm::vec4 *m_coord; //Contains tex coords of each letter in atlas
+	glm::vec4 *m_coord; //Contains tex coords of each letter in 
 	float *m_coords; //Contains the coords of the quad
 	float *m_texCoords; //Contains the tex coords of the each letter in atlas
 

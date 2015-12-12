@@ -11,6 +11,7 @@ class Util
 public:
 	static glm::vec2 getPointPositionOnScreen(glm::mat4 const& matrix, glm::vec4 pPos, int screen_width, int screen_height);
 	static void error(const char* format, ...);
+	static void dev(const char* format, ...);
 
 private:
 	static HANDLE m_console_err_handle;

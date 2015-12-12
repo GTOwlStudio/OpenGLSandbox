@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ActionListener.cpp" />
+    <ClCompile Include="BSpline.cpp" />
+    <ClCompile Include="dev_gs.cpp" />
+    <ClCompile Include="engine_camera.cpp" />
+    <ClCompile Include="engine_core.cpp" />
+    <ClCompile Include="engine_shader.cpp" />
+    <ClCompile Include="engine_texture.cpp" />
+    <ClCompile Include="engine_window.cpp" />
+    <ClCompile Include="FileUtil.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="FontAtlas.cpp" />
+    <ClCompile Include="gui_Action.cpp" />
+    <ClCompile Include="gui_Button.cpp" />
+    <ClCompile Include="gui_devtest.cpp" />
+    <ClCompile Include="gui_FloatableMenu.cpp" />
+    <ClCompile Include="gui_Label.cpp" />
+    <ClCompile Include="gui_Menu.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="minimum_gui.cpp" />
+    <ClCompile Include="Quad.cpp" />
+    <ClCompile Include="QuadC.cpp" />
+    <ClCompile Include="test_gchar.cpp" />
+    <ClCompile Include="Util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ActionListener.h" />
+    <ClInclude Include="BSpline.h" />
+    <ClInclude Include="dev_gs.h" />
+    <ClInclude Include="engine_camera.h" />
+    <ClInclude Include="engine_core.h" />
+    <ClInclude Include="engine_shader.h" />
+    <ClInclude Include="engine_texture.h" />
+    <ClInclude Include="engine_window.h" />
+    <ClInclude Include="FileUtil.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="FontAtlas.h" />
+    <ClInclude Include="gui_Action.h" />
+    <ClInclude Include="gui_Button.h" />
+    <ClInclude Include="gui_devtest.h" />
+    <ClInclude Include="gui_FloatableMenu.h" />
+    <ClInclude Include="gui_Label.h" />
+    <ClInclude Include="gui_Menu.h" />
+    <ClInclude Include="gui_Object.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Line.h" />
+    <ClInclude Include="minimum_gui.h" />
+    <ClInclude Include="Quad.h" />
+    <ClInclude Include="QuadC.h" />
+    <ClInclude Include="test_gchar.h" />
+    <ClInclude Include="Util.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C99B5B92-B2C3-4180-AB50-FDBB4008E4C8}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>OpenGLSandbox</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\Thomas Duborgel\Documents\Visual Studio 2015\Projects\OpenGLSandbox\OpenGLSandbox\lib\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Thomas Duborgel\Documents\Visual Studio 2015\Projects\OpenGLSandbox\OpenGLSandbox\lib\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
