@@ -1,13 +1,14 @@
 #include "gui_Button.h"
 
 
-gui_Button::gui_Button(std::string text, FontAtlas &font, float x, float y, float w, float h, float depth, float r, float g, float b, float a, float txoffset, float tyoffset) : 
+gui_Button::gui_Button(std::string text, FontAtlas &font, float x, float y, float w, float h, float depth, float r, float g, float b, float a, float txoffset, float tyoffset) :
 	/*m_background(x,y,font.getTextWidth(text),font.getTextHeight(text),depth,r,g,b,a), m_text(text, font, glm::vec4(x,y,w,h), depth, 1.0,1.0,1.0),
 	m_x(x), m_y(y), m_w(w), m_h(h), m_isEntered(false), m_isExited(true), m_isPressed(false), m_beenReleased(false)*/
-	m_x(x), m_y(y), m_w(w), m_h(h),m_depth(depth),
-	m_background(x,y,w,h,depth,r,g,b,a), m_text(text, font, glm::vec4(x+txoffset,y+tyoffset,w,h), depth, 1.0,1.0,1.0),
-	m_isEntered(false), m_isExited(true), m_isPressed(false), m_beenReleased(false)
+	m_x(x), m_y(y), m_w(w), m_h(h), m_depth(depth),
+	m_background(x, y, w, h, depth, r, g, b, a), m_text(text, font, glm::vec4(x + txoffset, y + tyoffset, w, h), depth, 1.0, 1.0, 1.0),
+	m_isEntered(false), m_isExited(true), m_isPressed(false), m_beenReleased(false), m_tx(txoffset), m_ty(tyoffset), m_layout(LABEL_POS_CENTERED)
 {
+	//Util::green("xo%f xy%f\n", txoffset, tyoffset);
 	for (int i=0;i<24;i+=4){
 		m_colors[i] = r;
 		m_colors[i+1] = g;
@@ -37,6 +38,18 @@ gui_Button::gui_Button(std::string text, FontAtlas &font, float x, float y, floa
 	}*/
 
 }
+
+gui_Button::gui_Button(std::string text, FontAtlas & font, float x, float y, float w, float h, float depth, float r, float g, float b, float a, LABEL_POS_MODE xmode, LABEL_POS_MODE ymode) : gui_Button(text, font, x,y,w,h,depth,r,g,b,a, 0.0, 0.0)
+{
+	if (xmode==LABEL_POS_CENTERED) {
+		m_text.move((int)( (w/2) - (font.getATextWidth(text)/2) ), 0.0);
+	}
+	if (ymode==LABEL_POS_CENTERED) {
+		m_text.move(0.0, (int)((h / 2) - (font.getATextHeight(text) / 2)));
+	}
+}
+
+
 
 
 gui_Button::~gui_Button()
@@ -188,8 +201,10 @@ gui_Label* gui_Button::getLabel(){
 }
 
 void gui_Button::setPosition(float x, float y){
+	m_x = x;
+	m_y = y;
 	m_background.setPosition(x,y);
-	m_text.setPosition(x,y);
+	m_text.setPosition(x+m_tx,y+m_ty);
 	
 }
 

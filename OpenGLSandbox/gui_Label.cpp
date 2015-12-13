@@ -379,6 +379,14 @@ gui_Label::gui_Label(std::string text, FontAtlas &atlas, float x, float y, float
 	//printf("dev_v=%f\n", dev_v);
 
 }
+gui_Label & gui_Label::operator=(gui_Label const & labelToCopy)
+{
+	/*if (this != &labelToCopy) {
+		m_text = labelToCopy.m_text;
+		m_
+	}*/
+	return *this;
+}
 
 void gui_Label::update(){
 
@@ -591,15 +599,22 @@ void gui_Label::setPosition(float x, float y){
 	m_x=x;m_y=y;
 }
 
+void gui_Label::setBounds(float w, float h){
+	Util::error("Dont use set bounds on gui_Label, not supported yet");
+}
+
 void gui_Label::move(float relX, float relY){
-	for (int i=0;i<18*m_textSize;i+=2){
-		m_coords[i] += relX;
-		i++;
-		m_coords[i] += relY;
-	}
-	updateVBO(m_coords, m_coordsBytesSize, 0);
-	m_x += relX;
-	m_y += relY;
+	
+		for (int i = 0; i < 18 * m_textSize; i += 2) {
+			m_coords[i] += relX;
+			i++;
+			m_coords[i] += relY;
+		}
+		if (glIsBuffer(m_vboID)) {
+			updateVBO(m_coords, m_coordsBytesSize, 0);
+		}
+		m_x += relX;
+		m_y += relY;
 }
 
 FontAtlas* gui_Label::getFont() const{

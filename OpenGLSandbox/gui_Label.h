@@ -15,6 +15,7 @@ class gui_Label : public gui_Object
 public:
 	gui_Label(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, float depth,float  r, float g, float b);
 	gui_Label(std::string text, FontAtlas &atlas, float x, float y, float depth,float  r, float g, float b);
+	gui_Label& operator=(gui_Label const& labelToCopy);
 	//gui_Label(std::string text, FontAtlas &font, float x, float y, float depth, LABEL_POS_MODE  posmode);
 	~gui_Label();
 	void load();
@@ -23,6 +24,7 @@ public:
 	//void render(glm::mat4 &projection);
 	void render(glm::mat4 &projection, glm::mat4 &modelview);
 	void setPosition(float x, float y);
+	void setBounds(float w, float h);
 	void move(float relX, float relY);
 	FontAtlas* getFont() const;
 
