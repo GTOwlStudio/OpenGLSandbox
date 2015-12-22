@@ -10,6 +10,7 @@ class gui_Menu : public gui_Object
 {
 public:
 	gui_Menu(std::string name, FontAtlas &font, float x, float y, float w, float h, float depth, float txoffset=0.0f, float tyoffset=0.0f);
+	gui_Menu(std::string name, FontAtlas &font, float x, float y, float w, float h, float depth, LABEL_POS_MODE xmode, LABEL_POS_MODE ymode);
 	~gui_Menu();
 	void load();
 	void update();

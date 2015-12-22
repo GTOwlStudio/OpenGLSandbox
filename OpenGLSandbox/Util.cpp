@@ -12,7 +12,24 @@ glm::vec2 Util::getPointPositionOnScreen(glm::mat4 const& matrix, glm::vec4 pPos
 	return glm::vec2(coords.x, coords.y);
 }
 
+std::vector<float> Util::getPointerDataArrayf(int arraySize, std::vector<float> data,int argSize, ...) {
+	std::vector<float> a;
+	va_list ids;
+	va_start(ids, argSize);
+	for (int i = 0; i < argSize;i++) {
+		a.push_back(data[va_arg(ids, int)]);
+	}
+	va_end(ids);
+	return a;
+}
 
+std::vector<float> Util::getXDimensionArrayf(std::vector<float> arr, unsigned int Xn, unsigned int Xd) {
+	std::vector<float> a;
+	for (int i = 0; i < arr.size()/Xn;i++) {
+		a.push_back(arr[Xn*i+Xd]);
+	}
+	return a;
+}
 
 void Util::error(const char *format, ...){
 	SetConsoleTextAttribute(Util::m_console_err_handle, FOREGROUND_RED|FOREGROUND_INTENSITY);
@@ -30,4 +47,13 @@ void Util::dev(const char *format, ...){
     vfprintf( stderr, format, args );
     va_end( args );
 	SetConsoleTextAttribute(Util::m_console_err_handle, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
+}
+
+void Util::green(const char *format, ...) {
+	SetConsoleTextAttribute(Util::m_console_err_handle, FOREGROUND_GREEN| FOREGROUND_INTENSITY);
+	va_list args;
+	va_start(args, format);
+	vfprintf(stderr, format, args);
+	va_end(args);
+	SetConsoleTextAttribute(Util::m_console_err_handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
 }

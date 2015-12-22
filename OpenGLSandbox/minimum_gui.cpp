@@ -14,7 +14,8 @@ void minimum_gui::load(){
 	//gui_Menu* menu_file = new gui_Menu("File", &m_font, 0.0, m_height-20.0, 20.0, 20.0, 0.701);
 	m_menubar = new QuadC(0.0, m_height - 20.0, m_width, 20.0, 0.700, 1.0, 1.0, 1.0, 1.0);
 	m_menubar->load();
-	m_menu_file = new gui_Menu("File", m_font, 0.0f,m_height-20.0, 20.0f, 20.0f, 0.701f, 0.0, 7.0f);
+	//m_menu_file = new gui_Menu("File", m_font, 10.0f,m_height-20.0, 20.0f, 20.0f, 0.701f, 0.0, 7.0f);
+	m_menu_file = new gui_Menu("File", m_font, 0.0f, m_height - 20.0, 30.0f, 20.0f, 0.701f, LABEL_POS_CENTERED, LABEL_POS_CENTERED);
 	m_menu_file->addAction("Action 1");
 	m_menu_file->addAction("Quit");
 	//m_menu_file->getButton()->getLabel()->move(0.0, 0.5);

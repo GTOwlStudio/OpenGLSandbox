@@ -39,13 +39,16 @@ gui_Button::gui_Button(std::string text, FontAtlas &font, float x, float y, floa
 
 }
 
-gui_Button::gui_Button(std::string text, FontAtlas & font, float x, float y, float w, float h, float depth, float r, float g, float b, float a, LABEL_POS_MODE xmode, LABEL_POS_MODE ymode) : gui_Button(text, font, x,y,w,h,depth,r,g,b,a, 0.0, 0.0)
+gui_Button::gui_Button(std::string text, FontAtlas & font, float x, float y, float w, float h, float depth, float r, float g, float b, float a, LABEL_POS_MODE xmode, LABEL_POS_MODE ymode) : 
+	gui_Button(text, font, x, y, w, h, depth, r, g, b, a, 0.0, 0.0)
 {
 	if (xmode==LABEL_POS_CENTERED) {
 		m_text.move((int)( (w/2) - (font.getATextWidth(text)/2) ), 0.0);
+		m_tx = (int)((w / 2) - (font.getATextWidth(text) / 2));
 	}
 	if (ymode==LABEL_POS_CENTERED) {
 		m_text.move(0.0, (int)((h / 2) - (font.getATextHeight(text) / 2)));
+		m_ty = (int)((h / 2) - (font.getATextHeight(text) / 2));
 	}
 }
 

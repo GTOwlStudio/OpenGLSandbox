@@ -7,6 +7,11 @@ gui_Menu::gui_Menu(std::string name, FontAtlas &font, float x, float y, float w,
 	
 }
 
+gui_Menu::gui_Menu(std::string name, FontAtlas & font, float x, float y, float w, float h, float depth, LABEL_POS_MODE xmode, LABEL_POS_MODE ymode) : 
+	m_button(name, font, x, y, w, h, depth, 1.0, 1.0, 1.0, 1.0, xmode, ymode), m_actions(), m_isUnfold(false), m_isEntered(false), m_isExited(true), m_lastActionID(-1)
+{
+}
+
 
 gui_Menu::~gui_Menu()
 {
@@ -113,7 +118,16 @@ void gui_Menu::addAction(std::string name){
 }
 
 void gui_Menu::setPosition(float x, float y){
-
+	//printf("x");
+	float xb = m_button.getX();
+	float yb = m_button.getY();
+	float tmpX;
+	float tmpY;
+	for (int i = 0; i < m_actions.size();i++) {
+		Util::green("x=%f y=%f\n", x - (m_actions[i]->getButton()->getX() - xb), y - (m_actions[i]->getButton()->getY() - yb));
+		m_actions[i]->setPosition(x+(m_actions[i]->getButton()->getX()-xb), y+(m_actions[i]->getButton()->getY()-yb));
+	}
+	m_button.setPosition(x, y);
 }
 
 bool gui_Menu::isUnfold() const{

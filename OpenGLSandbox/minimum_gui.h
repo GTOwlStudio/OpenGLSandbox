@@ -19,6 +19,7 @@ public:
 	bool isFinished() const;
 
 private:
+	QuadC* m_menubar;
 	gui_Menu* m_menu_file;
 	FontAtlas &m_font;
 	int m_width;

@@ -20,6 +20,7 @@
 #include "Util.h"
 #include "dev_gs.h"
 #include "BSpline.h"
+#include "dev_Quad.h"
 
 class engine_core
 {
