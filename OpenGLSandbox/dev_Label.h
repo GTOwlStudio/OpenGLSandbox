@@ -5,19 +5,19 @@
 #include "FileUtil.h"
 #include "Util.h"
 
-enum LABEL_POS_MODE {
+/*enum LABEL_POS_MODE {
 	LABEL_POS_NONE = 0, //USER Defined
 	LABEL_POS_CENTERED = 1 //Centered on the parent
-};
+};*/
 
-class gui_Label : public gui_Object
+class dev_Label : public gui_Object
 {
 public:
-	gui_Label(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, float depth,float  r, float g, float b);
-	gui_Label(std::string text, FontAtlas &atlas, float x, float y, float depth,float  r, float g, float b);
-	gui_Label& operator=(gui_Label const& labelToCopy);
+	dev_Label(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, float depth,float  r, float g, float b);
+	dev_Label(std::string text, FontAtlas &atlas, float x, float y, float depth,float  r, float g, float b);
+	dev_Label& operator=(dev_Label const& labelToCopy);
 	//gui_Label(std::string text, FontAtlas &font, float x, float y, float depth, LABEL_POS_MODE  posmode);
-	~gui_Label();
+	~dev_Label();
 	void load();
 	void update();
 	void updateVBO(void* datas, unsigned int bytesSize, unsigned int offset);
@@ -39,8 +39,10 @@ private:
 	//int m_max;
 
 	engine_shader m_shader;
-	GLuint m_vboID;
 	GLuint m_vaoID;
+	GLuint m_vboID;
+	GLuint m_iboID;
+	
 	
 	float m_x, m_y,m_sx, m_sy;
 

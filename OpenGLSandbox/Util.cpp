@@ -49,6 +49,16 @@ void Util::dev(const char *format, ...){
 	SetConsoleTextAttribute(Util::m_console_err_handle, FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_GREEN);
 }
 
+void Util::conceptor(const char * format, ...)
+{
+	SetConsoleTextAttribute(Util::m_console_err_handle, FOREGROUND_BLUE |FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	va_list args;
+	va_start(args, format);
+	vfprintf(stderr, format, args);
+	va_end(args);
+	SetConsoleTextAttribute(Util::m_console_err_handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
+}
+
 void Util::green(const char *format, ...) {
 	SetConsoleTextAttribute(Util::m_console_err_handle, FOREGROUND_GREEN| FOREGROUND_INTENSITY);
 	va_list args;

@@ -1,11 +1,11 @@
-#include "gui_Label.h"
+#include "dev_Label.h"
 #ifndef BUFFER_OFFSET
 	#define BUFFER_OFFSET(offset)((char*)NULL + (offset))
 #endif
 
-gui_Label::gui_Label(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, float depth, float r, float g, float b) : 
+dev_Label::dev_Label(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, float depth, float r, float g, float b) : 
 	m_text(text), 
-	m_textSize(m_text.length()), m_vaoID(0), m_vboID(0), 
+	m_textSize(m_text.length()), m_vaoID(0), m_vboID(0), m_iboID(0), 
 	m_shader("shaders/font_dev.vert", "shaders/font_dev.frag"), m_x(xysxsy.x),
 	m_y(xysxsy.y), m_depth(depth)
 	//,m_maxWidth(0)
@@ -68,16 +68,38 @@ gui_Label::gui_Label(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, float
 		ty = m_fontatlas->getCharInfo()[*p].ty;
 
 		bh=m_fontatlas->getFontHeight();
-		float tmpCoord[18] = {x3+bl, y3+ay+bt+bh, depth,
-								x3+bl,y3+ay+bt, depth,
-								x3+bl+bw,y3+ay+bt, depth,
-								x3+bl, y3+ay+bh+bt, depth,
-								x3+bl+bw,y3+ay+bt, depth,
-								x3+bl+bw,y3+ay+bh+bt, depth};
-
+		// Counter Clock Coord Definition
+		/*float tmpCoord[18] = {x3+bl,		y3+ay+bt+bh, depth,
+								x3+bl,		y3+ay+bt, depth,
+								x3+bl+bw,	y3+ay+bt, depth,
+								x3+bl,		y3+ay+bt+bh, depth,
+								x3+bl+bw,	y3+ay+bt, depth,
+								x3+bl+bw,	y3+ay+bt+bh, depth};*/
+		//Clock Coord Definition
+		float tmpCoord[18] = { x3 + bl,			y3 + ay + bt + bh, depth, //1
+								x3 + bl + bw,	y3 + ay + bt + bh, depth,//6
+								x3 + bl,		y3 + ay + bt, depth,//2
+								x3 + bl,		y3 + ay + bt, depth,//2
+								x3 + bl + bw,	y3 + ay + bt + bh, depth,//6
+								x3 + bl + bw,	y3 + ay + bt, depth,//5
+								 };
+		/*Counter Clock Coord Definition
 		float tmpTexCoords[18] = {(tx-bw)/dev_w,ty/dev_h, (tx-bw)/dev_w,(ty+bh)/dev_h, (tx)/dev_w,(ty+bh)/dev_h,	
-				(tx-bw)/dev_w,ty/dev_h, tx/dev_w,(ty+bh)/dev_h, tx/dev_w,ty/dev_h};
-
+				(tx-bw)/dev_w,ty/dev_h, tx/dev_w,(ty+bh)/dev_h, tx/dev_w,ty/dev_h};*/
+		/*float tmpTexCoords[18] = { (tx - bw) / dev_w,	ty / dev_h, 
+			(tx - bw) / dev_w,			(ty + bh) / dev_h,
+			(tx) / dev_w,				(ty + bh) / dev_h,
+			(tx - bw) / dev_w,			ty / dev_h,
+			tx / dev_w,					(ty + bh) / dev_h, 
+			tx / dev_w,					ty / dev_h };*/
+		//Clock Tex Coord Definition
+		float tmpTexCoords[18] = { (tx - bw) / dev_w,	ty / dev_h,//1
+			tx / dev_w,					ty / dev_h, //6
+			(tx - bw) / dev_w,			(ty + bh) / dev_h,//2
+			(tx - bw) / dev_w,			(ty + bh) / dev_h,//2
+			tx / dev_w,					ty / dev_h, //6
+			(tx) / dev_w,				(ty + bh) / dev_h,//3
+		};
 
 		for (int i =0;i<18;i++){
 			m_coords[i+coordOffset] = tmpCoord[i];
@@ -96,7 +118,7 @@ gui_Label::gui_Label(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, float
 
 }
 
-gui_Label::gui_Label(std::string text, FontAtlas &atlas, float x, float y, float depth, float r, float g, float b) : 
+dev_Label::dev_Label(std::string text, FontAtlas &atlas, float x, float y, float depth, float r, float g, float b) : 
 	m_text(text), 
 	m_textSize(m_text.length()), m_vaoID(0), m_vboID(0), 
 	m_shader("shaders/font_dev.vert", "shaders/font_dev.frag"), m_x(x),
@@ -187,7 +209,7 @@ gui_Label::gui_Label(std::string text, FontAtlas &atlas, float x, float y, float
 	//printf("dev_v=%f\n", dev_v);
 
 }
-gui_Label & gui_Label::operator=(gui_Label const & labelToCopy)
+dev_Label & dev_Label::operator=(dev_Label const & labelToCopy)
 {
 	/*if (this != &labelToCopy) {
 		m_text = labelToCopy.m_text;
@@ -196,7 +218,7 @@ gui_Label & gui_Label::operator=(gui_Label const & labelToCopy)
 	return *this;
 }
 
-void gui_Label::update(){
+void dev_Label::update(){
 
 }
 
@@ -265,7 +287,7 @@ void gui_Label::update(){
 //
 //}
 
-void gui_Label::load(){
+void dev_Label::load(){
 	m_shader.load();
 	if (glIsBuffer(m_vboID)==GL_TRUE){
 		std::cout << "glIsBuffer() = GL_TRUE vboID = " << m_vboID << std::endl;
@@ -316,7 +338,7 @@ void gui_Label::load(){
 
 }
 
-gui_Label::~gui_Label()
+dev_Label::~dev_Label()
 {
 	m_fontatlas = 0;
 	glDeleteBuffers(1, &m_vboID);
@@ -372,7 +394,7 @@ gui_Label::~gui_Label()
 //
 //}
 
-void gui_Label::render(glm::mat4 &projection, glm::mat4 &modelview){
+void dev_Label::render(glm::mat4 &projection, glm::mat4 &modelview){
 	
 	glUseProgram(m_shader.getProgramID());
 	   glBindVertexArray(m_vaoID);
@@ -390,7 +412,7 @@ void gui_Label::render(glm::mat4 &projection, glm::mat4 &modelview){
 
 }
 
-void gui_Label::setText(std::string text)
+void dev_Label::setText(std::string text)
 {
 
 	m_text = text;
@@ -484,7 +506,7 @@ void gui_Label::setText(std::string text)
 	load();
 }
 
-void gui_Label::updateVBO(void* datas, unsigned int bytesSize, unsigned int offset){
+void dev_Label::updateVBO(void* datas, unsigned int bytesSize, unsigned int offset){
 	glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
 	void *VBOAddress = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 	if (VBOAddress==NULL){
@@ -500,18 +522,18 @@ void gui_Label::updateVBO(void* datas, unsigned int bytesSize, unsigned int offs
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void gui_Label::setPosition(float x, float y){
+void dev_Label::setPosition(float x, float y){
 	/*printf("m_x=%f m_y=%f\n", m_x, m_y);
 	printf("x=%f, y=%f\n", x-m_x, y-m_y);*/
 	move(x-m_x,y-m_y);
 	m_x=x;m_y=y;
 }
 
-void gui_Label::setBounds(float w, float h){
+void dev_Label::setBounds(float w, float h){
 	Util::error("Dont use set bounds on gui_Label, not supported yet");
 }
 
-void gui_Label::move(float relX, float relY){
+void dev_Label::move(float relX, float relY){
 	
 		for (int i = 0; i < 18 * m_textSize; i += 2) {
 			m_coords[i] += relX;
@@ -525,15 +547,15 @@ void gui_Label::move(float relX, float relY){
 		m_y += relY;
 }
 
-FontAtlas* gui_Label::getFont() const{
+FontAtlas* dev_Label::getFont() const{
 	return m_fontatlas;
 }
 
-std::string gui_Label::getText() const
+std::string dev_Label::getText() const
 {
 	return m_text;
 }
 
-void gui_Label::setShaderSource(std::string vert, std::string frag){
+void dev_Label::setShaderSource(std::string vert, std::string frag){
 	m_shader.setSourceFile(vert, frag);
 }

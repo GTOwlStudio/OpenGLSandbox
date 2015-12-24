@@ -15,6 +15,7 @@ public:
 	static std::vector<float> getXDimensionArrayf(std::vector<float> arr, unsigned int Xn, unsigned int Xd); //Xn : number of dimmension,  Xd the X dimension to extract
 	static void error(const char* format, ...); //Display intance red message
 	static void dev(const char* format, ...);//Display intance blue message
+	static void conceptor(const char* format, ...);//Display intance blue message
 	static void green(const char* format, ...); //Display green message
 
 private:
