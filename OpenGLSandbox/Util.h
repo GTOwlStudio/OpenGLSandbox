@@ -17,6 +17,8 @@ public:
 	static void dev(const char* format, ...);//Display intance blue message
 	static void conceptor(const char* format, ...);//Display intance blue message
 	static void green(const char* format, ...); //Display green message
+	static void fillArrWithRandvf(unsigned int arrSize, float *arr, float minValue, float maxValue);
+	static void fillArrWithRandvui(unsigned int arrSize, unsigned int *arr, unsigned int minValue, unsigned int maxValue);
 
 private:
 	static HANDLE m_console_err_handle;

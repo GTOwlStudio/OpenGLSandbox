@@ -67,3 +67,18 @@ void Util::green(const char *format, ...) {
 	va_end(args);
 	SetConsoleTextAttribute(Util::m_console_err_handle, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_GREEN);
 }
+
+void Util::fillArrWithRandvf(unsigned int arrSize, float * arr, float minValue, float maxValue){
+	for (int i = 0; i < arrSize; i++) {
+		arr[i] = minValue + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (maxValue - minValue)));
+	}
+}
+
+void Util::fillArrWithRandvui(unsigned int arrSize, unsigned int * arr, unsigned int minValue, unsigned int maxValue)
+{
+	for (int i = 0; i < arrSize;i++) {
+		arr[i] = minValue + (rand() / (RAND_MAX / (maxValue - minValue)));
+	}
+}
+
+
