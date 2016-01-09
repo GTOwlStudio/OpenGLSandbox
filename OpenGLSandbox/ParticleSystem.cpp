@@ -52,6 +52,7 @@ ParticleSystem::~ParticleSystem()
 void ParticleSystem::load() {
 	
 	unsigned char tmpp[1 * 3] = {255,255,255};
+	float fpixels[3] = {2.0f,2.0f,2.0f};
 	for (int i = 0; i < 3; i++) {
 		p[i] = tmpp[i];
 	}
@@ -76,13 +77,14 @@ void ParticleSystem::load() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 512, 512, 0, GL_RGB, GL_FLOAT,  0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, 512, 512, 0, GL_RGB, GL_FLOAT,  0);
 	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 10, 10, GL_RGB, GL_FLOAT, pixels);
 	for (int y = 0; y < 512;y++) {
 	Util::fillArrWithRandvf(512 * 3, pixels, 0.0, 1.0f);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0,y,512,1,GL_RGB,GL_FLOAT,pixels);
 	//printf("y=%i\n", y);
 	}
+	glTexSubImage2D(GL_TEXTURE_2D, 0,0,0,1,1,GL_RGB, GL_FLOAT,fpixels);
 	//glTexSubImage2D(GL_TEXTURE_2D, 0,0,510,512,1,GL_RGB,GL_FLOAT,pixels);
 	//glTexSubImage2D(GL_TEXTURE_2D, 0, 1, 1, 1, 1, GL_RGB, GL_FLOAT, pixels);
 	//glTexSubImage2D();
@@ -91,10 +93,10 @@ void ParticleSystem::load() {
 	if(glIsTexture(m_PreviousPos)) { glDeleteTextures(1, &m_PreviousPos); }
 		glGenTextures(1, &m_PreviousPos);
 		glBindTexture(GL_TEXTURE_2D, m_PreviousPos);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 512, 512, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 512, 512, 0, GL_RGB, GL_FLOAT, 0);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexSubImage2D(GL_TEXTURE_2D, 0,0,0,1,1,GL_RGB,GL_UNSIGNED_BYTE,p);
+		glTexSubImage2D(GL_TEXTURE_2D, 0,0,0,1,1,GL_RGB,GL_FLOAT,p);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
 		if (glIsFramebuffer(m_fbo)) { glDeleteFramebuffers(1, &m_fbo); }
