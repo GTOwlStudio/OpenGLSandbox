@@ -1,7 +1,7 @@
 #include "engine_core.h"
 
 engine_core::engine_core(int w, int h, std::string mainwindowtitle, int fpsCap) :// m_input(),
-	m_fpsCap(fpsCap), m_while_start(0), m_while_duration(0), m_timeBetweenFrames(1000/fpsCap)
+	m_fpsCap(fpsCap), m_while_start(0), m_while_duration(0), m_last_while_duration(0), m_timeBetweenFrames(1000/fpsCap)
 {
 	m_mainwindow = new engine_window(w,h,mainwindowtitle);
 	Input::input.setRefWindow(m_mainwindow->getHeight());
@@ -27,28 +27,46 @@ bool engine_core::init(){
 void engine_core::mainLoop(){
 
 	//glm::mat4 guiMat = glm::ortho(0.0f,960.0f, 0.0f, 600.0f);
+	engine_camera cam(60.0f, (float)m_mainwindow->getWidth() / m_mainwindow->getHeight(), 0.0f, 100.0f);
+	cam.lookAt(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	glm::mat4 guiMat = glm::ortho(0.0f,(float)m_mainwindow->getWidth(), 0.0f, (float)m_mainwindow->getHeight());
 	//glm::mat4 projection = glm::ortho(0.0f,960.0f, 0.0f, 600.0f, -1.0f, 100.0f);
 	glm::mat4 projection = glm::perspective(60.0f, (float)m_mainwindow->getWidth()/m_mainwindow->getHeight(), 0.0f, 100.0f);
 	glm::mat4 m = glm::mat4(1.0); 
-	m = glm::lookAt(glm::vec3(3.0, 3.0, 3.0), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+//	m = glm::translate(m, glm::vec3(0.5, 0.5, 0.0));
+	m = glm::lookAt(glm::vec3(2.0, 2.0, 2.0), glm::vec3(-0.0f, -0.0f, -0.0f), glm::vec3(0.0, 1.0, 0.0));
+	//m = glm::lookAt(glm::vec3(2.0, 2.0, 2.0), glm::vec3(0.5f, 0.5f, 0.0f), glm::vec3(0.0, 1.0, 0.0));
 	glm::mat4 modelview = glm::mat4(1.0);
+	
+	glm::mat4 rotation = glm::translate(glm::mat4(1.0f), glm::vec3(-.5, -.5, -.5));
+	//m = m* rotation;
+//	glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0.0, 1.0, 0.0));
+
+	glm::mat4 model = glm::translate(glm::mat4(1.0f),glm::vec3(-0.5, -0.5, -.5) );
+	/*glm::mat4 model;
+	glm::mat4 view;
+	glm::mat4 projection;
+	*/
 //	glm::mat4 modelview = glm::lookAt(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	FontAtlas ftest("fonts/tahoma.ttf", 12);
 	FontAtlas ebrima("fonts/ebrima.ttf", 48);
+	FontAtlas metro("fonts/MetroScript Regular.otf",48);
 	std::string allLetter = "The Quick Brown Fox Jum Over The Lazy Dog";
 	//Quad q(20.0,20.0,512.0,48,1.0,"shaders/font.vert", "shaders/font.frag", "textures/base_texture.jpg");
 	//Quad q(0.0,0.0,512.0,512.0,1.0,"shaders/font_dev.vert", "shaders/font_dev.frag", "textures/dev_atlasredtest.png");
 	/*Quad q(200.0,10.0,512,ftest.getAtlasHeight(),0.2,"shaders/font_dev.vert", "shaders/font_dev.frag", ftest.getTexID());
 	q.load();*/
+	
+	engine_shader pp("shaders/ps_basic.vert", "shaders/ps_basic.frag");
+	pp.load();
 
 	float qVertices[18] = {0.0f,0.0f+512.0f,0.2f, 0.0f+512.0f,0.0f+512.0f,0.2f,	0.0f,0.0f,0.2f,
 							 0.0f,0.0f,0.2f,	 0.0f+512.0f,0.0f+512.0f,0.2f,		0.0f+512.0f,0.0f,0.2f};
 	float qTexc[12] = {0.0,1.0, 1.0,1.0, 0.0,0.0, 
 								0.0,0.0, 1.0,1.0, 1.0, 0.0};
 	
-	Quad test(qVertices, qTexc, "shaders/texture.vert", "shaders/texture.frag", "textures/texu.png");
-	test.load();
+	/*Quad test(qVertices, qTexc, "shaders/texture.vert", "shaders/texture.frag", "textures/texu.png");
+	test.load();*/
 	/*gui_Button button("OpenGL", ftest, 100.0,100.0,     100.0, 20.0, 0.7, 1.0, 1.0, 0.0);
 	button.load();*/
 	
@@ -60,7 +78,7 @@ void engine_core::mainLoop(){
 
 //	printf("File/2.0=%f\n", ftest.getATextWidth("File")/2.0);
 
-	glLineWidth(2.0);
+	//glLineWidth(2.0);
 	glEnable(GL_LINE_SMOOTH);
 	Line line(50.0, 50.0, 0.2,  100.0, 100.0, 0.2f, 1.0, 0.0, 1.0, 1.0);
 	line.load();
@@ -77,11 +95,13 @@ void engine_core::mainLoop(){
 	QuadC rq(-1.0, -1.0, 2.0, 2.0, 0.0, 1.0, 0.3, 1.0, 1.0);
 	rq.load();
 
-	dev_gs geometrys(200.0f, 200.0f, 300.0f, 200.0f, 0.2f, "shaders/gs_basic.vert", "shaders/gs_basic.frag", "shaders/gs_basic.gs");
-	geometrys.load();
+	//printf("x=%f y=%f w=%f h=%f\n", rq.getX(), rq.getY(), rq.getWidth(), rq.getHeight());
 
-	gui_Button b(allLetter, ftest,100.0, 400.0, 100.0, 100.0, 0.8, 1.0, 1.0, 1.0,1.0, LABEL_POS_CENTERED, LABEL_POS_CENTERED);
-	b.load();
+	/*dev_gs geometrys(200.0f, 200.0f, 300.0f, 200.0f, 0.2f, "shaders/gs_basic.vert", "shaders/gs_basic.frag", "shaders/gs_basic.gs");
+	geometrys.load();*/
+
+	/*gui_Button b(allLetter, ftest,100.0, 400.0, 100.0, 100.0, 0.8, 1.0, 1.0, 1.0,1.0, LABEL_POS_CENTERED, LABEL_POS_CENTERED);
+	b.load();*/
 
 	//gui_Action action("Action 1", ftest, 0.0, 570.0,45.0,10.0,0.1);
 	//action.load();
@@ -102,16 +122,20 @@ void engine_core::mainLoop(){
 	}
 	/*gui_Label alphabet(allLetter, ftest, glm::vec4(10,200,80,10), 0.1, 1.0,0.0,0.0);
 	alphabet.load();*/
-	/*gui_Label label(test_string, ftest, glm::vec4(50.0,50.52,ftest.getATextWidth(test_string),ftest.getATextHeight(test_string)), 0.1,1.0,0.0,0.0);
-	label.load();*/
+	gui_Label label(test_string, metro, glm::vec4(50.0,50.52,ftest.getATextWidth(test_string),ftest.getATextHeight(test_string)), 0.1,0.0,0.0,0.0);
+	label.load();
+	gui_Label fpsLabel("FPS : %i", ftest, glm::vec4(m_mainwindow->getWidth()-ftest.getATextWidth("FPS : 000-"), m_mainwindow->getHeight()-ftest.getATextHeight("FPS : 000-"), 0.0f, 0.0f), 0.1, 1.0, 0.0, 0.0);
+	fpsLabel.load();
+	gui_Label fpsN("000", ftest, glm::vec4(m_mainwindow->getWidth() - ftest.getATextWidth("000-"), m_mainwindow->getHeight() - ftest.getATextHeight("000-"), 0.0f, 0.0f), 0.1, 1.0, 0.0, 0.0);
+	fpsN.load();
 	//label.setPosition(100.0,100.0);
 	//label.move(100.0,0.0);
 	//label.move(100.0, 0.0);
 	
-	/*dev_Quad dq(400.0f, 300.0f, 100.0f, 100.0f, 0.2f, 1.0f, 0.0f, 1.0f, 1.0f);
-	dq.load();*/
+	dev_Quad dq(400.0f, 200.0f, 100.0f, 100.0f, 0.2f, 1.0f, 0.0f, 1.0f, 1.0f);
+	dq.load();
 
-	BSpline spline(50.0, 50.0, 0.2,  100.0, 100.0, 0.2f, 1.0, 0.0, 0.0, 1.0);
+	/*BSpline spline(50.0, 50.0, 0.2,  100.0, 100.0, 0.2f, 1.0, 0.0, 0.0, 1.0);
 	spline.load();
 	spline.addControlPoint(400.0, 000.0, 0.2);
 	spline.addControlPoint(450.0, 300.0, 0.2);
@@ -120,16 +144,45 @@ void engine_core::mainLoop(){
 	//spline.addControlPoint(450.0, 100.0, 0.2);
 	//spline.addControlPoint(520.0, 50.0, 0.2);
 	//spline.addControlPoint(150.0, 300.0, 0.2);
-	spline.generateSpline(0.025f);
+	spline.generateSpline(0.025f);*/
 	//spline.hardGenerateSpline(0.025f);
 
 	//Line segment(100.0, 100.0, 400.0, 100.0, 0.2, 1.0, 0.0, 1.0, 1.0);
-	Line segment(100.0, 200.0, 0.2,  400.0, 200.0, 0.2f, 1.0, 0.0, 1.0, 1.0);
-	segment.load();
+	/*Line segment(100.0, 200.0, 0.2,  400.0, 200.0, 0.2f, 1.0, 0.0, 1.0, 1.0);
+	segment.load();*/
 	//segment.addPoints(200.0, 100.0, 0.2);
 
-	gui_Label l(test_string, ebrima, 51.0, 51.0, 0.1,0.0,0.0,1.0);
-	l.load();
+	/*gui_Label l(test_string, ebrima, 51.0, 51.0, 0.1,0.0,0.0,1.0);
+	l.load();*/
+
+
+	/*gui_Slider slider("test=%v", ftest, 100.0f, 100.0f, 200.0f, 20.0f, 0.2f, 100.0f, 50.0f, 0.0f);
+	slider.load();
+	*/
+	dev_Label ls(test_string, ftest, glm::vec4(100.0f, 350.0f, 10.0f, 10.0f), 0.2f, 1.0f, 1.0f, 1.0f);
+	//ls.setShaderSource("shaders/font_auto.vert", "shaders/font_auto.frag");
+	ls.load();
+	
+	ParticleSystem sys(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, *m_mainwindow);
+	sys.load();
+	//sys.initParticle(PHYX_INITMODE_UNIFORM, 64, 64, 64);
+
+	/*dev_ro q(0.0f, 0.0f,1.0f,1.0f);
+	q.load();*/
+	//sys.setR_T(ftest.getTexID());
+
+	/*ParticleSystem box(-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f);
+	box.load();*/
+
+	/*dev_line li(0.0f, 0.0f, 0.0f, 1.0f, 0.5f, 1.0f, -1.0f, -1.0f, 0.0f);
+	li.load();*/
+
+	/*dev_line li(0.0f, 0.0f, 0.2f, 100.0f, 100.0f, 0.2f, 250.0f, 100.0f, 0.2f);
+	li.load();*/
+
+	/*gui_TextField tf(ftest, 200.0f, 200.0f, 50.0f, 50.0f, 0.2f, "Test default", 1.0f, 0.0f, 1.0f,1.0f);
+	tf.load();*/
+
 	//l.move(0.0, 0.5);
 	//l.move(0.0, -0.5);
 	/*gui_devtest l (test_string, ftest, 50.0f, 50.0f,0.1,0.0,0.0,1.0);
@@ -137,43 +190,39 @@ void engine_core::mainLoop(){
 	/*QuadC mq(20.0f,20.0f,20.0f,20.0f, 0.1f, 1.0f,0.0f,0.0f,1.0f);
 	mq.load();
 	mq.setPosition(100.0,20.0);*/
-	float greyValue = 0.50f;
+	float greyValue = 0.5f;
 	//glClearColor(0.25,0.25,0.25,1.0);
 	glClearColor(greyValue, greyValue,greyValue,1.0f);
 	//glEnable(GL_DEPTH_TEST);
+	glPointSize(4.0f);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 //	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	bool dev_hit = false;
 	float angle = 0.0f;
 	unsigned int plusEachFrame = 0;
-	//glm::vec4 ();
 	Util::getPointPositionOnScreen(guiMat, glm::vec4(50.0, 50.0, 0.2, 1.0), m_mainwindow->getWidth(), m_mainwindow->getHeight());
-	//glEnable(GL_CULL_FACE);
-	//glCullFace(GL_BACK);
-	/*Uint32 m_S, m_L;
-	Uint32 updateFreq = 240;
-	//while(!m_input.terminer())
-	m_S = SDL_GetTicks();*/
+	clock_t t;
+	clock_t update_clock = clock();
+	t = clock();
+	//glEnable(GL_DEBUG_OUTPUT);
+	//ftest.runTest();
 	while(!Input::input.terminer())
-	//while(!Input::input.terminer())
     {
-
-		/*m_while_start = SDL_GetTicks();
-		m_L = SDL_GetTicks();
-		if ((m_L-m_S)>=(1000/updateFreq)){
-			m_S = SDL_GetTicks();
-			//printf("here\n");
-			l.setPosition(Input::input.getX(), m_mainwindow->getHeight()- Input::input.getY());
-			//l.move(0.0, 0.05);
-		}*/
-       // m_input.updateEvenements();
-		
+		m_while_start = SDL_GetTicks();
 		plusEachFrame += 1;
-		if (plusEachFrame>=60) {
-			m = glm::rotate(m, angle, glm::vec3(0.0, 1.0, 0.0));
+		if (plusEachFrame>=1) {
+			//m = glm::mat4(1.0);
+			//fpsN.setText(std::to_string(m_while_duration));
+			//m = glm::rotate(m, angle, glm::vec3(0.0, 1.0, 0.0));
+			//printf();
+			//MVP = projection * m *  rotation*model;
+			cam.rotate(angle, glm::vec3(0.0, 1.0, 0.0));
 			plusEachFrame = 0;
-			angle = 1.0f;
+			angle += 0.5f;
+			if (angle>=360.0f) {
+				angle = angle - 360.0f;
+			}
 		}
 
 		Input::input.updateEvenements();
@@ -197,54 +246,85 @@ void engine_core::mainLoop(){
 		if (Input::input.getTouche(SDLK_p)){
 			//rq.setPosition(300, (m_mainwindow->getHeight())-50);
 		}
-		if (Input::input.getTouche(SDLK_a)&&!dev_hit){
-			printf("Here\n");
-			segment.setPoint(1, 150.0, 10.0, 0.2);
+		if (Input::input.getTouche(SDLK_a)&&clock()-t>=800){
+			//printf("%i\n", m_while_duration);
+			t = clock();
+			fpsLabel.replace(6,9, std::to_string(1000/m_last_while_duration));
+			//segment.setPoint(1, 150.0, 10.0, 0.2);
 			dev_hit = true;
 		}
+		if (Input::input.getTouche(SDLK_i)&&(clock()-t>=1000)) {
+			t = clock();
+			printf("Init PhyX");
+			sys.initParticle(PHYX_INITMODE_UNIFORM,8,64,64);
+		}
+
 		if (!gui.isFinished()){
 			break;
 		}
 
-		
-
-
-		/*if (m_input.getTouche(SDL_SCANCODE_G)){
-			std::cout << "GL : "<< gl_version_major << "." << gl_version_minor << std::endl;
-		}*/
+		/*if (clock()-update_clock>=1000/30) {
+			update_clock = clock();
+			//gui.update();
 			
-       // camera.deplacer(m_input);
-		modelview = glm::mat4(1.0);
-        glClear(GL_COLOR_BUFFER_BIT/* | GL_DEPTH_BUFFER_BIT*/);
-		//RENDU
-      //  caisse.afficher(projection, modelview);
-	//	q.render(projection, modelview);
-		//r.render(projection, modelview);	
-	//	label.render(projection, modelview);
-//		mq.render(projection, modelview);
-		//alphabet.render(projection, modelview);
-		//l.render(guiMat, modelview);
-		//geometrys.render(guiMat, modelview);
-		rq.render(projection, m);
-	//	dq.render(guiMat, modelview);
-	//	dev.update();
-		//dev.render(projection, modelview);
-	//	aLetter.render(projection, modelview);
-		//test.render(projection, modelview);
-		segment.render(guiMat);
-		line.render(guiMat);
-		spline.render(guiMat);
-		gui.update();
-		gui.render(guiMat);
-		b.update();
-		b.render(guiMat, modelview);
+			//slider.update();
+		}*/
 
+		glClear(GL_COLOR_BUFFER_BIT/* | GL_DEPTH_BUFFER_BIT*/);
+		//RENDU
+		if (Input::input.getTouche(SDLK_s)) {
+			if (clock() - t >= 1000) {
+				//slider.setPosition();
+				t = clock();
+				printf("PhyX\n");
+				sys.texProcess(sys.getFBOtexId(), sys.getFBOId(), pp, 512*8,64);
+				printf("done\n");
+				//sys.physX(guiMat, modelview);
+			}
+		}
+		if(Input::input.getTouche(SDLK_r)) {
+			if (clock() - t >= 1000) {
+				//slider.setPosition();
+				t = clock();
+				Util::conceptor("PhyX Reloaded\n");
+				sys.dev_reloadPhyxShader();
+				//sys.physX(guiMat, modelview);
+			}
+		}
+		//tf.render(guiMat, modelview);
+		//slider.update();
+		//slider.render(guiMat, modelview);
+		//rq.render(projection, m);
+		ls.render(guiMat, modelview);
+		//dq.render(guiMat, modelview);
+		
+		gui.render(guiMat);
+		//label.render(guiMat, modelview);
+		
+		//sys.physX(projection,m);
+		//sys.physX(guiMat, modelview);
+		
+		//sys.texProcess();
+		//sys.fboDisplay();
+		/*sys.physX(MVP,modelview);
+		sys.render(MVP, modelview);*/
+	/*	sys.physX(projection, m);
+		sys.render(projection, m);*/
+		sys.physX(cam.getMatrix()*model, modelview);
+		sys.render(cam.getMatrix()*model, modelview);
+		//q.render();
+		//DEV INFO
+		//fpsLabel.render(guiMat,modelview);
+		//fpsN.render(guiMat,modelview);
+		//***Dont Touch Under*********************************************************************
 		m_mainwindow->update();
 
 		m_while_duration = SDL_GetTicks()-m_while_start;		
-		if(m_while_duration< m_timeBetweenFrames)
+		if (m_while_duration < m_timeBetweenFrames)
 			//glFlush();
+			//printf("Here");
 			SDL_Delay(m_timeBetweenFrames - m_while_duration);
+			m_last_while_duration = SDL_GetTicks()-m_while_start;//#dev_tag
     }
 
 }

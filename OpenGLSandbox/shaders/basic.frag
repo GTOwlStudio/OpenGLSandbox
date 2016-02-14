@@ -15,5 +15,6 @@ out vec4 frag_Color;
 void main()
 {
     // Couleur finale du pixel
-    frag_Color = vec4(color, 1.0);
+    //frag_Color = vec4(color, 1.0);
+	frag_Color = vec4(1.0, 1.0, 1.0, 1.0);
 }

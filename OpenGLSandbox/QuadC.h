@@ -24,6 +24,12 @@ public:
 	void setBounds(float w, float h);
 	void render(glm::mat4 &projection, glm::mat4 &modelview);
 
+	float getX() const;
+	float getY() const;
+	float getWidth() const;
+	float getHeight() const;
+	
+
 private:
 	GLuint m_vboID;
 	GLuint m_vaoID;

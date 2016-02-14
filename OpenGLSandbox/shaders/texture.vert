@@ -10,7 +10,6 @@ in vec2 in_TexCoord0;
 
 
 // Uniform
-voi 
 uniform mat4 projection;
 uniform mat4 modelview;
 

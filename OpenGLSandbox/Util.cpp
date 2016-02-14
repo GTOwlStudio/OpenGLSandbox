@@ -81,4 +81,3 @@ void Util::fillArrWithRandvui(unsigned int arrSize, unsigned int * arr, unsigned
 	}
 }
 
-

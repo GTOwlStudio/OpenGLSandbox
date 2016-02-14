@@ -19,6 +19,8 @@ public:
 	static void green(const char* format, ...); //Display green message
 	static void fillArrWithRandvf(unsigned int arrSize, float *arr, float minValue, float maxValue);
 	static void fillArrWithRandvui(unsigned int arrSize, unsigned int *arr, unsigned int minValue, unsigned int maxValue);
+	//static void 2DTextureTo3DTexCoord();
+	//static void 3DTextureTo2DTexCoords(float vx, float vy, float vz, size_t Dx, size_t Dy, size_t Dz, );
 
 private:
 	static HANDLE m_console_err_handle;

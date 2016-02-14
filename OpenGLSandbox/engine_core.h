@@ -5,6 +5,7 @@
 #include <glm\glm.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\core\type_mat4x4.hpp>
+#include <cmath>
 
 #include "engine_window.h"
 #include "Input.h"
@@ -21,6 +22,13 @@
 #include "dev_gs.h"
 #include "BSpline.h"
 #include "dev_Quad.h"
+#include "gui_TextField.h"
+#include "gui_Slider.h"
+#include "dev_Label.h"
+#include "ParticleSystem.h"
+#include "dev_ro.h"
+#include "engine_camera.h"
+
 
 class engine_core
 {
@@ -35,6 +43,6 @@ private:
 	//Input m_input;
 	unsigned int m_fpsCap;
 	unsigned int m_timeBetweenFrames;
-	Uint32 m_while_start, m_while_duration;
+	Uint32 m_while_start, m_while_duration, m_last_while_duration;
 };
 

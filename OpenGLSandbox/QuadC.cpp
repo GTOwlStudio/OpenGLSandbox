@@ -138,6 +138,7 @@ void QuadC::render(glm::mat4 &projection, glm::mat4 &modelview){
 
 }
 
+
 void QuadC::setPosition(float x, float y){
 	//printf("x=%f y=%f\n", x, y);
 	float tmp_W=m_vertices[3]-m_vertices[0];
@@ -169,4 +170,22 @@ void QuadC::setBounds(float w, float h){
 	}
 	updateVBO(m_vertices, m_verticesBytesSize, 0);
 
+}
+
+float QuadC::getX() const
+{
+	return m_vertices[0];
+}
+
+float QuadC::getY() const 
+{
+	return m_vertices[9];
+}
+
+float QuadC::getWidth() const {
+	return m_vertices[4] - m_vertices[0];
+}
+
+float QuadC::getHeight() const {
+	return m_vertices[1]-m_vertices[9];
 }

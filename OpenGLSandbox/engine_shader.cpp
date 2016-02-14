@@ -88,7 +88,7 @@ bool engine_shader::load()
 
 
     // Compilation des shaders
-
+	//printf("vertex shader = %s\n frag_shader = %s\n", m_vertexSource.c_str(), m_fragmentSource.c_str());
     if(!compilerShader(m_vertexID, GL_VERTEX_SHADER, m_vertexSource)){
         return false;
 	}
@@ -206,7 +206,7 @@ bool engine_shader::compilerShader(GLuint &shader, GLenum type, std::string cons
     if(!fichier)
     {
         //std::cout << "Erreur le fichier " << fichierSource << " est introuvable" << std::endl;
-		Util::error("ERROR : file %s is unfindable\n");
+		Util::error("ERROR : file %s is unfindable\n", fichierSource.c_str());
 		glDeleteShader(shader);
 
         return false;
@@ -291,6 +291,13 @@ bool engine_shader::compilerShader(GLuint &shader, GLenum type, std::string cons
 
     else
         return true;
+}
+
+void engine_shader::setSourceFile(std::string vertex_path, std::string frag_path)
+{
+	//printf("vertex shader = %s\n frag_shader = %s\n", vertex_path.c_str(), frag_path.c_str());
+	m_vertexSource = vertex_path;
+	m_fragmentSource = frag_path;
 }
 
 

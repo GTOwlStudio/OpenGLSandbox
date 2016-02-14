@@ -55,6 +55,7 @@ class engine_shader
 
     bool load();
     bool compilerShader(GLuint &shader, GLenum type, std::string const &fichierSource);
+	void setSourceFile(std::string vertex_path, std::string frag_path);
     GLuint getProgramID() const;
 
 	SHADER_TYPE getShaderType() const;
