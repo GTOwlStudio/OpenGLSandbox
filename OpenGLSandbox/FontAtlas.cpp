@@ -85,6 +85,10 @@ FontAtlas::FontAtlas(std::string fontfile, int fontHeight) : m_texID(0),
 			printf("%i %c x=%i y=%i\n", i,i, last_x,last_y);
 		}*/
 		//printf("%i %c x=%i y=%i\n", i,i, last_x,last_y);
+
+		if ((m_glypSlot->bitmap.rows + last_y)>m_height) {
+			last_y = last_y - (m_glypSlot->bitmap.rows+last_y - m_height);
+		}
 		glTexSubImage2D(GL_TEXTURE_2D, 0, last_x, last_y, m_glypSlot->bitmap.width, m_glypSlot->bitmap.rows, GL_RED,
 			GL_UNSIGNED_BYTE, m_glypSlot->bitmap.buffer);
 		//std::printf("last_x=%i last_y=%i\n", last_x, last_y);
