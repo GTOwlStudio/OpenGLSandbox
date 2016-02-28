@@ -46,15 +46,15 @@ class engine_shader
     public:
 
     engine_shader();
-    engine_shader(engine_shader const &shaderACopier);
+    engine_shader(engine_shader const &shaderToCopy);
     engine_shader(std::string vertexSource, std::string fragmentSource);
 	engine_shader(std::string vertexSource, std::string fragmentShader, std::string geometrySource);
     ~engine_shader();
 
-    engine_shader& operator=(engine_shader const &engine_shaderACopier);
+    engine_shader& operator=(engine_shader const &engine_shaderToCopy);
 
     bool load();
-    bool compilerShader(GLuint &shader, GLenum type, std::string const &fichierSource);
+    bool compileShader(GLuint &shader, GLenum type, std::string const &sourceFile);
 	void setSourceFile(std::string vertex_path, std::string frag_path);
     GLuint getProgramID() const;
 

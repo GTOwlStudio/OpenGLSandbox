@@ -8,13 +8,13 @@ engine_shader::engine_shader() : m_vertexID(0), m_fragmentID(0), m_geometryID(0)
 }
 
 
-engine_shader::engine_shader(engine_shader const &shaderACopier)
+engine_shader::engine_shader(engine_shader const &shaderToCopy)
 {
     // Copie des fichiers sources
 
-    m_vertexSource = shaderACopier.m_vertexSource;
-    m_fragmentSource = shaderACopier.m_fragmentSource;
-	m_geometrySource = shaderACopier.m_geometrySource;
+    m_vertexSource = shaderToCopy.m_vertexSource;
+    m_fragmentSource = shaderToCopy.m_fragmentSource;
+	m_geometrySource = shaderToCopy.m_geometrySource;
 
     // Chargement du nouveau shader
 
@@ -46,13 +46,13 @@ engine_shader::~engine_shader()
 
 // Méthodes
 
-engine_shader& engine_shader::operator=(engine_shader const &shaderACopier)
+engine_shader& engine_shader::operator=(engine_shader const &shaderToCopy)
 {
     // Copie des fichiers sources
 
-    m_vertexSource = shaderACopier.m_vertexSource;
-    m_fragmentSource = shaderACopier.m_fragmentSource;
-	m_geometrySource = shaderACopier.m_geometrySource;
+    m_vertexSource = shaderToCopy.m_vertexSource;
+    m_fragmentSource = shaderToCopy.m_fragmentSource;
+	m_geometrySource = shaderToCopy.m_geometrySource;
 
 
     // Chargement du nouveau shader
@@ -89,16 +89,16 @@ bool engine_shader::load()
 
     // Compilation des shaders
 	//printf("vertex shader = %s\n frag_shader = %s\n", m_vertexSource.c_str(), m_fragmentSource.c_str());
-    if(!compilerShader(m_vertexID, GL_VERTEX_SHADER, m_vertexSource)){
+    if(!compileShader(m_vertexID, GL_VERTEX_SHADER, m_vertexSource)){
         return false;
 	}
 
 	if (m_shaderType==SHADER_VERTEX_GEOMETRY_FRAGMENT){
-		if (!compilerShader(m_geometryID, GL_GEOMETRY_SHADER, m_geometrySource)){
+		if (!compileShader(m_geometryID, GL_GEOMETRY_SHADER, m_geometrySource)){
 			return false;
 		}
 	}
-    if(!compilerShader(m_fragmentID, GL_FRAGMENT_SHADER, m_fragmentSource)){
+    if(!compileShader(m_fragmentID, GL_FRAGMENT_SHADER, m_fragmentSource)){
         return false;
 	}
 
@@ -132,39 +132,39 @@ bool engine_shader::load()
 
     // Vérification du linkage
 
-    GLint erreurLink(0);
-    glGetProgramiv(m_programID, GL_LINK_STATUS, &erreurLink);
+    GLint errorLink(0);
+    glGetProgramiv(m_programID, GL_LINK_STATUS, &errorLink);
 
 
     // S'il y a eu une erreur
 
-    if(erreurLink != GL_TRUE)
+    if(errorLink != GL_TRUE)
     {
         // Récupération de la taille de l'erreur
 
-        GLint tailleErreur(0);
-        glGetProgramiv(m_programID, GL_INFO_LOG_LENGTH, &tailleErreur);
+        GLint errorSize(0);
+        glGetProgramiv(m_programID, GL_INFO_LOG_LENGTH, &errorSize);
 
 
         // Allocation de mémoire
 
-        char *erreur = new char[tailleErreur + 1];
+        char *error = new char[errorSize + 1];
 
 
         // Récupération de l'erreur
 
-        glGetShaderInfoLog(m_programID, tailleErreur, &tailleErreur, erreur);
-        erreur[tailleErreur] = '\0';
+        glGetShaderInfoLog(m_programID, errorSize, &errorSize, error);
+        error[errorSize] = '\0';
 
 
         // Affichage de l'erreur
 
-        std::cout << erreur << std::endl;
+        std::cout << error << std::endl;
 
 
         // Libération de la mémoire et retour du booléen false
 
-        delete[] erreur;
+        delete[] error;
         glDeleteProgram(m_programID);
 
         return false;
@@ -179,7 +179,7 @@ bool engine_shader::load()
 }
 
 
-bool engine_shader::compilerShader(GLuint &shader, GLenum type, std::string const &fichierSource)
+bool engine_shader::compileShader(GLuint &shader, GLenum type, std::string const &fileSource)
 {
     // Création du shader
 
@@ -198,15 +198,15 @@ bool engine_shader::compilerShader(GLuint &shader, GLenum type, std::string cons
 
     // Flux de lecture
 
-    std::ifstream fichier(fichierSource.c_str());
+    std::ifstream file(fileSource.c_str());
 
 
     // Test d'ouverture
 
-    if(!fichier)
+    if(!file)
     {
         //std::cout << "Erreur le fichier " << fichierSource << " est introuvable" << std::endl;
-		Util::error("ERROR : file %s is unfindable\n", fichierSource.c_str());
+		Util::error("ERROR : file %s is unfindable\n", fileSource.c_str());
 		glDeleteShader(shader);
 
         return false;
@@ -221,13 +221,13 @@ bool engine_shader::compilerShader(GLuint &shader, GLenum type, std::string cons
 
     // Lecture
 
-    while(getline(fichier, ligne))
+    while(getline(file, ligne))
         codeSource += ligne + '\n';
 
 
     // Fermeture du fichier
 
-    fichier.close();
+    file.close();
 
 
     // Récupération de la chaine C du code source
@@ -247,40 +247,40 @@ bool engine_shader::compilerShader(GLuint &shader, GLenum type, std::string cons
 
     // Vérification de la compilation
 
-    GLint erreurCompilation(0);
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &erreurCompilation);
+    GLint compilationError(0);
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compilationError);
 
 
     // S'il y a eu une erreur
 
-    if(erreurCompilation != GL_TRUE)
+    if(compilationError != GL_TRUE)
     {
         // Récupération de la taille de l'erreur
 
-        GLint tailleErreur(0);
-        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &tailleErreur);
+        GLint errorSize(0);
+        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &errorSize);
 
 
         // Allocation de mémoire
 
-        char *erreur = new char[tailleErreur + 1];
+        char *error = new char[errorSize + 1];
 
 
         // Récupération de l'erreur
 
-        glGetShaderInfoLog(shader, tailleErreur, &tailleErreur, erreur);
-        erreur[tailleErreur] = '\0';
+        glGetShaderInfoLog(shader, errorSize, &errorSize, error);
+        error[errorSize] = '\0';
 
 
         // Affichage de l'erreur
 
-       // std::cout << erreur << std::endl;
-		Util::error(erreur);
+       // std::cout << error << std::endl;
+		Util::error(error);
 
 
         // Libération de la mémoire et retour du booléen false
 
-        delete[] erreur;
+        delete[] error;
         glDeleteShader(shader);
 
         return false;

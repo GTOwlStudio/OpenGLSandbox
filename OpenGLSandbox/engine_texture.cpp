@@ -3,28 +3,28 @@
 
 // Constructeurs et Destructeur
 
-engine_texture::engine_texture() : m_id(0), m_fichierImage("")
+engine_texture::engine_texture() : m_id(0), m_imageFile("")
 {
 
 }
 
 
-engine_texture::engine_texture(engine_texture const &textureACopier)
+engine_texture::engine_texture(engine_texture const &textureToCopy)
 {
     // Copie de la texture
 
-    m_fichierImage = textureACopier.m_fichierImage;
+    m_imageFile = textureToCopy.m_imageFile;
     load();
 }
 
 
 
-engine_texture::engine_texture(std::string fichierImage) : m_id(0), m_fichierImage(fichierImage)
+engine_texture::engine_texture(std::string fichierImage) : m_id(0), m_imageFile(fichierImage)
 {
 
 }
 
-engine_texture::engine_texture(GLuint id) : m_fichierImage("Texture load from an ID"){
+engine_texture::engine_texture(GLuint id) : m_imageFile("Texture load from an ID"){
 	if (glIsTexture(id)==GL_TRUE){
 		m_id = id;;
 	}
@@ -43,11 +43,11 @@ engine_texture::~engine_texture()
 
 // Méthodes
 
-engine_texture& engine_texture::operator=(engine_texture const &textureACopier)
+engine_texture& engine_texture::operator=(engine_texture const &textureToCopy)
 {
     // Copie de la texture
 
-    m_fichierImage = textureACopier.m_fichierImage;
+    m_imageFile = textureToCopy.m_imageFile;
     load();
 
 
@@ -63,7 +63,7 @@ bool engine_texture::load()
 	if (m_id!=0){
 		return true;
 	}
-    SDL_Surface *imageSDL = IMG_Load(m_fichierImage.c_str());
+    SDL_Surface *imageSDL = IMG_Load(m_imageFile.c_str());
 
     if(imageSDL == 0)
     {
@@ -75,7 +75,7 @@ bool engine_texture::load()
 
     // Inversion de l'image
 
-    SDL_Surface *imageInversee = inverserPixels(imageSDL);
+    SDL_Surface *reversedImage = reversePixels(imageSDL);
     SDL_FreeSurface(imageSDL);
 
 
@@ -97,22 +97,22 @@ bool engine_texture::load()
 
     // Format de l'image
 
-    GLenum formatInterne(0);
+    GLenum internalFormat(0);
     GLenum format(0);
 
 
     // Détermination du format et du format interne pour les images à 3 composantes
 
-    if(imageInversee->format->BytesPerPixel == 3)
+    if(reversedImage->format->BytesPerPixel == 3)
     {
         // Format interne
 
-        formatInterne = GL_RGB;
+        internalFormat = GL_RGB;
 
 
         // Format
 
-        if(imageInversee->format->Rmask == 0xff)
+        if(reversedImage->format->Rmask == 0xff)
             format = GL_RGB;
 
         else
@@ -122,16 +122,16 @@ bool engine_texture::load()
 
     // Détermination du format et du format interne pour les images à 4 composantes
 
-    else if(imageInversee->format->BytesPerPixel == 4)
+    else if(reversedImage->format->BytesPerPixel == 4)
     {
         // Format interne
 
-        formatInterne = GL_RGBA;
+        internalFormat = GL_RGBA;
 
 
         // Format
 
-        if(imageInversee->format->Rmask == 0xff)
+        if(reversedImage->format->Rmask == 0xff)
             format = GL_RGBA;
 
         else
@@ -144,7 +144,7 @@ bool engine_texture::load()
     else
     {
         std::cout << "Erreur, format interne de l'image inconnu" << std::endl;
-        SDL_FreeSurface(imageInversee);
+        SDL_FreeSurface(reversedImage);
 
         return false;
     }
@@ -152,7 +152,7 @@ bool engine_texture::load()
 
     // Copie des pixels
 
-    glTexImage2D(GL_TEXTURE_2D, 0, formatInterne, imageInversee->w, imageInversee->h, 0, format, GL_UNSIGNED_BYTE, imageInversee->pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, reversedImage->w, reversedImage->h, 0, format, GL_UNSIGNED_BYTE, reversedImage->pixels);
 
 
     // Application des filtres
@@ -168,23 +168,23 @@ bool engine_texture::load()
 
     // Fin de la méthode
 
-    SDL_FreeSurface(imageInversee);
+    SDL_FreeSurface(reversedImage);
     return true;
 }
 
 
-SDL_Surface* engine_texture::inverserPixels(SDL_Surface *imageSource) const
+SDL_Surface* engine_texture::reversePixels(SDL_Surface *imageSource) const
 {
     // Copie conforme de l'image source sans les pixels
 
-    SDL_Surface *imageInversee = SDL_CreateRGBSurface(0, imageSource->w, imageSource->h, imageSource->format->BitsPerPixel, imageSource->format->Rmask,
+    SDL_Surface *reversedImage = SDL_CreateRGBSurface(0, imageSource->w, imageSource->h, imageSource->format->BitsPerPixel, imageSource->format->Rmask,
                                                          imageSource->format->Gmask, imageSource->format->Bmask, imageSource->format->Amask);
 
 
     // Tableau intermédiaires permettant de manipuler les pixels
 
     unsigned char* pixelsSources = (unsigned char*) imageSource->pixels;
-    unsigned char* pixelsInverses = (unsigned char*) imageInversee->pixels;
+    unsigned char* pixelsInverses = (unsigned char*) reversedImage->pixels;
 
 
     // Inversion des pixels
@@ -198,7 +198,7 @@ SDL_Surface* engine_texture::inverserPixels(SDL_Surface *imageSource) const
 
     // Retour de l'image inversée
 
-    return imageInversee;
+    return reversedImage;
 }
 
 
@@ -210,8 +210,8 @@ GLuint engine_texture::getID() const
 }
 
 
-void engine_texture::setFichierImage(const std::string &fichierImage)
+void engine_texture::setImageFile(const std::string &fichierImage)
 {
-    m_fichierImage = fichierImage;
+    m_imageFile = fichierImage;
 }
 

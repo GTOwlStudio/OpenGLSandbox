@@ -9,13 +9,13 @@ Input::Input() : m_x(0), m_y(0), m_xRel(0), m_yRel(0), m_terminer(false),
     // Initialisation du tableau m_touches[]
 	printf("Careful with the constructor of Input make sure this line is just diplayed once");
     for(int i(0); i < SDL_NUM_SCANCODES; i++)
-        m_touches[i] = false;
+        m_keys[i] = false;
 
 
     // Initialisation du tableau m_boutonsSouris[]
 
     for(int i(0); i < 8; i++)
-        m_boutonsSouris[i] = false;
+        m_mouseButton[i] = false;
 }
 
 
@@ -34,22 +34,22 @@ void Input::updateEvenements()
     m_xRel = 0;
     m_yRel = 0;
 
-	m_x = m_evenements.motion.x;
-    m_y = m_evenements.motion.y;
+	m_x = m_events.motion.x;
+    m_y = m_events.motion.y;
 //	m_updateLoopRotation = 0;
     // Boucle d'évènements
 	m_window_resized = false;
-    while(SDL_PollEvent(&m_evenements))
+    while(SDL_PollEvent(&m_events))
     {
         // Switch sur le type d'évènement
 
-        switch(m_evenements.type)
+        switch(m_events.type)
         {
             // Cas d'une touche enfoncée
 
             case SDL_KEYDOWN:
 				//m_touches[m_evenements.key.keysym.scancode] = true;
-				m_touches[m_evenements.key.keysym.sym] = true;
+				m_keys[m_events.key.keysym.sym] = true;
             break;
 
 
@@ -57,7 +57,7 @@ void Input::updateEvenements()
 
             case SDL_KEYUP:
               //  m_touches[m_evenements.key.keysym.scancode] = false;
-				m_touches[m_evenements.key.keysym.sym] = false;
+				m_keys[m_events.key.keysym.sym] = false;
             break;
 
 
@@ -65,7 +65,7 @@ void Input::updateEvenements()
 
             case SDL_MOUSEBUTTONDOWN:
 
-                m_boutonsSouris[m_evenements.button.button] = true;
+                m_mouseButton[m_events.button.button] = true;
 
             break;
 
@@ -74,7 +74,7 @@ void Input::updateEvenements()
 
             case SDL_MOUSEBUTTONUP:
 
-                m_boutonsSouris[m_evenements.button.button] = false;
+                m_mouseButton[m_events.button.button] = false;
 
             break;
 
@@ -86,8 +86,8 @@ void Input::updateEvenements()
               /*  m_x = m_evenements.motion.x;
                 m_y = m_evenements.motion.y;*/
 
-                m_xRel = m_evenements.motion.xrel;
-                m_yRel = m_evenements.motion.yrel;
+                m_xRel = m_events.motion.xrel;
+                m_yRel = m_events.motion.yrel;
 
             break;
 
@@ -96,9 +96,9 @@ void Input::updateEvenements()
 
             case SDL_WINDOWEVENT:
 				//printf("Over\n");
-                if(m_evenements.window.event == SDL_WINDOWEVENT_CLOSE)
+                if(m_events.window.event == SDL_WINDOWEVENT_CLOSE)
                     m_terminer = true;
-				if (m_evenements.window.event == SDL_WINDOWEVENT_SIZE_CHANGED){
+				if (m_events.window.event == SDL_WINDOWEVENT_SIZE_CHANGED){
 					m_window_resized = true;
 					//printf("\tHere1\n");
 				}
@@ -145,17 +145,27 @@ void Input::capturerPointeur(bool reponse) const
 // Getters
 
 //bool Input::getTouche(const SDL_Scancode touche) const
-bool Input::getTouche(const SDL_Keycode touche) const
+bool Input::getKey(const SDL_Keycode touche) const
 {
-    return m_touches[touche];
+    return m_keys[touche];
 }
 
 
-bool Input::getBoutonSouris(const Uint8 bouton) const
+bool Input::getMouseButton(const Uint8 bouton) const
 {
-    return m_boutonsSouris[bouton];
+    return m_mouseButton[bouton];
 }
 
+bool & Input::getKeyRef(const SDL_Keycode key)
+{
+	return m_keys[key];
+}
+
+
+bool & Input::getMouseButtonRef(const Uint8 button)
+{
+	return m_mouseButton[button];
+}
 
 bool Input::mouvementSouris() const
 {

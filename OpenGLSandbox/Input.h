@@ -23,8 +23,10 @@ class Input
     void capturerPointeur(bool reponse) const;
 	void setRefWindow(int height); //To addapt some data to the window
 
-    bool getTouche(const SDL_Keycode touche) const;
-    bool getBoutonSouris(const Uint8 bouton) const;
+    bool getKey(const SDL_Keycode key) const;
+    bool getMouseButton(const Uint8 button) const;
+	bool& getKeyRef(const SDL_Keycode key);
+	bool& getMouseButtonRef(const Uint8 button);
     bool mouvementSouris() const;
 
 	bool windowResized() const;
@@ -41,10 +43,10 @@ class Input
 
     private:
 
-    SDL_Event m_evenements;
-   bool m_touches[SDL_NUM_SCANCODES];
+    SDL_Event m_events;
+   bool m_keys[SDL_NUM_SCANCODES];
 //	bool m_touches[SDL_NUM];
-    bool m_boutonsSouris[8];
+    bool m_mouseButton[8];
 
     int m_x;
     int m_y;

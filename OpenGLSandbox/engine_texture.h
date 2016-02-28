@@ -39,21 +39,21 @@ class engine_texture
     public:
 
     engine_texture();
-    engine_texture(engine_texture const &textureACopier);
-    engine_texture(std::string fichierImage);
+    engine_texture(engine_texture const &textureToCopy);
+    engine_texture(std::string imageFile);
 	engine_texture(GLuint id);
     ~engine_texture();
 
-    engine_texture& operator=(engine_texture const &textureACopier);
+    engine_texture& operator=(engine_texture const &textureToCpy);
     bool load();
-    SDL_Surface* inverserPixels(SDL_Surface *imageSource) const;
+    SDL_Surface* reversePixels(SDL_Surface *imageSource) const;
 
     GLuint getID() const;
-    void setFichierImage(const std::string &fichierImage);
+    void setImageFile(const std::string &imageFile);
 
 
     private:
 
     GLuint m_id;
-    std::string m_fichierImage;
+    std::string m_imageFile;
 };
