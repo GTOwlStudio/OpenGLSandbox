@@ -8,6 +8,10 @@
 #include <glm\core\type_mat4x4.hpp>
 
 #include "engine_shader.h"
+#include "MathUtil.h"
+#include "FileUtil.h"
+#include <iostream>
+
 
 class BSpline
 {
@@ -16,11 +20,14 @@ public:
 	~BSpline();
 	void load();
 	void render(glm::mat4 &mat);
+	void renderEditLine(glm::mat4 &mat);
 	void addControlPoint(float x, float y, float z);
 	void generateSpline(float step);
+	void hardGenerateSpline(float step);
 
 protected:
 	float bezierCubic(float v0, float v1, float v2, float v3, float t); //data an array of 4*3 float
+	float bezier(int degree, float *data, float t);
 
 private:
 	void updateVBO(void* datas,unsigned int bytesSize, unsigned int offset);
@@ -28,7 +35,8 @@ private:
 	engine_shader m_shader; //The display shader
 	GLuint m_vbo; //VBO ID of control vertices
 	GLuint m_vbo_spline; //VBO ID of points
-	GLuint m_vao; //VAO iD
+	GLuint m_vao; //VAO spline iD
+	GLuint m_vao_line; //VAO line id
 	unsigned int m_controlBytesSize;
 	unsigned int m_pointsBytesSize;
 	unsigned int m_colorsBytesSize;

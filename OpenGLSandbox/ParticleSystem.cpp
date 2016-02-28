@@ -9,7 +9,7 @@ m_vao(0), m_vbo(0), m_ibo(0), tp_vao(0), tp_vbo(0), tp_ibo(0),
 m_boundsBytesSize(sizeof(float) * 8 * 3), m_indicesBytesSize(sizeof(unsigned int) * 24),
 m_shader("shaders/particle_container.vert", "shaders/particle_container.frag"), m_shader_fbo("phyX/phyX_fbo.vert", "phyX/phyX_fbo.frag"),
 m_phyX("phyX/phyX_dev.vert", "phyX/phyX_dev.frag"), m_shaderInit("shaders/couleur2D.vert", "shaders/couleur2D.frag"),
-m_LastPos(0), m_PreviousPos(0), m_LastVel(0), m_PreviousVel(0),
+m_LastPos(0), m_PreviousPos(0), m_LastVel(0), m_PreviousVel(0), m_nParticles(0),
 m_fbo(0), m_window(window)//, m_renderBuffer(0)
 {
 
@@ -45,8 +45,10 @@ ParticleSystem::~ParticleSystem()
 	glDeleteTextures(1, &m_LastPos);
 	glDeleteTextures(1, &m_PreviousVel);
 	glDeleteTextures(1, &m_LastVel);
+	glDeleteTextures(1, &m_grid);
 	glDeleteFramebuffers(1, &m_fbo);
-
+	glDeleteRenderbuffers(1, &m_grbo);
+	glDeleteFramebuffers(1, &m_gfbo);
 	
 }
 
@@ -110,6 +112,26 @@ void ParticleSystem::load() {
 		//glFramebufferTexture(GL_DRAW_FRAMEBUFFER, GL_FRONT, m_PreviousPos, 0);
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 		
+		initGridTex();
+
+		
+		
+		if (glIsRenderbuffer(m_grbo)) { glDeleteRenderbuffers(1, &m_grbo); }
+		glGenRenderbuffers(1, &m_grbo);
+		glBindRenderbuffer(GL_RENDERBUFFER, m_grbo);
+		printf("m_grboId=%i\n", m_grbo);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, 512,512);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_STENCIL, 512, 512);
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+		if (glIsFramebuffer(m_gfbo)) { glDeleteFramebuffers(1, &m_gfbo); }
+		glGenFramebuffers(1, &m_gfbo);
+		glBindFramebuffer(GL_FRAMEBUFFER, m_gfbo);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_grid, 0);
+		//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_grbo);
+		//glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_grbo);
+		
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	
 		/*glGenTextures(1, &m_particles);
 	glBindTexture(GL_TEXTURE_2D, m_particles);
@@ -153,13 +175,55 @@ void ParticleSystem::load() {
 
 }
 
+void ParticleSystem::gridGeneration(glm::mat4 &matrix, glm::mat4 &modelview)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER,m_gfbo);
+	//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
+		glUseProgram(m_phyX.getProgramID());
+		glUniformMatrix4fv(glGetUniformLocation(m_shader.getProgramID(), "projection"), 1, GL_FALSE, glm::value_ptr(matrix));
+		glUniformMatrix4fv(glGetUniformLocation(m_shader.getProgramID(), "modelview"), 1, GL_FALSE, glm::value_ptr(modelview));
+			glBindVertexArray(m_uvao);
+				//FIRST PASS
+				glBindTexture(GL_TEXTURE_2D, m_PreviousPos);
+					glEnable(GL_STENCIL_TEST);
+					glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE); //GBA
+					glDepthFunc(GL_LESS);
+					glDrawArrays(GL_POINTS, 0, m_nParticles * 6);
+					//SECOND PASS
+					glColorMask(GL_TRUE, GL_FALSE, GL_TRUE, GL_TRUE); //RBA
+					glDepthFunc(GL_GREATER);
+					glStencilFunc(GL_GREATER, 1, 1);
+					glStencilOp(GL_KEEP, GL_KEEP, GL_INCR);
+					glClear(GL_STENCIL_BUFFER_BIT);
+					glDrawArrays(GL_POINTS, 0, m_nParticles * 6);
+					//THIRD PASS
+					glColorMask(GL_TRUE,GL_TRUE, GL_FALSE,GL_TRUE); //RGA
+					glClear(GL_STENCIL_BUFFER_BIT);
+					glDrawArrays(GL_POINTS, 0, m_nParticles * 6);
+
+					//FOURTH PASS
+					glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_FALSE);//RGB
+					glClear(GL_STENCIL_BUFFER_BIT);
+					glDrawArrays(GL_POINTS, 0, m_nParticles * 6);
+
+				
+				glBindTexture(GL_TEXTURE_2D, 0);
+			glBindVertexArray(0);
+		glUseProgram(0);
+		glDisable(GL_STENCIL_TEST);
+		glDepthFunc(GL_LESS);
+	//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void ParticleSystem::physX(glm::mat4 &projection, glm::mat4 &modelview) {
 	glUseProgram(m_phyX.getProgramID());
 	glUniformMatrix4fv(glGetUniformLocation(m_shader.getProgramID(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(glGetUniformLocation(m_shader.getProgramID(), "modelview"), 1, GL_FALSE, glm::value_ptr(modelview));
 	glBindVertexArray(m_uvao);
 	glBindTexture(GL_TEXTURE_2D, m_PreviousPos);
-	glDrawArrays(GL_POINTS,0,262144);
+	//glDrawArrays(GL_POINTS,0,262144);
+	glDrawArrays(GL_POINTS, 0,m_nParticles*6);
 	//glDrawArrays(GL_POINTS, 0, 44);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindVertexArray(0);
@@ -205,6 +269,7 @@ void ParticleSystem::texProcess(GLuint const& texture, GLuint const& fbo, engine
 
 void ParticleSystem::fboDisplay()
 {
+	glDisable(GL_DEPTH_TEST);
 	glUseProgram(m_shader_fbo.getProgramID());
 	glBindVertexArray(tp_vao);
 	glBindTexture(GL_TEXTURE_2D,m_PreviousPos);
@@ -212,6 +277,77 @@ void ParticleSystem::fboDisplay()
 	glBindTexture(GL_TEXTURE_2D,0);
 	glBindVertexArray(0);
 	glUseProgram(0);
+	glEnable(GL_DEPTH_TEST);
+}
+
+void ParticleSystem::gfboDisplay()
+{
+	glDisable(GL_DEPTH_TEST);
+	glUseProgram(m_shader_fbo.getProgramID());
+	glBindVertexArray(tp_vao);
+	glBindTexture(GL_TEXTURE_2D, m_grid);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindVertexArray(0);
+	glUseProgram(0);
+	glEnable(GL_DEPTH_TEST);
+}
+
+void ParticleSystem::dev_manip(GLuint const& fbo, engine_shader const& shader, size_t texW, size_t texH) {
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	glViewport(0, 0, texW, texH);
+	glUseProgram(shader.getProgramID());
+
+	glBindVertexArray(tp_vao);
+	glBindTexture(GL_TEXTURE_2D, m_grid);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindVertexArray(0);
+
+	glUseProgram(0);
+	glViewport(0, 0, m_window.getWidth(), m_window.getHeight());
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void ParticleSystem::displaytex(GLuint const & texId)
+{
+	glDisable(GL_DEPTH_TEST);
+	glUseProgram(m_shader_fbo.getProgramID());
+	glBindVertexArray(tp_vao);
+	glBindTexture(GL_TEXTURE_2D, texId);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindVertexArray(0);
+	glUseProgram(0);
+	glEnable(GL_DEPTH_TEST);
+}
+
+void ParticleSystem::initGridTex()
+{
+	Uint32 p[4] = {3,3,3, 1};
+	//GLuint p[4] = { 255, 0, 1, 1 };
+	Uint32 r[4];
+	//GLuint r[4];
+	//printf("sizeof=%i\n", p[0]);
+	if (glIsTexture(m_grid)) { glDeleteTextures(1, &m_grid); }
+
+	glGenTextures(1, &m_grid);
+	glBindTexture(GL_TEXTURE_2D, m_grid);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	//glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA32UI, 512, 512);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32UI_EXT, 512,512,0,GL_RGBA_INTEGER_EXT, GL_UNSIGNED_INT,0);
+	
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_INT, p);
+	p[1] = 3;
+	glReadPixels(0,0,1,1,GL_RGBA, GL_UNSIGNED_INT, &r[0]);
+	Util::conceptor("r:%i g:%i b:%i a:%i\n",r[0],r[1],r[2],r[3]);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+
 }
 
 /*bool ParticleSystem::copyTexture(GLuint src, GLuint des)
@@ -222,6 +358,10 @@ void ParticleSystem::fboDisplay()
 	}
 	return false;
 }*/
+
+void ParticleSystem::drawVertices()
+{
+}
 
 void ParticleSystem::texProcessorInit() {
 	tp_verticesBytesSize = sizeof(float) * 8;
@@ -271,9 +411,10 @@ void ParticleSystem::texProcessorInit() {
 
 }
 
-void ParticleSystem::initParticle(PhyxEnum mode, unsigned int sx, unsigned int sy, unsigned int sz)
+void ParticleSystem::initParticle(PhyxEnum mode, unsigned int size)
 {
-	//printf("sx=%i sy=%i\n", sx,sy);
+	m_nParticles = size*size*size;
+	printf("n:%i\n", m_nParticles);
 	//unsigned int texW = 512;
 	//unsigned int texH = 512;
 	//GLuint tmpVBO;
@@ -399,7 +540,7 @@ void ParticleSystem::initParticle(PhyxEnum mode, unsigned int sx, unsigned int s
 	float pixels[3];
 	unsigned int texW = 4096;
 	unsigned int texH = 64;
-	unsigned int size = sx;
+	//unsigned int size = s;
 	
 	if (mode == PHYX_INITMODE_UNIFORM) {
 	glBindTexture(GL_TEXTURE_2D, m_PreviousPos);

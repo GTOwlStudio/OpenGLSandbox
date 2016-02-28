@@ -20,15 +20,19 @@ bool engine_core::init(){
 
 	if (!m_mainwindow->init_gl())
 		return false;
-	
+
 	return true;
 }
 
 void engine_core::mainLoop(){
 
 	//glm::mat4 guiMat = glm::ortho(0.0f,960.0f, 0.0f, 600.0f);
-	engine_camera cam(60.0f, (float)m_mainwindow->getWidth() / m_mainwindow->getHeight(), 0.0f, 100.0f);
-	cam.lookAt(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	engine_camera cam(60.0f, (float)m_mainwindow->getWidth() / m_mainwindow->getHeight(), 0.1f, 100.0f);
+	engine_camera ocam(0.0f,1.0f,0.0f,1.0f,0.0f,100.0f);
+
+	cam.lookAt(glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	ocam.lookAt(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,0.0f,1.0f));
+
 	glm::mat4 guiMat = glm::ortho(0.0f,(float)m_mainwindow->getWidth(), 0.0f, (float)m_mainwindow->getHeight());
 	//glm::mat4 projection = glm::ortho(0.0f,960.0f, 0.0f, 600.0f, -1.0f, 100.0f);
 	glm::mat4 projection = glm::perspective(60.0f, (float)m_mainwindow->getWidth()/m_mainwindow->getHeight(), 0.0f, 100.0f);
@@ -57,9 +61,17 @@ void engine_core::mainLoop(){
 	/*Quad q(200.0,10.0,512,ftest.getAtlasHeight(),0.2,"shaders/font_dev.vert", "shaders/font_dev.frag", ftest.getTexID());
 	q.load();*/
 	
+	Mesh mesh("obj/monkey.obj");
+	mesh.load();
+
 	engine_shader pp("shaders/ps_basic.vert", "shaders/ps_basic.frag");
 	pp.load();
-
+	engine_shader bck("phyX/phyX_bucket.vert", "phyX/phyX_bucket.frag");
+	bck.load();
+	engine_shader lineShader("shaders/universal.vert", "shaders/universal.frag");
+	lineShader.load();
+	BasePoint bp(lineShader);
+	bp.load();
 	float qVertices[18] = {0.0f,0.0f+512.0f,0.2f, 0.0f+512.0f,0.0f+512.0f,0.2f,	0.0f,0.0f,0.2f,
 							 0.0f,0.0f,0.2f,	 0.0f+512.0f,0.0f+512.0f,0.2f,		0.0f+512.0f,0.0f,0.2f};
 	float qTexc[12] = {0.0,1.0, 1.0,1.0, 0.0,0.0, 
@@ -132,20 +144,32 @@ void engine_core::mainLoop(){
 	//label.move(100.0,0.0);
 	//label.move(100.0, 0.0);
 	
-	dev_Quad dq(400.0f, 200.0f, 100.0f, 100.0f, 0.2f, 1.0f, 0.0f, 1.0f, 1.0f);
+	dev_Quad dq(50.0f, 50.0f, 50.0f, 50.0f, 0.2f, 1.0f, 0.0f, 1.0f, 1.0f);
 	dq.load();
 
-	/*BSpline spline(50.0, 50.0, 0.2,  100.0, 100.0, 0.2f, 1.0, 0.0, 0.0, 1.0);
+	BSpline spline(50.0, 50.0, 0.2,  100.0, 300.0, 0.2f, 1.0, 0.0, 0.0, 1.0);
 	spline.load();
 	spline.addControlPoint(400.0, 000.0, 0.2);
-	spline.addControlPoint(450.0, 300.0, 0.2);
-	//spline.addControlPoint(500.0, 250.0, 0.2);
-	//spline.addControlPoint(500.0, 250.0, 0.2);//2nd
-	//spline.addControlPoint(450.0, 100.0, 0.2);
-	//spline.addControlPoint(520.0, 50.0, 0.2);
-	//spline.addControlPoint(150.0, 300.0, 0.2);
-	spline.generateSpline(0.025f);*/
-	//spline.hardGenerateSpline(0.025f);
+	spline.addControlPoint(500.0, 300.0, 0.2);//2nd
+	spline.generateSpline(0.025f);
+
+	/*BSpline hspline(50.0f, 50.0f, 0.2f, 20.0f, 300.0f, 0.2f, 1.0f, 0.0f, 0.0f, 1.0f);
+	hspline.load();
+	hspline.addControlPoint(400.0f, 800.0f, 0.2f);
+	hspline.addControlPoint(300.0f, 300.0f, 0.2f);//2nd
+	hspline.addControlPoint(600.0f, 100.0f,0.2f);
+	hspline.addControlPoint(1200.0f, 600.0f, 0.2f);
+	hspline.hardGenerateSpline(0.025f);*/
+
+	BSpline hspline(.0f,.0f,.0f, 1.0f,.0f,.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+	hspline.load();
+	hspline.addControlPoint(1.0f, 1.0f, 0.0f);
+	hspline.addControlPoint(0.0f, 1.0f, 1.0f);
+	hspline.addControlPoint(0.0f, 0.0f, 1.0f);
+	hspline.addControlPoint(1.0f, 0.0f, 1.0f);
+	
+	hspline.hardGenerateSpline(0.025f);
+
 
 	//Line segment(100.0, 100.0, 400.0, 100.0, 0.2, 1.0, 0.0, 1.0, 1.0);
 	/*Line segment(100.0, 200.0, 0.2,  400.0, 200.0, 0.2f, 1.0, 0.0, 1.0, 1.0);
@@ -155,16 +179,27 @@ void engine_core::mainLoop(){
 	/*gui_Label l(test_string, ebrima, 51.0, 51.0, 0.1,0.0,0.0,1.0);
 	l.load();*/
 
+	EventManager mng;
+	bool a = false;
+	mng.addValueSpy(&a);
+
+	engine_texture texture("textures/texu.png");
+	texture.load();
+
+	EzyTex etex(texture.getID());
+	etex.load();
 
 	/*gui_Slider slider("test=%v", ftest, 100.0f, 100.0f, 200.0f, 20.0f, 0.2f, 100.0f, 50.0f, 0.0f);
 	slider.load();
 	*/
-	dev_Label ls(test_string, ftest, glm::vec4(100.0f, 350.0f, 10.0f, 10.0f), 0.2f, 1.0f, 1.0f, 1.0f);
+	//dev_Label ls(test_string, ftest, glm::vec4(100.0f, 350.0f, 10.0f, 10.0f), 0.2f, 1.0f, 1.0f, 1.0f);
 	//ls.setShaderSource("shaders/font_auto.vert", "shaders/font_auto.frag");
-	ls.load();
+	//ls.load();
 	
-	ParticleSystem sys(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, *m_mainwindow);
+	/*ParticleSystem sys(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, *m_mainwindow);
 	sys.load();
+	dev_ut uti;
+	uti.load();*/
 	//sys.initParticle(PHYX_INITMODE_UNIFORM, 64, 64, 64);
 
 	/*dev_ro q(0.0f, 0.0f,1.0f,1.0f);
@@ -193,7 +228,7 @@ void engine_core::mainLoop(){
 	float greyValue = 0.5f;
 	//glClearColor(0.25,0.25,0.25,1.0);
 	glClearColor(greyValue, greyValue,greyValue,1.0f);
-	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 	glPointSize(4.0f);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -205,25 +240,30 @@ void engine_core::mainLoop(){
 	clock_t t;
 	clock_t update_clock = clock();
 	t = clock();
+/*	Uint32 lastSecond = 0;
+	Uint32 average = 0;*/
+	float averageFPS=0;
+	printf("cursor = %i\n", SDL_SYSTEM_CURSOR_CROSSHAIR);
+	int cursorId = 0;
 	//glEnable(GL_DEBUG_OUTPUT);
 	//ftest.runTest();
 	while(!Input::input.terminer())
     {
 		m_while_start = SDL_GetTicks();
 		plusEachFrame += 1;
-		if (plusEachFrame>=1) {
+		//if (plusEachFrame>=1) {
 			//m = glm::mat4(1.0);
 			//fpsN.setText(std::to_string(m_while_duration));
 			//m = glm::rotate(m, angle, glm::vec3(0.0, 1.0, 0.0));
 			//printf();
 			//MVP = projection * m *  rotation*model;
-			cam.rotate(angle, glm::vec3(0.0, 1.0, 0.0));
-			plusEachFrame = 0;
+			cam.rotate(angle, glm::vec3(0.0, 0.0, 1.0));
+			//plusEachFrame = 0;
 			angle += 0.5f;
 			if (angle>=360.0f) {
 				angle = angle - 360.0f;
 			}
-		}
+	//	}
 
 		Input::input.updateEvenements();
 		if (Input::input.windowResized()){
@@ -231,7 +271,7 @@ void engine_core::mainLoop(){
 			Input::input.setRefWindow(m_mainwindow->getHeight());
 			printf("x:%i y:%i\n", 150, (int)m_mainwindow->getHeight()-50);
 			gui.resize(m_mainwindow->getWidth(), m_mainwindow->getHeight());
-			
+			cam.resize(m_mainwindow->getWidth(), m_mainwindow->getHeight());
 			//std::cout << m_mainwindow->getHeight()-50 << std::endl;
 			//rq.setPosition(150.0, (float)m_mainwindow->getHeight()-50.0f);
 			guiMat = glm::ortho(0.0f, (float)m_mainwindow->getWidth(), 0.0f, (float)m_mainwindow->getHeight());
@@ -240,23 +280,34 @@ void engine_core::mainLoop(){
 		}
 		if(Input::input.getTouche(SDLK_ESCAPE))
            break;
-		if (Input::input.getTouche(SDLK_g)){
-			gui.resize(m_mainwindow->getWidth(), m_mainwindow->getHeight());
+		if (Input::input.getTouche(SDLK_g) && clock()-t>=1000) {
+			t = clock();
+			printf("Grid Generation");
+			//sys.gridGeneration(ocam.getMatrix());
 		}
-		if (Input::input.getTouche(SDLK_p)){
-			//rq.setPosition(300, (m_mainwindow->getHeight())-50);
+		if (Input::input.getTouche(SDLK_p) && clock() - t >= 800){
+			t = clock();			
+			//a = true;
+			//mng.updateEvent();
+			cursorId += 1;
+			printf("%i\n",cursorId);
+			if (cursorId>12) {
+				printf("Turn");
+				cursorId = 0;
+			}
+			m_mainwindow->setCursor(SDL_SystemCursor(cursorId));
 		}
 		if (Input::input.getTouche(SDLK_a)&&clock()-t>=800){
 			//printf("%i\n", m_while_duration);
 			t = clock();
-			fpsLabel.replace(6,9, std::to_string(1000/m_last_while_duration));
+			fpsLabel.replace(6,8, std::to_string(1000/m_last_while_duration));
 			//segment.setPoint(1, 150.0, 10.0, 0.2);
 			dev_hit = true;
 		}
 		if (Input::input.getTouche(SDLK_i)&&(clock()-t>=1000)) {
 			t = clock();
 			printf("Init PhyX");
-			sys.initParticle(PHYX_INITMODE_UNIFORM,8,64,64);
+			//sys.initParticle(PHYX_INITMODE_UNIFORM,16);
 		}
 
 		if (!gui.isFinished()){
@@ -270,14 +321,17 @@ void engine_core::mainLoop(){
 			//slider.update();
 		}*/
 
-		glClear(GL_COLOR_BUFFER_BIT/* | GL_DEPTH_BUFFER_BIT*/);
+		glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 		//RENDU
 		if (Input::input.getTouche(SDLK_s)) {
 			if (clock() - t >= 1000) {
 				//slider.setPosition();
 				t = clock();
 				printf("PhyX\n");
-				sys.texProcess(sys.getFBOtexId(), sys.getFBOId(), pp, 512*8,64);
+				//sys.texProcess(sys.getFBOtexId(), sys.getFBOId(), pp, 512*8,64);
+				//sys.dev_manip(uti.getFBOId(), uti.getShader(), 512,512);
+				//sys.texProcess(uti.getTexId(), uti.getFBOId(), bck, 512 * 8, 64);
+				
 				printf("done\n");
 				//sys.physX(guiMat, modelview);
 			}
@@ -287,35 +341,31 @@ void engine_core::mainLoop(){
 				//slider.setPosition();
 				t = clock();
 				Util::conceptor("PhyX Reloaded\n");
-				sys.dev_reloadPhyxShader();
+				//bck.load();
+			//	sys.dev_reloadPhyxShader();
 				//sys.physX(guiMat, modelview);
 			}
 		}
-		//tf.render(guiMat, modelview);
-		//slider.update();
-		//slider.render(guiMat, modelview);
-		//rq.render(projection, m);
-		ls.render(guiMat, modelview);
-		//dq.render(guiMat, modelview);
+
+		etex.render(modelview);
+		bp.render(cam.getMatrix()*model);
+		//spline.render(guiMat);
+		hspline.render(cam.getMatrix()*model);
+		hspline.renderEditLine(cam.getMatrix()*model);
+		//mesh.render(cam.getMatrix());
 		
-		gui.render(guiMat);
-		//label.render(guiMat, modelview);
-		
-		//sys.physX(projection,m);
-		//sys.physX(guiMat, modelview);
-		
-		//sys.texProcess();
-		//sys.fboDisplay();
-		/*sys.physX(MVP,modelview);
-		sys.render(MVP, modelview);*/
-	/*	sys.physX(projection, m);
-		sys.render(projection, m);*/
-		sys.physX(cam.getMatrix()*model, modelview);
-		sys.render(cam.getMatrix()*model, modelview);
 		//q.render();
 		//DEV INFO
-		//fpsLabel.render(guiMat,modelview);
+		
 		//fpsN.render(guiMat,modelview);
+		if (plusEachFrame>=2) {
+			plusEachFrame = 0;
+			gui.update();
+		}
+
+		
+		gui.render(guiMat);
+		//fpsLabel.render(guiMat, modelview);
 		//***Dont Touch Under*********************************************************************
 		m_mainwindow->update();
 

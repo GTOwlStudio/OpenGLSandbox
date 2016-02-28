@@ -23,12 +23,17 @@ public:
 	void load();
 	
 	void update();
+	void gridGeneration(glm::mat4 &matrix, glm::mat4 &modelview);
 	void physX(glm::mat4 &projection, glm::mat4 &modelview);
 	void render(glm::mat4 &projection, glm::mat4 &modelview);
 	void texProcess(GLuint const& texToProcess, GLuint const& fbo, engine_shader const& shader, size_t texW, size_t texh);
 	void fboDisplay();
+	void gfboDisplay();
+	void dev_manip(GLuint const& fbo, engine_shader const& shader, size_t texW, size_t texH);
+	void displaytex(GLuint const& texId);
+	void initGridTex();
 	//bool copyTexture(GLuint src, GLuint des, );
-	void initParticle(PhyxEnum mode, unsigned int sx, unsigned int sy, unsigned int sz);
+	void initParticle(PhyxEnum mode, unsigned int size);
 
 	GLuint getFBOId() const;
 	GLuint getFBOtexId() const;
@@ -39,7 +44,9 @@ public:
 private:
 
 	void init();
+	void drawVertices(); //Same That in GPU GEMS 3 Chap.29
 	void texProcessorInit();
+	int m_nParticles;
 	
 
 	GLuint m_vao;
@@ -49,6 +56,8 @@ private:
 	GLuint m_uvao;//EMPTY vao but USEFULL
 
 	GLuint m_fbo;
+	GLuint m_gfbo;
+	GLuint m_grbo;
 //	GLuint m_renderBuffer;
 	
 	//TextureProcessor

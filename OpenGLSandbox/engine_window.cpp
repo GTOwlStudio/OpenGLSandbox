@@ -12,6 +12,7 @@ engine_window::~engine_window()
 {
 	SDL_GL_DeleteContext(m_glcontext);
 	SDL_DestroyWindow(m_mainwindow);
+	SDL_FreeCursor(m_cursor);
 	SDL_Quit();
 }
 
@@ -28,6 +29,7 @@ bool engine_window::init(){
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 //	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 
 	
@@ -86,6 +88,13 @@ void engine_window::updateResize(){
 	//int a = 0;
 	SDL_GetWindowSize(m_mainwindow, &m_window_width, &m_window_height);
 	printf("Window Size is %ix%i\n", m_window_width, m_window_height);
+}
+
+void engine_window::setCursor(SDL_SystemCursor id)
+{
+	SDL_FreeCursor(m_cursor);
+	m_cursor = SDL_CreateSystemCursor(id);
+	SDL_SetCursor(m_cursor);
 }
 
 void engine_window::update(){

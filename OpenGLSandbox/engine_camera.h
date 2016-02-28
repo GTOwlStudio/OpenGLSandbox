@@ -16,6 +16,7 @@ public:
 	engine_camera( float const& fov, float const& ratio, float const& near, float const& far);
 	engine_camera(float left, float right, float bottom, float top, float near, float var);
 	void lookAt(glm::vec3 pos, glm::vec3 center, glm::vec3 axis);
+	void resize(int w, int h);
 	~engine_camera();
 	void rotate(float angle, glm::vec3 axis);
 	glm::mat4 getMatrix() const;

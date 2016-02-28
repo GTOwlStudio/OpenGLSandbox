@@ -5,7 +5,7 @@ gui_Button::gui_Button(std::string text, FontAtlas &font, float x, float y, floa
 	/*m_background(x,y,font.getTextWidth(text),font.getTextHeight(text),depth,r,g,b,a), m_text(text, font, glm::vec4(x,y,w,h), depth, 1.0,1.0,1.0),
 	m_x(x), m_y(y), m_w(w), m_h(h), m_isEntered(false), m_isExited(true), m_isPressed(false), m_beenReleased(false)*/
 	m_x(x), m_y(y), m_w(w), m_h(h), m_depth(depth),
-	m_background(x, y, w, h, depth, r, g, b, a), m_text(text, font, glm::vec4(x + txoffset, y + tyoffset, w, h), depth, 1.0, 1.0, 1.0),
+	m_background(x, y, w, h, depth, r, g, b, a), m_text(text, font, glm::vec4(x + txoffset, y + tyoffset, w, h), depth, 0.0, 0.0, 0.0),
 	m_isEntered(false), m_isExited(true), m_isPressed(false), m_beenReleased(false), m_tx(txoffset), m_ty(tyoffset), m_layout(LABEL_POS_CENTERED)
 {
 	//Util::green("xo%f xy%f\n", txoffset, tyoffset);

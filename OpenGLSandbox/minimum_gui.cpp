@@ -18,6 +18,7 @@ void minimum_gui::load(){
 	m_menu_file = new gui_Menu("File", m_font, 0.0f, m_height - 20.0, 30.0f, 20.0f, 0.701f, LABEL_POS_CENTERED, LABEL_POS_CENTERED);
 	m_menu_file->addAction("Action 1");
 	m_menu_file->addAction("Quit");
+	
 	//m_menu_file->getButton()->getLabel()->move(0.0, 0.5);
 	//m_objects[1] = menu_file;
 	//Util::green("File Menu Pos Before Window Resizing : x=%f y=%f\n", m_menu_file->getButton()->getX(), m_menu_file->getButton()->getY());
@@ -56,6 +57,7 @@ void minimum_gui::update(){
 }
 
 void minimum_gui::render(glm::mat4 &guiMatrix){
+	glDisable(GL_DEPTH_TEST);
 	for (int i =0;i<m_objectsSize;i++){
 		m_objects[i]->render(guiMatrix, glm::mat4(1.0));
 	}
@@ -64,6 +66,7 @@ void minimum_gui::render(glm::mat4 &guiMatrix){
 	
 /*	m_objects[0]->render(guiMatrix, glm::mat4(1.0));
 	m_objects[1]->render(guiMatrix, glm::mat4(1.0));*/
+	glEnable(GL_DEPTH_TEST);
 }
 
 bool minimum_gui::isFinished() const{

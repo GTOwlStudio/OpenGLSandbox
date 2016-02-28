@@ -7,14 +7,14 @@ gui_Label::gui_Label(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, float
 	m_text(text), 
 	m_textSize(m_text.length()), m_vaoID(0), m_vboID(0), 
 	m_shader("shaders/font_dev.vert", "shaders/font_dev.frag"), m_x(xysxsy.x),
-	m_y(xysxsy.y), m_depth(depth)
+	m_y(xysxsy.y), m_depth(depth), m_nbreOfParameter(0)
 	//,m_maxWidth(0)
 {
-
+//	initParameter(text);
 	m_coordsBytesSize = sizeof(float)*m_textSize*18;
 	m_colorsBytesSize = sizeof(float)*m_textSize*18;
-	m_texCoordsBytesSize = sizeof(float)*m_textSize*18;
-	printf("Theorical Size = %i\n", (m_coordsBytesSize+m_colorsBytesSize+m_texCoordsBytesSize)/sizeof(float));
+	m_texCoordsBytesSize = sizeof(float)*m_textSize*12;
+//	printf("Theorical Size = %i\n", (m_coordsBytesSize+m_colorsBytesSize+m_texCoordsBytesSize)/sizeof(float));
 
 	
 	m_color = new float[m_textSize * 18];
@@ -75,7 +75,7 @@ gui_Label::gui_Label(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, float
 								x3+bl+bw,y3+ay+bt, depth,
 								x3+bl+bw,y3+ay+bh+bt, depth};
 
-		float tmpTexCoords[18] = {(tx-bw)/dev_w,ty/dev_h, (tx-bw)/dev_w,(ty+bh)/dev_h, (tx)/dev_w,(ty+bh)/dev_h,	
+		float tmpTexCoords[12] = {(tx-bw)/dev_w,ty/dev_h, (tx-bw)/dev_w,(ty+bh)/dev_h, (tx)/dev_w,(ty+bh)/dev_h,	
 				(tx-bw)/dev_w,ty/dev_h, tx/dev_w,(ty+bh)/dev_h, tx/dev_w,ty/dev_h};
 
 
@@ -100,7 +100,7 @@ gui_Label::gui_Label(std::string text, FontAtlas &atlas, float x, float y, float
 	m_text(text), 
 	m_textSize(m_text.length()), m_vaoID(0), m_vboID(0), 
 	m_shader("shaders/font_dev.vert", "shaders/font_dev.frag"), m_x(x),
-	m_y(y), m_depth(depth)
+	m_y(y), m_depth(depth), m_nbreOfParameter(0)
 	//,m_maxWidth(0)
 {
 	m_shader.load();
@@ -277,7 +277,7 @@ void gui_Label::load(){
 
 	glGenBuffers(1, &m_vboID);
 	//printf("VBO size");
-	printf("m_vboID label = %i\n", m_vboID);
+	printf("m_vboID = %i\n", m_vboID);
 	//printf("dev_vertSize=%i dev_texSize=%i", dev_vertSize, dev_texSize);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
 	
@@ -294,7 +294,7 @@ void gui_Label::load(){
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	if (glIsVertexArray(m_vaoID)==GL_TRUE){
-		std::cout << "glIsVertexArray() = GL_TRUE vaoID = " << m_vaoID << std::endl;
+	//	std::cout << "glIsVertexArray() = GL_TRUE vaoID = " << m_vaoID << std::endl;
 		glDeleteVertexArrays(1, &m_vaoID);
 	}
 
@@ -323,6 +323,7 @@ gui_Label::~gui_Label()
 	glDeleteVertexArrays(1, &m_vaoID);
 	//delete m_fontatlas;
 
+	//delete[] m_locationOfParamater;
 	delete[] m_coord;
 	delete[] m_coords;
 	delete[] m_color;
@@ -427,7 +428,7 @@ void gui_Label::setText(std::string text)
 	float sx = 1.0f;// xysxsy.z;
 	float sy = 1.0f;// xysxsy.w;
 
-	Util::dev("m_text.c_str() = %s\n", m_text.c_str());
+	//Util::dev("m_text.c_str() = %s\n", m_text.c_str());
 	float x3 = m_x;
 	float y3 = m_y - m_fontatlas->getFontHeight();
 	float ax, ay, bw, bh, bl, bt, tx, ty;
@@ -484,6 +485,72 @@ void gui_Label::setText(std::string text)
 	load();
 }
 
+void gui_Label::replace(size_t first, size_t last, std::string text)
+{
+	if (last-first<0) {
+		Util::error("replace() function invalid value, condition : last>first");
+		return;
+	}
+	
+	m_text.replace(first, last, text);
+	//std::cout << m_text << std::endl;
+	//std::cout << m_text << std::endl;
+	//Util::dev("%s\n",m_text);
+	float ax, ay, bm, bt, bl, bw, bh, tx,ty;
+	bh = m_fontatlas->getFontHeight();
+	float dev_w = (float)m_fontatlas->getAtlasWidth();
+	float dev_h = (float)m_fontatlas->getAtlasHeight();
+	float x3 = m_x + (m_coords[first*18]-m_x);
+//	printf("x3=%f\n",x3);
+	float y3 = m_y - m_fontatlas->getFontHeight();
+	for (int i = 0; i < last - first;i++) {
+		//printf("m_text[%i]=%c\n", i+first, m_text[i+first]);
+		bw = m_fontatlas->getCharInfo()[m_text[i+first]].bw;
+		tx = m_fontatlas->getCharInfo()[m_text[i+first]].tx;
+		ty = m_fontatlas->getCharInfo()[m_text[i+first]].ty;
+		ax = m_fontatlas->getCharInfo()[m_text[i + first]].ax;
+		ay = m_fontatlas->getCharInfo()[m_text[i + first]].ay;
+		bw = m_fontatlas->getCharInfo()[m_text[i + first]].bw;
+		//bh = m_fontatlas->getCharInfo()[*p].bh;
+		bl = m_fontatlas->getCharInfo()[m_text[i + first]].bl;
+		bt = m_fontatlas->getCharInfo()[m_text[i + first]].bt;
+		tx = m_fontatlas->getCharInfo()[m_text[i + first]].tx;
+		ty = m_fontatlas->getCharInfo()[m_text[i + first]].ty;
+		float tmpCoords[18] = { x3 + bl, y3 + ay + bt + bh, m_depth,
+			x3 + bl,y3 + ay + bt, m_depth,
+			x3 + bl + bw,y3 + ay + bt, m_depth,
+			x3 + bl, y3 + ay + bh + bt, m_depth,
+			x3 + bl + bw,y3 + ay + bt, m_depth,
+			x3 + bl + bw,y3 + ay + bh + bt, m_depth };
+
+		float tmpTexCoords[12] = { (tx - bw) / dev_w,ty / dev_h, (tx - bw) / dev_w,(ty + bh) / dev_h, (tx) / dev_w,(ty + bh) / dev_h,
+			(tx - bw) / dev_w,ty / dev_h, tx / dev_w,(ty + bh) / dev_h, tx / dev_w,ty / dev_h };
+		for (int t = 0; t<18; t++) {
+			m_coords[first +(i*18)+t] = tmpCoords[t];
+			//tmpCoords[t] = 12.0f;
+			//printf("%i\n", first + (i * 18) + t);
+
+		}
+		for (int t = 0; t < 12;t++) {
+			//printf("%i value=%f\n", first + (i * 12) + t, tmpTexCoords[t]);
+			m_texCoords[first + (i * 12) + t] = tmpTexCoords[t];
+			//tmpTexCoords[t] = 1.0f;
+		//	printf("%i\n", first + (i * 12) + t);
+		}
+		x3 += ax;
+		//printf("size=%i offset=%i byteOffset=%i tmpOffset=%i\n", sizeof(float)*12, (m_coordsBytesSize/12) + (((i + first))*(12)) + (((i + first))*(sizeof(float) * 12)), m_coordsBytesSize / (2 * (sizeof(float)))+ i+first,8*6+(i+first)*6);
+		updateVBO(tmpTexCoords, sizeof(float)*12, m_coordsBytesSize+(((i+first))*(sizeof(float)*12)));
+		updateVBO(tmpCoords, sizeof(float) * 18,(((i + first))*(sizeof(float) * 18)));
+	}
+
+}
+
+void gui_Label::setParameter(unsigned int parameter, int value)
+{
+	//m_text.replace(m_parameters[parameter].);
+	//m_parameters();
+}
+
 void gui_Label::updateVBO(void* datas, unsigned int bytesSize, unsigned int offset){
 	glBindBuffer(GL_ARRAY_BUFFER, m_vboID);
 	void *VBOAddress = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
@@ -536,4 +603,23 @@ std::string gui_Label::getText() const
 
 void gui_Label::setShaderSource(std::string vert, std::string frag){
 	m_shader.setSourceFile(vert, frag);
+}
+
+void gui_Label::initParameter(std::string const & input)
+{
+	std::vector<int> tmp;
+	
+	for (int i = 0; i < input.length(); i++) {
+		if (input[i] == '%' && input[i + 1] == 'i') {
+			m_nbreOfParameter += 1;
+			tmp.push_back(i);
+			m_parameters.emplace(i, input[i]);//insert(i,input[i]);
+		}
+	}
+	/*delete[] m_locationOfParamater;
+	m_locationOfParamater = new int[m_nbreOfParameter];
+	for (int i = 0; i <m_nbreOfParameter;i++) {
+		m_locationOfParamater[i] = tmp[i];
+	}*/
+
 }

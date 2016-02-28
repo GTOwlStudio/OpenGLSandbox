@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <SDL2\SDL.h>
+#include <vector>
 #include "Input.h"
 
 #ifdef WIN32
@@ -26,6 +27,7 @@ public:
 	bool init();
 	bool init_gl();
 	void updateResize();
+	void setCursor(SDL_SystemCursor id);
 	void update();
 	int getWidth() const;
 	int getHeight() const;
@@ -34,6 +36,7 @@ private:
 	SDL_Window *m_mainwindow;
 	SDL_Event m_windowEvent;
 	SDL_GLContext m_glcontext;
+	SDL_Cursor *m_cursor;
 
 	std::string m_window_title;
 	int m_window_width;

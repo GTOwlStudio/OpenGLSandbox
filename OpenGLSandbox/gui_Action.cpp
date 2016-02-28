@@ -26,7 +26,7 @@ void gui_Action::render(glm::mat4 &projection, glm::mat4 &modelview){
 }
 
 void gui_Action::setPosition(float x, float y){
-
+	m_button.setPosition(x,y);
 }
 
 gui_Button* gui_Action::getButton(){

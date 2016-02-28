@@ -63,7 +63,7 @@ void main(){
 	}*/
 
 	//gl_position = vec4(pos, 1.0, 1.0);
-	gl_Position = projection * modelview * vec4(pos, 1.0);
+	gl_Position = projection *modelview* vec4(pos, 1.0);
 	//gl_position = projection * modelview * vec4(1.0, 1.0, 1.0, 1.0);
 	
 }

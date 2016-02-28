@@ -28,6 +28,12 @@
 #include "ParticleSystem.h"
 #include "dev_ro.h"
 #include "engine_camera.h"
+#include "BasePoint.h"
+#include "gui_zone.h"
+#include "EventManager.h"
+#include "dev_ut.h"
+#include "EzyTex.h"
+#include "Mesh.h"
 
 
 class engine_core
