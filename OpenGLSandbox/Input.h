@@ -7,7 +7,6 @@
 #include <stdio.h>
 
 #include "engine_window.h"
-
 // Classe
 
 class Input
@@ -25,9 +24,9 @@ class Input
 
     bool getKey(const SDL_Keycode key) const;
     bool getMouseButton(const Uint8 button) const;
-	bool& getKeyRef(const SDL_Keycode key);
-	bool& getMouseButtonRef(const Uint8 button);
-    bool mouvementSouris() const;
+	bool* getKeyRef(const SDL_Keycode key);
+	bool* getMouseButtonRef(const Uint8 button);
+    bool mouseIsMoving() const;
 
 	bool windowResized() const;
 

@@ -8,14 +8,16 @@ Input::Input() : m_x(0), m_y(0), m_xRel(0), m_yRel(0), m_terminer(false),
 {
     // Initialisation du tableau m_touches[]
 	printf("Careful with the constructor of Input make sure this line is just diplayed once");
-    for(int i(0); i < SDL_NUM_SCANCODES; i++)
-        m_keys[i] = false;
+	for (int i(0); i < SDL_NUM_SCANCODES; i++) {
+		m_keys[i] = false;
+	}
 
 
     // Initialisation du tableau m_boutonsSouris[]
 
-    for(int i(0); i < 8; i++)
-        m_mouseButton[i] = false;
+	for (int i(0); i < 8; i++) {
+		m_mouseButton[i] = false;
+	}
 }
 
 
@@ -156,18 +158,18 @@ bool Input::getMouseButton(const Uint8 bouton) const
     return m_mouseButton[bouton];
 }
 
-bool & Input::getKeyRef(const SDL_Keycode key)
+bool* Input::getKeyRef(const SDL_Keycode key)
 {
-	return m_keys[key];
+	return &m_keys[key];
 }
 
 
-bool & Input::getMouseButtonRef(const Uint8 button)
+bool* Input::getMouseButtonRef(const Uint8 button)
 {
-	return m_mouseButton[button];
+	return &m_mouseButton[button];
 }
 
-bool Input::mouvementSouris() const
+bool Input::mouseIsMoving() const
 {
     if(m_xRel == 0 && m_yRel == 0)
         return false;

@@ -179,9 +179,9 @@ void engine_core::mainLoop(){
 	/*gui_Label l(test_string, ebrima, 51.0, 51.0, 0.1,0.0,0.0,1.0);
 	l.load();*/
 
-	EventManager mng;
+	/*EventManager mng;
 	bool a = false;
-	mng.addValueSpy(&a);
+	mng.addValueSpy(&a);*/
 
 	engine_texture texture("textures/texu.png");
 	texture.load();
@@ -257,7 +257,7 @@ void engine_core::mainLoop(){
 			//m = glm::rotate(m, angle, glm::vec3(0.0, 1.0, 0.0));
 			//printf();
 			//MVP = projection * m *  rotation*model;
-			cam.rotate(angle, glm::vec3(0.0, 0.0, 1.0));
+			//cam.rotate(angle, glm::vec3(0.0, 0.0, 1.0));
 			//plusEachFrame = 0;
 			angle += 0.5f;
 			if (angle>=360.0f) {
@@ -278,14 +278,14 @@ void engine_core::mainLoop(){
 			projection = glm::perspective(60.0f, (float)m_mainwindow->getWidth()/m_mainwindow->getHeight(), 0.0f, 100.0f);
 			glViewport(0, 0, m_mainwindow->getWidth(), m_mainwindow->getHeight());
 		}
-		if(Input::input.getTouche(SDLK_ESCAPE))
+		if(Input::input.getKey(SDLK_ESCAPE))
            break;
-		if (Input::input.getTouche(SDLK_g) && clock()-t>=1000) {
+		if (Input::input.getKey(SDLK_g) && clock()-t>=1000) {
 			t = clock();
 			printf("Grid Generation");
 			//sys.gridGeneration(ocam.getMatrix());
 		}
-		if (Input::input.getTouche(SDLK_p) && clock() - t >= 800){
+		if (Input::input.getKey(SDLK_p) && clock() - t >= 800){
 			t = clock();			
 			//a = true;
 			//mng.updateEvent();
@@ -297,14 +297,14 @@ void engine_core::mainLoop(){
 			}
 			m_mainwindow->setCursor(SDL_SystemCursor(cursorId));
 		}
-		if (Input::input.getTouche(SDLK_a)&&clock()-t>=800){
+		if (Input::input.getKey(SDLK_a)&&clock()-t>=800){
 			//printf("%i\n", m_while_duration);
 			t = clock();
 			fpsLabel.replace(6,8, std::to_string(1000/m_last_while_duration));
 			//segment.setPoint(1, 150.0, 10.0, 0.2);
 			dev_hit = true;
 		}
-		if (Input::input.getTouche(SDLK_i)&&(clock()-t>=1000)) {
+		if (Input::input.getKey(SDLK_i)&&(clock()-t>=1000)) {
 			t = clock();
 			printf("Init PhyX");
 			//sys.initParticle(PHYX_INITMODE_UNIFORM,16);
@@ -313,6 +313,10 @@ void engine_core::mainLoop(){
 		if (!gui.isFinished()){
 			break;
 		}
+
+		/*if (Input::input.getMouseButton(2)) {
+			printf("here %i\n", Input::input.getMouseButtonRef(2));
+		}*/
 
 		/*if (clock()-update_clock>=1000/30) {
 			update_clock = clock();
@@ -323,7 +327,7 @@ void engine_core::mainLoop(){
 
 		glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 		//RENDU
-		if (Input::input.getTouche(SDLK_s)) {
+		if (Input::input.getKey(SDLK_s)) {
 			if (clock() - t >= 1000) {
 				//slider.setPosition();
 				t = clock();
@@ -336,7 +340,7 @@ void engine_core::mainLoop(){
 				//sys.physX(guiMat, modelview);
 			}
 		}
-		if(Input::input.getTouche(SDLK_r)) {
+		if(Input::input.getKey(SDLK_r)) {
 			if (clock() - t >= 1000) {
 				//slider.setPosition();
 				t = clock();
@@ -360,6 +364,7 @@ void engine_core::mainLoop(){
 		//fpsN.render(guiMat,modelview);
 		if (plusEachFrame>=2) {
 			plusEachFrame = 0;
+			cam.update();
 			gui.update();
 		}
 

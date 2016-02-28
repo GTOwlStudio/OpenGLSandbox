@@ -16,16 +16,40 @@ EventManager::~EventManager()
 
 void EventManager::updateEvent()
 {
-	for (unsigned int i = 0; i < m_watcher.size();i++) {
+	clearEventQueue();
+	for (unsigned int i = 0; i < m_watcher.size(); i++) {
 		if (*m_watcher[i] != m_values[i]) {
 			m_values[i] = *m_watcher[i];
+			m_events.push(i);
 		}
 	}
 }
 
-void EventManager::addValueSpy(bool *adress)
+bool EventManager::isEvent() const
+{
+	return !m_events.empty();
+}
+
+unsigned int EventManager::readEventId()
+{
+	unsigned int tmp = m_events.back();
+	m_events.pop();
+	return tmp;
+}
+
+bool EventManager::getValue(size_t id) const
+{
+	return m_values[id];
+}
+
+void EventManager::clearEventQueue() {
+	while (!m_events.empty()) {
+		m_events.pop();
+	}
+}
+
+void EventManager::addValueSpy(bool* adress)
 {
 	m_watcher.push_back(adress);
 	m_values.push_back(*adress);
-	std::cout << m_values.back() << std::endl;
 }

@@ -5,18 +5,28 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Input.h"
+#include "EventManager.h"
+
 enum CAMERA_TYPE {
+
+};
+
+struct camera_controller_struct {
+
+	bool m_MMB = false;
+	
 
 };
 
 class engine_camera
 {
 public:
-	engine_camera(glm::vec3 position, glm::vec3 cible, glm::vec3 verticalAxis);
-	engine_camera( float const& fov, float const& ratio, float const& near, float const& far);
-	engine_camera(float left, float right, float bottom, float top, float near, float var);
+	engine_camera(float const& fov, float const& ratio, float const& n, float const& f);
+	engine_camera(float left, float right, float bottom, float top, float n, float f);
 	void lookAt(glm::vec3 pos, glm::vec3 center, glm::vec3 axis);
 	void resize(int w, int h);
+	void update();
 	~engine_camera();
 	void rotate(float angle, glm::vec3 axis);
 	glm::mat4 getMatrix() const;
@@ -34,6 +44,9 @@ private:
 
 	glm::vec3 m_position;
 	glm::vec3 m_cible;
+
+	EventManager m_mng;
+	camera_controller_struct m_controller;
 
 };
 
