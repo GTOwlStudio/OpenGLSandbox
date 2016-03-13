@@ -121,7 +121,7 @@ FontAtlas::FontAtlas(std::string fontfile, int fontHeight) : m_texID(0),
 
 		//Util::green("%c ax:%f ay:%f bw:%f bh:%f bl:%f bt:%f\n",i, m_charInfo[i].ax, m_charInfo[i].ay, m_charInfo[i].bw, m_charInfo[i].bh, m_charInfo[i].bl, m_charInfo[i].bt);
 		//Util::green("%c ax:%f ay:%f bw:%f bh:%f bx:%f by:%f\n", i, m_charInfo[i].ax, m_charInfo[i].ay, m_charInfo[i].bw, m_charInfo[i].bh, m_charInfo[i].bx, m_charInfo[i].by);
-		Util::green("%c ax:%f ay:%f w:%f h:%f bx:%f by:%f\n", i, m_charInfo[i].ax, m_charInfo[i].ay, m_charInfo[i].w, m_charInfo[i].h, m_charInfo[i].bx, m_charInfo[i].by);
+		///Util::green("%c ax:%f ay:%f w:%f h:%f bx:%f by:%f\n", i, m_charInfo[i].ax, m_charInfo[i].ay, m_charInfo[i].w, m_charInfo[i].h, m_charInfo[i].bx, m_charInfo[i].by);
 
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);

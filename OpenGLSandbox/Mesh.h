@@ -20,14 +20,18 @@ public:
 	void update();
 	void load();
 	void render(glm::mat4 &matrix);
+	void render(glm::mat4 &matrix, glm::mat4 &world); //For Diffuse Lighting
 
 private:
 	std::vector<glm::vec3> m_vertices;
+	std::vector<glm::vec3> m_normals;
 	std::vector<unsigned int> m_indices;
 	void loadFromFile(std::string filename);
+	void computeNormals();
 
 	//DEV
 	unsigned int m_verticesBytesSize;
+	unsigned int m_normalsBytesSize;
 	unsigned int m_indicesBytesSize;
 	engine_shader m_shader;
 	GLuint m_vao;

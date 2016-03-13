@@ -5,9 +5,10 @@
 #endif
 
 EzyTex::EzyTex(GLuint id) : m_tid(id), m_vbo(0), m_vao(0), m_ibo(0), m_coordsBytesSize(sizeof(float) * 8),
-m_texCoordsBytesSize(sizeof(float) * 8), m_indicesBytesSize(sizeof(unsigned int) * 6), m_shader("shaders/texture2d.vert", "shaders/texture2d.frag")
+m_texCoordsBytesSize(sizeof(float) * 8), m_indicesBytesSize(sizeof(unsigned int) * 6), m_shaderId(RessourcesManager::getShaderId("texture2d"))//, m_shader("shaders/texture2d.vert", "shaders/texture2d.frag")
 {
 	float tmpCoords[8] = { -1.0f, -1.0f,		-1.0f,1.0f,		1.0f,1.0f,	1.0, -1.0 };
+	//float tmpCoords[8] = { 0.0f, -0.0f,		0.0f,1.0f,		1.0f,1.0f,	1.0, 0.0 };
 	float tmpTex[8] = { 0.0f,0.0f, 0.0f,1.0f, 1.0f,1.0f, 1.0f,0.0f };
 	unsigned int tmpIndices[6] = {0,1,2,0,2,3};
 	for (unsigned int i = 0; i < 8;i++) {
@@ -15,6 +16,22 @@ m_texCoordsBytesSize(sizeof(float) * 8), m_indicesBytesSize(sizeof(unsigned int)
 		m_texCoords[i] = tmpTex[i];
 	}
 	for (unsigned int i = 0; i < 6;i++) {
+		m_indices[i] = tmpIndices[i];
+	}
+}
+
+EzyTex::EzyTex(GLuint id, std::string ssv, std::string ssf) : m_tid(id), m_vbo(0), m_vao(0), m_ibo(0), m_coordsBytesSize(sizeof(float) * 8),
+m_texCoordsBytesSize(sizeof(float) * 8), m_indicesBytesSize(sizeof(unsigned int) * 6), m_shader(ssv, ssf)
+{
+	float tmpCoords[8] = { -1.0f, -1.0f,		-1.0f,1.0f,		1.0f,1.0f,	1.0, -1.0 };
+	//float tmpCoords[8] = { 0.0f, -0.0f,		0.0f,1.0f,		1.0f,1.0f,	1.0, 0.0 };
+	float tmpTex[8] = { 0.0f,0.0f, 0.0f,1.0f, 1.0f,1.0f, 1.0f,0.0f };
+	unsigned int tmpIndices[6] = { 0,1,2,0,2,3 };
+	for (unsigned int i = 0; i < 8; i++) {
+		m_coords[i] = tmpCoords[i];
+		m_texCoords[i] = tmpTex[i];
+	}
+	for (unsigned int i = 0; i < 6; i++) {
 		m_indices[i] = tmpIndices[i];
 	}
 }
@@ -51,16 +68,18 @@ void EzyTex::load()
 
 	glBindVertexArray(0);
 
-	m_shader.load();
+	//m_shader.load();
 
 }
 
 void EzyTex::render(glm::mat4 & matrix)
 {
+	
 	glDisable(GL_DEPTH_TEST);
-	glUseProgram(m_shader.getProgramID());
+	//glUseProgram(m_shader.getProgramID());
+	glUseProgram(m_shaderId);
 
-	glUniformMatrix4fv(glGetUniformLocation(m_shader.getProgramID(), "matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
+	glUniformMatrix4fv(glGetUniformLocation(m_shaderId, "matrix"), 1, GL_FALSE, glm::value_ptr(matrix));
 
 		glBindVertexArray(m_vao);
 		glBindTexture(GL_TEXTURE_2D, m_tid);

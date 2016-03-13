@@ -10,6 +10,7 @@ class EzyTex
 {
 public:
 	EzyTex(GLuint id);
+	EzyTex(GLuint id, std::string ssv, std::string ssf); //ssv special shader vertex, f fragment
 	~EzyTex();
 	void load();
 	void render(glm::mat4 &matrix);
@@ -22,6 +23,7 @@ private:
 	GLuint m_ibo;
 
 	engine_shader m_shader;
+	GLuint m_shaderId;
 
 	float m_coords[8];
 	float m_texCoords[8];

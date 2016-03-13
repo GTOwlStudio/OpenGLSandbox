@@ -21,16 +21,19 @@ bool engine_core::init(){
 	if (!m_mainwindow->init_gl())
 		return false;
 
+	
+
 	return true;
 }
 
 void engine_core::mainLoop(){
-
+	
 	//glm::mat4 guiMat = glm::ortho(0.0f,960.0f, 0.0f, 600.0f);
+	
 	engine_camera cam(60.0f, (float)m_mainwindow->getWidth() / m_mainwindow->getHeight(), 0.1f, 100.0f);
 	engine_camera ocam(0.0f,1.0f,0.0f,1.0f,0.0f,100.0f);
 
-	cam.lookAt(glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	cam.lookAt(glm::vec3(0.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	ocam.lookAt(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,0.0f,1.0f));
 
 	glm::mat4 guiMat = glm::ortho(0.0f,(float)m_mainwindow->getWidth(), 0.0f, (float)m_mainwindow->getHeight());
@@ -61,7 +64,8 @@ void engine_core::mainLoop(){
 	/*Quad q(200.0,10.0,512,ftest.getAtlasHeight(),0.2,"shaders/font_dev.vert", "shaders/font_dev.frag", ftest.getTexID());
 	q.load();*/
 	
-	Mesh mesh("obj/monkey.obj");
+	Mesh mesh("obj/surface.obj");
+	//Mesh mesh("obj/plane.obj");
 	mesh.load();
 
 	engine_shader pp("shaders/ps_basic.vert", "shaders/ps_basic.frag");
@@ -134,7 +138,7 @@ void engine_core::mainLoop(){
 	}
 	/*gui_Label alphabet(allLetter, ftest, glm::vec4(10,200,80,10), 0.1, 1.0,0.0,0.0);
 	alphabet.load();*/
-	gui_Label label(test_string, metro, glm::vec4(50.0,50.52,ftest.getATextWidth(test_string),ftest.getATextHeight(test_string)), 0.1,0.0,0.0,0.0);
+	gui_Label label(test_string, metro, glm::vec4(50.0f,50.0f,ftest.getATextWidth(test_string),ftest.getATextHeight(test_string)), 0.1f,0.0f,0.0f,0.0f);
 	label.load();
 	gui_Label fpsLabel("FPS : %i", ftest, glm::vec4(m_mainwindow->getWidth()-ftest.getATextWidth("FPS : 000-"), m_mainwindow->getHeight()-ftest.getATextHeight("FPS : 000-"), 0.0f, 0.0f), 0.1, 1.0, 0.0, 0.0);
 	fpsLabel.load();
@@ -143,7 +147,10 @@ void engine_core::mainLoop(){
 	//label.setPosition(100.0,100.0);
 	//label.move(100.0,0.0);
 	//label.move(100.0, 0.0);
-	
+	glm::mat4 devFontMatrix = glm::ortho(0.0f,(float)metro.getAtlasWidth(), 0.0f, (float)metro.getAtlasHeight());
+	debug_font dbf(metro.getTexID(), metro);
+	dbf.load();
+
 	dev_Quad dq(50.0f, 50.0f, 50.0f, 50.0f, 0.2f, 1.0f, 0.0f, 1.0f, 1.0f);
 	dq.load();
 
@@ -186,9 +193,19 @@ void engine_core::mainLoop(){
 	engine_texture texture("textures/texu.png");
 	texture.load();
 
+	
+	//FramebufferInfo tinfo = { GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 512,  512 };
+	FramebufferInfo tinfo = { GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_mainwindow->getWidth(),  m_mainwindow->getHeight() };
+	RenderbufferInfo rinfo = {GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT};
+	GLuint tfbo;
+	GLuint fboId;
+	FramebufferManager::genFBOTAndTexture(tfbo, fboId, tinfo);
+	printf("tbo=%i %i\n", tfbo, fboId);
 	EzyTex etex(texture.getID());
+	//EzyTex etex(texture.getID(), Ressou, "shaders/texture2d.frag");
 	etex.load();
-
+	/*EzyTex etex(tfbo, "shaders/red2grey.vert", "shaders/red2grey.frag");
+	etex.load();*/
 	/*gui_Slider slider("test=%v", ftest, 100.0f, 100.0f, 200.0f, 20.0f, 0.2f, 100.0f, 50.0f, 0.0f);
 	slider.load();
 	*/
@@ -247,6 +264,9 @@ void engine_core::mainLoop(){
 	int cursorId = 0;
 	//glEnable(GL_DEBUG_OUTPUT);
 	//ftest.runTest();
+	float angleX = 0.0f;
+	float angleY = 0.0f;
+	float devStep = 45.0f;
 	while(!Input::input.terminer())
     {
 		m_while_start = SDL_GetTicks();
@@ -257,7 +277,7 @@ void engine_core::mainLoop(){
 			//m = glm::rotate(m, angle, glm::vec3(0.0, 1.0, 0.0));
 			//printf();
 			//MVP = projection * m *  rotation*model;
-			//cam.rotate(angle, glm::vec3(0.0, 0.0, 1.0));
+			cam.rotate(angle, glm::vec3(0.0, 0.0, 1.0));
 			//plusEachFrame = 0;
 			angle += 0.5f;
 			if (angle>=360.0f) {
@@ -298,11 +318,13 @@ void engine_core::mainLoop(){
 			m_mainwindow->setCursor(SDL_SystemCursor(cursorId));
 		}
 		if (Input::input.getKey(SDLK_a)&&clock()-t>=800){
-			//printf("%i\n", m_while_duration);
+			printf("Pressed\n");
 			t = clock();
-			fpsLabel.replace(6,8, std::to_string(1000/m_last_while_duration));
+			//fpsLabel.replace(6,8, std::to_string(1000/m_last_while_duration));
+			
+
 			//segment.setPoint(1, 150.0, 10.0, 0.2);
-			dev_hit = true;
+		
 		}
 		if (Input::input.getKey(SDLK_i)&&(clock()-t>=1000)) {
 			t = clock();
@@ -327,7 +349,7 @@ void engine_core::mainLoop(){
 
 		glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 		//RENDU
-		if (Input::input.getKey(SDLK_s)) {
+		if (Input::input.getKey(SDLK_m)) {
 			if (clock() - t >= 1000) {
 				//slider.setPosition();
 				t = clock();
@@ -340,24 +362,37 @@ void engine_core::mainLoop(){
 				//sys.physX(guiMat, modelview);
 			}
 		}
-		if(Input::input.getKey(SDLK_r)) {
-			if (clock() - t >= 1000) {
-				//slider.setPosition();
+		if(Input::input.getKey(SDLK_z)) {
+			if (clock() - t >= 150) {
 				t = clock();
-				Util::conceptor("PhyX Reloaded\n");
-				//bck.load();
-			//	sys.dev_reloadPhyxShader();
-				//sys.physX(guiMat, modelview);
+				angleX += devStep;
+				cam.setRotation(angleX, glm::vec3(1.0f, 0.0f, 0.0f));
+				//cam.rotationAtp(45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+				//cam.rotationAtp(90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+			}
+		}
+		if (Input::input.getKey(SDLK_s)) {
+			if (clock() - t >= 150) {
+				t = clock();
+				angleY += devStep;
+				cam.setRotation(angleY, glm::vec3(0.0f, 0.0f, 1.0f));
+				//cam.rotationAtp(-45.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+				//cam.rotationAtp(90.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 			}
 		}
 
 		etex.render(modelview);
-		bp.render(cam.getMatrix()*model);
+		//dbf.render(modelview, devFontMatrix);
+		bp.render(cam.getMatrix());
 		//spline.render(guiMat);
 		hspline.render(cam.getMatrix()*model);
 		hspline.renderEditLine(cam.getMatrix()*model);
-		//mesh.render(cam.getMatrix());
-		
+		/*glBindFramebuffer(GL_FRAMEBUFFER, fboId);
+			glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+			glViewport(0,0,512,512);
+			mesh.render(cam.getMatrix());
+			glViewport(0, 0, m_mainwindow->getWidth(), m_mainwindow->getHeight());
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);*/
 		//q.render();
 		//DEV INFO
 		
@@ -369,7 +404,19 @@ void engine_core::mainLoop(){
 		}
 
 		
+		
 		gui.render(guiMat);
+		//etex.render(modelview);
+		mesh.render(cam.getMatrix(), modelview);
+		/*dq.render(guiMat, modelview);
+		glDisable(GL_DEPTH_TEST);
+		label.render(guiMat,modelview);
+		glEnable(GL_DEPTH_TEST);*/
+		
+		//glDisable(GL_DEPTH_TEST);
+		//glClear(GL_DEPTH_BUFFER_BIT);
+		//bp.render(cam.getMatrix());
+		//glEnable(GL_DEPTH_TEST);
 		//fpsLabel.render(guiMat, modelview);
 		//***Dont Touch Under*********************************************************************
 		m_mainwindow->update();
@@ -382,4 +429,10 @@ void engine_core::mainLoop(){
 			m_last_while_duration = SDL_GetTicks()-m_while_start;//#dev_tag
     }
 
+}
+
+void engine_core::cleanUp()
+{
+	FramebufferManager::cleanUp();
+	RessourcesManager::cleanUp();
 }

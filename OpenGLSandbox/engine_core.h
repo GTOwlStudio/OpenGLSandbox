@@ -34,7 +34,9 @@
 #include "dev_ut.h"
 #include "EzyTex.h"
 #include "Mesh.h"
-
+#include "FramebufferManager.h"
+#include "RessourcesManager.h"
+#include "debug_font.h"
 
 class engine_core
 {
@@ -43,6 +45,7 @@ public:
 	~engine_core();
 	bool init();
 	void mainLoop();
+	void cleanUp();
 
 private:
 	engine_window *m_mainwindow;
