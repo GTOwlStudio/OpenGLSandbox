@@ -17,10 +17,13 @@ struct character_info{
   
 	float bw; // bitmap.width;
 	float bh; // bitmap.rows;
-  
-	float bl; // bitmap_left;
-	float bt; // bitmap_top;
-  
+
+	float w; //font width
+	float h; //font height
+
+	float bx; //x Bearing
+	float by; //Y Bearing
+
 	float tx; // x offset of glyph in texture coordinates
 	float ty; //y offset of glyph in textrure coordinates
 

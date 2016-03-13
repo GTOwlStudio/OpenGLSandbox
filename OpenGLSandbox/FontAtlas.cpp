@@ -104,11 +104,24 @@ FontAtlas::FontAtlas(std::string fontfile, int fontHeight) : m_texID(0),
 		m_charInfo[i].bw = m_glypSlot->bitmap.width;
 		m_charInfo[i].bh = m_glypSlot->bitmap.rows;
 
-		m_charInfo[i].bl = m_glypSlot->bitmap_left;
-		m_charInfo[i].bt = m_glypSlot->bitmap_top;
+		/*m_charInfo[i].bl = m_glypSlot->bitmap_left;
+		m_charInfo[i].bt = m_glypSlot->bitmap_top;*/
+
+		m_charInfo[i].w = m_glypSlot->metrics.width / 64;
+		m_charInfo[i].h = m_glypSlot->metrics.height / 64;
+
+		m_charInfo[i].bx = m_glypSlot->metrics.horiBearingX / 64;
+		m_charInfo[i].by = m_glypSlot->metrics.horiBearingY/64;
+		
+
 
 		m_charInfo[i].tx = (float)last_x;
 		m_charInfo[i].ty = (float)last_y;
+
+
+		//Util::green("%c ax:%f ay:%f bw:%f bh:%f bl:%f bt:%f\n",i, m_charInfo[i].ax, m_charInfo[i].ay, m_charInfo[i].bw, m_charInfo[i].bh, m_charInfo[i].bl, m_charInfo[i].bt);
+		//Util::green("%c ax:%f ay:%f bw:%f bh:%f bx:%f by:%f\n", i, m_charInfo[i].ax, m_charInfo[i].ay, m_charInfo[i].bw, m_charInfo[i].bh, m_charInfo[i].bx, m_charInfo[i].by);
+		Util::green("%c ax:%f ay:%f w:%f h:%f bx:%f by:%f\n", i, m_charInfo[i].ax, m_charInfo[i].ay, m_charInfo[i].w, m_charInfo[i].h, m_charInfo[i].bx, m_charInfo[i].by);
 
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
