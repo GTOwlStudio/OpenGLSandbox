@@ -11,7 +11,8 @@ Mesh::Mesh(std::string filename)
 }*/
 
 Mesh::Mesh(std::string filename) : m_vao(0), m_vbo(0),
-m_shader("shaders/phong.vert", "shaders/phong.frag"),
+m_shader("shaders/ambient.vert", "shaders/ambient.frag"),
+//m_shader("shaders/diffuse.vert", "shaders/diffuse.frag"),
 m_verticesBytesSize(0), m_indicesBytesSize(0), m_normalsBytesSize(0)
 {
 	loadFromFile(filename);

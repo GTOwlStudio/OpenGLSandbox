@@ -66,7 +66,7 @@ void gui_Slider::update() {
 		m_background.updateVBO(m_colors, sizeof(float) * 24, sizeof(float) * 18);
 	}
 
-	if (m_isEntered && !m_isPressed && Input::input.getBoutonSouris(1)) { //Pressed
+	if (m_isEntered && !m_isPressed && Input::input.getMouseButton(1)) { //Pressed
 																		  //printf("Pressed\n");
 		m_isPressed = true;
 		m_background.updateVBO(m_pcolors, sizeof(float) * 24, sizeof(float) * 18);
@@ -74,7 +74,7 @@ void gui_Slider::update() {
 
 	
 
-	if (m_isPressed && m_isEntered && !Input::input.getBoutonSouris(1)) { // Released
+	if (m_isPressed && m_isEntered && !Input::input.getMouseButton(1)) { // Released
 																		  //printf("Released\n");
 		m_beenReleased = true;
 		m_background.updateVBO(m_colors, sizeof(float) * 24, sizeof(float) * 18);

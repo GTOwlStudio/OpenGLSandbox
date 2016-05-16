@@ -123,6 +123,7 @@ bool engine_shader::load()
     glBindAttribLocation(m_programID, 0, "in_Vertex");
     glBindAttribLocation(m_programID, 1, "in_Color");
     glBindAttribLocation(m_programID, 2, "in_TexCoord0");
+	glBindAttribLocation(m_programID, 3, "in_Normal");
 
 
     // Linkage du programme

@@ -20,6 +20,11 @@ float MathUtil::BernsteingPolynome(float m, float i, float u)
 	return binomialCoeff(m,i)*std::pow(u,i)*std::pow((1-u), m-i);
 }
 
+int MathUtil::sign(int x)
+{
+	return (x>>31)|(!!x);
+}
+
 size_t MathUtil::util3dTex_u(size_t x, size_t z, size_t Lx, size_t Dx)
 {
 	return size_t(x + (Lx*(z - (Dx*floor(z / Dx)) )));

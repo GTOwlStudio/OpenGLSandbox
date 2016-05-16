@@ -19,7 +19,7 @@ m_vaoId(0), m_vboId(0), m_iboId(0), m_shader("shaders/dev_quad.vert", "shaders/d
 	for (int i = 0; i < 16; i++) {
 		m_colors[i] = tmpC[i];
 	}
-	float tmpI[16] = {0,1,3,	1, 2,3};
+	float tmpI[6] = {0,1,3,	1, 2,3};
 	for (int i = 0; i < 6;i++) {
 		m_index[i]=tmpI[i];
 	}
@@ -49,14 +49,15 @@ void dev_Quad::load() {
 		glGenBuffers(1, &m_iboId);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indexBytesSize, m_index, GL_STATIC_DRAW);
+		
 			//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboId);
 
 		if (glIsBuffer(m_vboId)) {glDeleteBuffers(1, &m_vboId);	}
 		
 		glGenBuffers(1, &m_vboId);
 		glBindBuffer(GL_ARRAY_BUFFER, m_vboId);
-		glBufferData(GL_ARRAY_BUFFER, m_verticesBytesSize+m_colorsBytesSize, 0,GL_STATIC_DRAW);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, m_verticesBytesSize, m_vertices);
+		glBufferData(GL_ARRAY_BUFFER, m_verticesBytesSize+m_colorsBytesSize, m_vertices,GL_STATIC_DRAW);
+		//glBufferSubData(GL_ARRAY_BUFFER, 0, m_verticesBytesSize, m_vertices);
 		glBufferSubData(GL_ARRAY_BUFFER, m_verticesBytesSize, m_colorsBytesSize, m_colors);
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);

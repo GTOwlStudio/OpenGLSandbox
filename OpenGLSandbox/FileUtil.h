@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <time.h>
+#include "Util.h"
 
 enum MODE_WRITTING_ARRAY_ENUM{
 	MODE_DONOTHING = 0,

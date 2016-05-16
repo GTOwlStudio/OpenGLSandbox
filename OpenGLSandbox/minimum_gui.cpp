@@ -50,6 +50,9 @@ void minimum_gui::update(){
 		m_objects[i]->update();
 	}
 	m_menu_file->update();
+/*	if (Input::input.getMouseButton(3)) {
+		printf("Right Click %i %i\n", Input::input.getX(), Input::input.getY());
+	}*/
 	if (m_menu_file->getLastActionID()==1){
 	//	printf("here");
 		m_isFinished = false;

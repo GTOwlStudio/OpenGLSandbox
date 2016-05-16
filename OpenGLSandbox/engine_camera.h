@@ -7,6 +7,7 @@
 
 #include "Input.h"
 #include "EventManager.h"
+#include "MathUtil.h"
 
 enum CAMERA_TYPE {
 
@@ -28,8 +29,11 @@ public:
 	void resize(int w, int h);
 	void update();
 	~engine_camera();
-	void rotate(float angle, glm::vec3 axis);
+	void setRotation(float angle, glm::vec3 axis);
+	void rotate(float dAngle, glm::vec3 axis);
+	void rotationAtp(float angle, glm::vec3 atp);
 	glm::mat4 getMatrix() const;
+	glm::mat4 getWorldMatrix() const;
 
 private:
 	glm::mat4 m_VP; //View Projection matrix
@@ -38,6 +42,10 @@ private:
 
 	float m_phi;
 	float m_teheta;
+
+	glm::vec3 m_rotation;
+	glm::vec3 m_atp; //Alpha Theta Phi
+	float m_angle;
 
 	glm::vec3 m_lateralAxis;
 	glm::vec3 m_verticalAxis;

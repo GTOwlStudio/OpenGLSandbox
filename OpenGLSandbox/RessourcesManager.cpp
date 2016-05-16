@@ -10,6 +10,7 @@ void RessourcesManager::init()
 	RessourcesManager::addShader("shaders/texture2d.vert", "shaders/texture2d.frag", "texture2d");
 	RessourcesManager::addShader("shaders/dev_font.vert", "shaders/dev_font.frag", "dev_font");
 	RessourcesManager::addShader("shaders/vertex_only.vert", "shaders/vertex_only.frag", "vertex_only");
+	RessourcesManager::addShader("shaders/diffuse.vert", "shaders/diffuse.frag", "diffuse");
 }
 
 void RessourcesManager::cleanUp()

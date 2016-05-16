@@ -402,12 +402,12 @@ void engine_core::mainLoop(){
 			cam.update();
 			gui.update();
 		}
-
-		
 		
 		gui.render(guiMat);
 		//etex.render(modelview);
-		mesh.render(cam.getMatrix(), modelview);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//	mesh.render(cam.getMatrix(), modelview);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		/*dq.render(guiMat, modelview);
 		glDisable(GL_DEPTH_TEST);
 		label.render(guiMat,modelview);

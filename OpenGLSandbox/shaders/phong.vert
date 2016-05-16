@@ -7,10 +7,12 @@ uniform mat4 matrix;
 uniform mat4 world;
 
 out vec3 Normal0;
+out vec3 WorldPos0;
 
 void main(){
 
 	gl_Position = matrix * vec4(in_Vertex, 1.0);
 	Normal0 = (world* vec4(in_Normal, 0.0)).xyz;
+	WorldPos0 = (world*vec4(in_Vertex, 1.0)).xyz;
 
 }

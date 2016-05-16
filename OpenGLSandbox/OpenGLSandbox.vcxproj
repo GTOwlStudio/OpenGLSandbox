@@ -12,43 +12,82 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActionListener.cpp" />
+    <ClCompile Include="BasePoint.cpp" />
     <ClCompile Include="BSpline.cpp" />
+    <ClCompile Include="debug_font.cpp" />
     <ClCompile Include="dev_gs.cpp" />
+    <ClCompile Include="dev_Label.cpp" />
+    <ClCompile Include="dev_line.cpp" />
+    <ClCompile Include="dev_Quad.cpp" />
+    <ClCompile Include="dev_ro.cpp" />
+    <ClCompile Include="dev_ut.cpp" />
     <ClCompile Include="engine_camera.cpp" />
     <ClCompile Include="engine_core.cpp" />
+    <ClCompile Include="engine_scene.cpp" />
     <ClCompile Include="engine_shader.cpp" />
     <ClCompile Include="engine_texture.cpp" />
     <ClCompile Include="engine_window.cpp" />
+    <ClCompile Include="EventManager.cpp" />
+    <ClCompile Include="EzyTex.cpp" />
     <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FontAtlas.cpp" />
+    <ClCompile Include="FramebufferManager.cpp" />
+    <ClCompile Include="GOS.cpp" />
     <ClCompile Include="gui_Action.cpp" />
     <ClCompile Include="gui_Button.cpp" />
     <ClCompile Include="gui_devtest.cpp" />
     <ClCompile Include="gui_FloatableMenu.cpp" />
     <ClCompile Include="gui_Label.cpp" />
     <ClCompile Include="gui_Menu.cpp" />
+    <ClCompile Include="gui_Slider.cpp" />
+    <ClCompile Include="gui_TextField.cpp" />
+    <ClCompile Include="gui_zone.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Layout.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MathUtil.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="minimum_gui.cpp" />
+    <ClCompile Include="NURBS.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="QuadC.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="RessourcesManager.cpp" />
+    <ClCompile Include="StaticVBOManager.cpp" />
     <ClCompile Include="test_gchar.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActionListener.h" />
+    <ClInclude Include="BasePoint.h" />
     <ClInclude Include="BSpline.h" />
+    <ClInclude Include="debug_font.h" />
     <ClInclude Include="dev_gs.h" />
+    <ClInclude Include="dev_Label.h" />
+    <ClInclude Include="dev_line.h" />
+    <ClInclude Include="dev_Quad.h" />
+    <ClInclude Include="dev_ro.h" />
+    <ClInclude Include="dev_ut.h" />
     <ClInclude Include="engine_camera.h" />
     <ClInclude Include="engine_core.h" />
+    <ClInclude Include="engine_cursor.h" />
+    <ClInclude Include="engine_object.h" />
+    <ClInclude Include="engine_scene.h" />
     <ClInclude Include="engine_shader.h" />
     <ClInclude Include="engine_texture.h" />
     <ClInclude Include="engine_window.h" />
+    <ClInclude Include="EventManager.h" />
+    <ClInclude Include="EzyTex.h" />
     <ClInclude Include="FileUtil.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FontAtlas.h" />
+    <ClInclude Include="FramebufferManager.h" />
+    <ClInclude Include="glheader.h" />
+    <ClInclude Include="GOS.h" />
     <ClInclude Include="gui_Action.h" />
     <ClInclude Include="gui_Button.h" />
     <ClInclude Include="gui_devtest.h" />
@@ -56,13 +95,33 @@
     <ClInclude Include="gui_Label.h" />
     <ClInclude Include="gui_Menu.h" />
     <ClInclude Include="gui_Object.h" />
+    <ClInclude Include="gui_Slider.h" />
+    <ClInclude Include="gui_TextField.h" />
+    <ClInclude Include="gui_zone.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Layout.h" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="MathUtil.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="minimum_gui.h" />
+    <ClInclude Include="NURBS.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Quad.h" />
     <ClInclude Include="QuadC.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="RessourcesManager.h" />
+    <ClInclude Include="StaticVBOManager.h" />
     <ClInclude Include="test_gchar.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="vboheader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenGLSandbox.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="black.cur" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C99B5B92-B2C3-4180-AB50-FDBB4008E4C8}</ProjectGuid>

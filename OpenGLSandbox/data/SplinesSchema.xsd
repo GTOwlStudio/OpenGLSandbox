@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<tema:schema xmlns:tema="http://www.w3.org/2001/XMLSchema">
+
+  <tema:simpleType name="ltype">
+    <tema:list itemType="tema:float"/>
+  </tema:simpleType>
+  
+  <tema:simpleType name="coords">
+    <tema:restriction base="ltype">
+      <tema:length value="3"/> 
+    </tema:restriction>
+  </tema:simpleType>
+
+  <tema:element name="Node" type="coords"/>
+
+  <tema:element name="Spline">
+    <tema:complexType>
+      <tema:sequence maxOccurs="unbounded">
+        <tema:element ref="Node"/>
+      </tema:sequence>
+    </tema:complexType>
+  </tema:element>
+
+  <tema:element name="Data">
+    <tema:complexType>
+      <tema:sequence maxOccurs="unbounded" >
+        <tema:element ref="Spline"/>
+      </tema:sequence>
+    </tema:complexType>
+  </tema:element>
+ 
+</tema:schema>

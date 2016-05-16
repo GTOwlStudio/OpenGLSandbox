@@ -50,11 +50,13 @@ private:
 	unsigned int m_coordsBytesSize;
 	unsigned int m_colorsBytesSize;
 	unsigned int m_texCoordsBytesSize;
+	unsigned int m_indicesBytesSize;
 	
 	glm::vec4 *m_coord; //Contains tex coords of each letter in 
 	float *m_coords; //Contains the coords of the quad
 	float *m_texCoords; //Contains the tex coords of the each letter in atlas
 	float *m_color;
+	unsigned int *m_indices;
 
 	float m_depth;
 	

@@ -33,7 +33,9 @@ int main(int argc, char** argv){
 	//engine_core engine(512,512,"OpenGL 3.3 Engine", 60);
 	engine_core engine(1440,900,"OpenGL 3.3 Engine", 60);
 	engine.init();
+	RessourcesManager::init();
 	engine.mainLoop();
+	engine.cleanUp();
 	_CrtDumpMemoryLeaks();
 	//system("pause");
 	return 0;

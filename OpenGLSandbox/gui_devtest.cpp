@@ -55,7 +55,7 @@ gui_devtest::gui_devtest(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, f
 
 	float x3 = m_x;
 	float y3 = m_y-m_fontatlas->getFontHeight();
-	float ax,ay,bw,bh,bl,bt,tx,ty;
+	float ax,ay,bw,bh,w,h,tx,ty,bx,by;
 	bh = 0;
 	int coordOffset = 0;
 	int texCoordOffset = 0;
@@ -69,10 +69,10 @@ gui_devtest::gui_devtest(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, f
 		//std::printf("p=%c", *p);
 		//std::printf(" m_fontatlas->getCharInfo()[*p]=%i",*p);
 
-		float x2 = m_x+m_fontatlas->getCharInfo()[*p].bl*sx;
-		float y2 = -m_y - m_fontatlas->getCharInfo()[*p].bt*sy;
-		float w = m_fontatlas->getCharInfo()[*p].bw*sx;
-		float h = m_fontatlas->getCharInfo()[*p].bh*sy;
+/*		float x2 = m_x+m_fontatlas->getCharInfo()[*p].bl*sx;
+		float y2 = -m_y - m_fontatlas->getCharInfo()[*p].bt*sy;*/
+		/*float w = m_fontatlas->getCharInfo()[*p].bw*sx;
+		float h = m_fontatlas->getCharInfo()[*p].bh*sy;*/
 		//std::printf(" x2=%i y2=%i w=%i h=%i\n",x2, y2, w, h);
 		//m_x += m_fontatlas->getCharInfo()[*p].ax * sx;
 		m_y += m_fontatlas->getCharInfo()[*p].ay *sy;
@@ -83,10 +83,12 @@ gui_devtest::gui_devtest(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, f
 		ay = m_fontatlas->getCharInfo()[*p].ay;
 		bw = m_fontatlas->getCharInfo()[*p].bw;
 		//bh = m_fontatlas->getCharInfo()[*p].bh;
-		bl = m_fontatlas->getCharInfo()[*p].bl;
-		bt = m_fontatlas->getCharInfo()[*p].bt;
+		w = m_fontatlas->getCharInfo()[*p].w;
+		h = m_fontatlas->getCharInfo()[*p].h;
 		tx = m_fontatlas->getCharInfo()[*p].tx;
 		ty = m_fontatlas->getCharInfo()[*p].ty;
+		bx = m_fontatlas->getCharInfo()[*p].bx;
+		by = m_fontatlas->getCharInfo()[*p].by;
 
 		/*float charInfoValues[6] = {ax, ay,bw,bh,bl,bt};
 		std::string charInfoValuesNames[6] = {"ax","ay","bw","bh","bl", "bt"};
@@ -123,7 +125,6 @@ gui_devtest::gui_devtest(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, f
 	/*	if (std::max(bh, m_fontatlas->getCharInfo()[*p].bh)==bh){
 			//printf("%i MAX is bh=%i\n",m_fontatlas->getCharInfo()[*p].bh, bh);
 		}*/
-		bh=m_fontatlas->getFontHeight();
 		//printf("m_textSize=%i", m_textSize);
 		//bh = std::max(bh, m_fontatlas->getCharInfo()[*p].bh);
 		/*float tmpCoord[18] = {x3+bl, y3+(ay-bt-bh), depth,
@@ -132,12 +133,12 @@ gui_devtest::gui_devtest(std::string text, FontAtlas &atlas, glm::vec4 xysxsy, f
 								x3+bl, y3+(ay-bt-bh), depth,
 								x3+bl+bw,y3+(ay-bt), depth,
 								x3+bl+bw,y3+(ay-bt-bh), depth};*/
-		float tmpCoord[18] = {x3+bl, y3+ay+bt+bh, depth,
-								x3+bl,y3+ay+bt, depth,
-								x3+bl+bw,y3+ay+bt, depth,
-								x3+bl, y3+ay+bh+bt, depth,
-								x3+bl+bw,y3+ay+bt, depth,
-								x3+bl+bw,y3+ay+bh+bt, depth};
+		float tmpCoord[18] = { x3 + bx,		y3 + by, depth,
+			x3 + bx,		y3 - (h - by), depth,
+			x3 + bx + w,	y3 - (h - by), depth,
+			x3 + bx,		y3 + by, depth,
+			x3 + bx + w,	y3 - (h - by), depth,
+			x3 + bx + w,	y3 + by, depth };
 		//dev_size += bw+bl;
 		//The Old Good one below
 		/*float tmpCoord[18] = {x3+bl, y3+(ay+bt+bh), depth,
@@ -239,7 +240,7 @@ gui_devtest::gui_devtest(std::string text, FontAtlas &atlas, float x, float y, f
 
 	float x3 = m_x;
 	float y3 = m_y-m_fontatlas->getFontHeight();
-	float ax,ay,bw,bh,bl,bt,tx,ty;
+	float ax,ay,bw,bh,w,h,tx,ty,bx,by;
 	bh = 0;
 	int coordOffset = 0;
 	int texCoordOffset = 0;
@@ -253,10 +254,8 @@ gui_devtest::gui_devtest(std::string text, FontAtlas &atlas, float x, float y, f
 		//std::printf("p=%c", *p);
 		//std::printf(" m_fontatlas->getCharInfo()[*p]=%i",*p);
 
-		float x2 = m_x+m_fontatlas->getCharInfo()[*p].bl;
-		float y2 = -m_y - m_fontatlas->getCharInfo()[*p].bt;
-		float w = m_fontatlas->getCharInfo()[*p].bw;
-		float h = m_fontatlas->getCharInfo()[*p].bh;
+	/*	float w = m_fontatlas->getCharInfo()[*p].bw;
+		float h = m_fontatlas->getCharInfo()[*p].bh;*/
 		//std::printf(" x2=%i y2=%i w=%i h=%i\n",x2, y2, w, h);
 		m_x += m_fontatlas->getCharInfo()[*p].ax;
 		m_y += m_fontatlas->getCharInfo()[*p].ay;
@@ -266,11 +265,14 @@ gui_devtest::gui_devtest(std::string text, FontAtlas &atlas, float x, float y, f
 		ax = (float)m_fontatlas->getCharInfo()[*p].ax;
 		ay = (float)m_fontatlas->getCharInfo()[*p].ay;
 		bw = (float)m_fontatlas->getCharInfo()[*p].bw;
-		//bh = m_fontatlas->getCharInfo()[*p].bh;
-		bl = (float)m_fontatlas->getCharInfo()[*p].bl;
-		bt = (float)m_fontatlas->getCharInfo()[*p].bt;
+		bh = m_fontatlas->getCharInfo()[*p].bh;
+		w = (float)m_fontatlas->getCharInfo()[*p].w;
+		h = (float)m_fontatlas->getCharInfo()[*p].h;
 		tx = (float)m_fontatlas->getCharInfo()[*p].tx;
 		ty = (float)m_fontatlas->getCharInfo()[*p].ty;
+		bx = (float)m_fontatlas->getCharInfo()[*p].bx;
+		by = (float)m_fontatlas->getCharInfo()[*p].by;
+
 
 		/*float charInfoValues[6] = {ax, ay,bw,bh,bl,bt};
 		std::string charInfoValuesNames[6] = {"ax","ay","bw","bh","bl", "bt"};
@@ -316,12 +318,12 @@ gui_devtest::gui_devtest(std::string text, FontAtlas &atlas, float x, float y, f
 								x3+bl, y3+(ay-bt-bh), depth,
 								x3+bl+bw,y3+(ay-bt), depth,
 								x3+bl+bw,y3+(ay-bt-bh), depth};*/
-		float tmpCoord[18] = {x3+bl,	 y3+ay+bt+bh, depth,
-								x3+bl,	 y3+ay+bt, depth,
-								x3+bl+bw,y3+ay+bt, depth,
-								x3+bl,	 y3+ay+bt+bh, depth,
-								x3+bl+bw,y3+ay+bt, depth,
-								x3+bl+bw,y3+ay+bt+bh, depth};
+		float tmpCoord[18] = { x3 + bx,		y3 + by, depth,
+			x3 + bx,		y3 - (h - by), depth,
+			x3 + bx + w,	y3 - (h - by), depth,
+			x3 + bx,		y3 + by, depth,
+			x3 + bx + w,	y3 - (h - by), depth,
+			x3 + bx + w,	y3 + by, depth };
 		//printf("bw=%f\n", bw);
 		//dev_size += bw+bl;
 		//The Old Good one below
